@@ -4,13 +4,15 @@ import Immutable from 'seamless-immutable'
 export const INITIAL_STATE = Immutable({
   isLoggedIn: false,
   isFetchingUser: false,
-  error: null
+  error: null,
+  refreshingToken: false
 })
 
 const { Types, Creators } = createActions({
   success: null,
   request: ['mobile', 'password'],
   failure: ['error'],
+  refreshToken: null,
   logout: null
 }, {
   prefix: 'LOGIN'
@@ -24,7 +26,8 @@ export const success = (state = INITIAL_STATE, action) => {
     ...state,
     isLoggedIn: true,
     error: null,
-    isFetchingUser: false
+    isFetchingUser: false,
+    refreshingToken: false
   }
 }
 
@@ -37,12 +40,18 @@ export const request = (state = INITIAL_STATE, action) => {
 }
 
 export const failure = (state = INITIAL_STATE, action) => {
-  console.log(action, 'login failure')
   const { error } = action
   return {
     ...state,
     error,
     isFetchingUser: null
+  }
+}
+
+export const refreshToken = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    refreshingToken: true
   }
 }
 
@@ -54,7 +63,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SUCCESS]: success,
   [Types.REQUEST]: request,
   [Types.FAILURE]: failure,
-  [Types.LOGOUT]: logout
+  [Types.LOGOUT]: logout,
+  [Types.REFRESH_TOKEN]: refreshToken
   })
 
 export default Creators

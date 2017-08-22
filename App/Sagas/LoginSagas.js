@@ -17,10 +17,9 @@ export function *login(api, action) {
   const { mobile, password } = action
   const loginModel = new LoginModel(mobile, password)
   const response = yield call(api.login, loginModel.fields())
-  console.log(response, 'response data login')
+
   if(response.ok) {
     const payload = yield TokenModel.correctObject(response.data)
-    console.log(payload, 'payload data login')
     yield put(AccessToken.issueToken(payload))
     yield put(Login.success())
     yield put(goToMainPage)

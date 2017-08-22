@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import NavigationBar from '../Components/NavigationBar'
 
 // Styles
 import styles from './Styles/DeviceStyle'
-import Icon from 'react-native-vector-icons/FontAwesome'
+
 
 class Device extends Component {
   static navigationOptions = {
@@ -28,19 +28,13 @@ class Device extends Component {
   render () {
     return (
       <View style={styles.wrapper}>
-        <View style={styles.navBar}>
-          <Text style={[styles.leftBarButton, styles.barButton]}>
-            <Icon name="angle-left" size={22} color="white" />
-          </Text>
-          <Text style={styles.title}>Device</Text>
-          <Text
-            onPress={() => {
-              this.props.navigation.navigate('AddDevice')
-            }}
-            style={[styles.rightBarButton, styles.barButton]}>
-            <Icon name="plus" size={22} color="white" />
-          </Text>
-        </View>
+        <NavigationBar
+          rightButton={this.renderRightBarButton()}
+          onPressRightButton={this.pressRightBarButton.bind(this)}
+          style={styles.navBar}
+        >
+          Device
+        </NavigationBar>
         <ScrollView style={styles.container}>
           <View style={styles.deviceContainer}>
             <View style={styles.deviceShapeContainer}>
@@ -62,6 +56,19 @@ class Device extends Component {
       </View>
 
     )
+  }
+
+  renderRightBarButton () {
+    return (
+      <Text style={styles.rightBarButton}>
+        ADD <Icon name="plus" size={14} color="white"/>
+      </Text>
+    )
+  }
+
+  pressRightBarButton () {
+    const { navigation } = this.props
+    navigation.navigate('AddDevice')
   }
 }
 

@@ -20,7 +20,6 @@ export default class NavigationBar extends Component {
 
   render () {
     const { onPressLeftButton, onPressRightButton, leftButton, rightButton, children, style, textStyle} = this.props
-    console.log(this.props, )
     return (
       <View style={[styles.container, style]}>
         <Text style={[styles.title, textStyle]}>

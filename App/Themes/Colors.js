@@ -8,6 +8,7 @@ const colors = {
   gray: '#ccc',
   darkRGB: '68,78,89',
   alertRGB: '135,43,51',
+  blackRGB: '0,0,0'
 }
 
 export default colors

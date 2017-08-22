@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import Metrics from '../../Themes/Metrics'
+import Colors from '../../Themes/Colors'
 
 const paddingBottom = 5
 
@@ -23,6 +24,8 @@ export default StyleSheet.create({
     bottom: paddingBottom,
     left: 0,
     alignItems: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: Colors.white,
+    fontSize: 18
   },
 })

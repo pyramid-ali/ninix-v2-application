@@ -1,27 +1,26 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, BackHandler, TouchableOpacity, View, FlatList } from 'react-native'
+import { ScrollView, Text, BackHandler, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import { NavigationActions } from 'react-navigation'
 import Connector from '../Bluetooth/Connector'
 import NinixDevice from '../Components/NinixDevice'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import NavigationBar from '../Components/NavigationBar'
+import FoundedDeviceItem from '../Components/FoundedDeviceItem'
+import BluetoothState from '../Bluetooth/BluetoothState'
+import BluetoothAction from '../Redux/BluetoothRedux'
 
 // Styles
 import styles from './Styles/AddDeviceStyle'
 import Colors from '../Themes/Colors'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../Components/NavigationBar'
-import FoundedDeviceItem from '../Components/FoundedDeviceItem'
+import ModalDeviceConnect from '../Components/ModalDeviceConnect'
 
 class AddDevice extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
   }
 
   componentDidMount() {
-
+    const { bluetooth } = this.props
     this.backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
       this.props.navigation.goBack(null)
     })
@@ -31,33 +30,68 @@ class AddDevice extends Component {
     BackHandler.removeEventListener('hardwareBackPress')
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
+  }
+
   render () {
-    const data = [
-      {key: 1, text: `NINIX 1 Demo`},
-      {key: 2, text: 'NINIX 2'},
-      {key: 3, text: 'NINIX 3'},
-      {key: 4, text: `NINIX 1 Demo`},
-      {key: 5, text: 'NINIX 2'},
-      {key: 6, text: 'NINIX 3'},
-      {key: 7, text: `NINIX 1 Demo`},
-      {key: 8, text: 'NINIX 2'},
-      {key: 9, text: 'NINIX 3'},
-    ]
+    const { bluetooth } = this.props
+    const data = bluetooth.devices
+    console.log('render')
+    const {logo, blink, color} = (() => {
+
+      if (bluetooth.isConnected) {
+        return {
+          logo: 'Connected',
+          blink: false,
+          color: Colors.primary
+        }
+      }
+
+      if (bluetooth.isScanning) {
+        return {
+          logo: 'Searching...\nTap To cancel',
+          blink: true,
+          color: Colors.primary
+        }
+      }
+
+      switch (bluetooth.state) {
+        case BluetoothState.poweredOn:
+          return {
+            logo: 'Start Scan',
+            blink: false,
+            color: '#3498DB'
+          }
+        default:
+          return {
+            logo: 'Bluetooth is off',
+            blink: false,
+            color: Colors.alert
+          }
+      }
+    })();
+
     return (
       <View style={{flex: 1}}>
         <NavigationBar
           style={styles.navBar}
           textStyle={styles.title}
           leftButton={this.renderLeftBarButton()}
-          onPressLeftButton={() => alert('pressed')}
+          onPressLeftButton={() => this.props.navigation.goBack(null)}
         >
           Add Device
         </NavigationBar>
         <View style={styles.container}>
           <View style={{flex: 1}}>
-            <NinixDevice logo="Bluetooth is off" blink={false} lightColor={Colors.alert} />
+            <NinixDevice
+              onPress={this.search.bind(this)}
+              logo={logo}
+              blink={blink}
+              lightColor={color} />
           </View>
           <FlatList
+            keyExtractor={(item, index) => item.id}
             ItemSeparatorComponent={this.separatorComponent.bind(this)}
             ListHeaderComponent={this.listHeaderComponent.bind(this)}
             style={{flex: 1, backgroundColor: Colors.white}}
@@ -65,6 +99,15 @@ class AddDevice extends Component {
             renderItem={({item}) => this.renderItem(item)}
           />
         </View>
+        <ModalDeviceConnect
+          buttons={[{
+            onPress: () => this.props.cancelConnection()    ,
+            text: 'Cancel'
+          }
+          ]}
+          visible={bluetooth.isConnecting}>
+          <Text>We're connecting to NINIX_DEMO</Text>
+        </ModalDeviceConnect>
       </View>
     )
   }
@@ -78,13 +121,17 @@ class AddDevice extends Component {
     )
   }
 
-  renderItem(item) {
+  renderItem (item) {
     return (
-      <FoundedDeviceItem text={item.text} />
+      <FoundedDeviceItem onPress={() => this.connect(item)} text={item.device.name} key={item.id} />
     )
   }
 
-  listHeaderComponent() {
+  connect (item) {
+    this.props.startConnection(item.device)
+  }
+
+  listHeaderComponent () {
     return (
       <View style={styles.header}>
         <Text style={styles.headerText}>Founded Devices</Text>
@@ -92,20 +139,37 @@ class AddDevice extends Component {
     )
   }
 
-  separatorComponent() {
+  separatorComponent () {
     return (
       <View style={styles.line} />
     )
   }
+
+  search() {
+    const { isScanning } = this.props.bluetooth
+    if(isScanning) {
+      Connector.stopScan()
+      return
+    }
+    Connector.scanDevices(this.deviceFound)
+  }
+
+  deviceFound(devices, errors) {
+    console.log('device scanned', devices, errors)
+  }
 }
 
 const mapStateToProps = (state) => {
+  const { bluetooth } = state
   return {
+    bluetooth
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    startConnection: (device) => dispatch(BluetoothAction.startConnecting(device)),
+    cancelConnection: () => dispatch(BluetoothAction.cancelConnection())
   }
 }
 

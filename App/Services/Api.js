@@ -1,68 +1,10 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
 import Config from 'react-native-config'
-
-// our "constructor"
-const create1 = (baseURL = 'https://api.github.com/') => {
-  // ------
-  // STEP 1
-  // ------
-  //
-  // Create and configure an apisauce-based api object.
-  //
-  const api = apisauce.create({
-    // base URL is read from the "constructor"
-    baseURL,
-    // here are some default headers
-    headers: {
-      'Cache-Control': 'no-cache'
-    },
-    // 10 second timeout...
-    timeout: 10000
-  })
-
-  // ------
-  // STEP 2
-  // ------
-  //
-  // Define some functions that call the api.  The goal is to provide
-  // a thin wrapper of the api layer providing nicer feeling functions
-  // rather than "get", "post" and friends.
-  //
-  // I generally don't like wrapping the output at this level because
-  // sometimes specific actions need to be take on `403` or `401`, etc.
-  //
-  // Since we can't hide from that, we embrace it by getting out of the
-  // way at this level.
-  //
-  const getRoot = () => api.get('')
-  const getRate = () => api.get('rate_limit')
-  const getUser = (username) => api.get('search/users', {q: username})
-
-  // ------
-  // STEP 3
-  // ------
-  //
-  // Return back a collection of functions that we would consider our
-  // interface.  Most of the time it'll be just the list of all the
-  // methods in step 2.
-  //
-  // Notice we're not returning back the `api` created in step 1?  That's
-  // because it is scoped privately.  This is one way to create truly
-  // private scoped goodies in JavaScript.
-  //
-  return {
-    // a list of the API functions from step 2
-    getRoot,
-    getRate,
-    getUser
-  }
-}
-
-// let's return back our create method as the default.
+import { store } from '../Containers/App'
+import moment from 'moment'
 
 const create = (baseURL = Config.API_URL) => {
-
   const unauthorizedApi = apisauce.create({
     baseURL,
     headers: {
@@ -76,16 +18,46 @@ const create = (baseURL = Config.API_URL) => {
   const requestActivationCode = (mobile) => unauthorizedApi.post('oauth/register/token', { mobile })
   const checkActivationCode = ({mobile, token}) => unauthorizedApi.post('oauth/register/verify', {mobile, token})
   const signup = (signupFields) => unauthorizedApi.post('oauth/register', signupFields)
+  const refreshToken = (refreshFields) => unauthorizedApi.post('oauth/refresh', refreshFields)
 
   return {
     login,
     requestActivationCode,
     checkActivationCode,
-    signup
+    signup,
+    refreshToken
   }
 
 }
 
+const createAuthorized = (baseURL = Config.API_URL) => {
+  const { token } = store.getState()
+  const revokeTime = moment().unix() - (24 * 60 * 60) // revoke time is one day before expire time
+
+
+
+  const authorizedApi = apisauce.create({
+    baseURL,
+    headers: {
+      'Accept': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Authorization': token.type + ' ' + token.accessToken
+    },
+    timeout: 10000
+  })
+
+  const retrieveFatherInformation = () => authorizedApi.get('parents/sync/father')
+  const retrieveMotherInformation = () => authorizedApi.get('parents/sync/mother')
+  const postFatherInformation = (parentFields) => authorizedApi.post('parents/sync/father', parentFields)
+  const postMotherInformation = (parentFields) => authorizedApi.post('parents/sync/mother', parentFields)
+
+  return {
+    retrieveFatherInformation,
+    retrieveMotherInformation,
+    postFatherInformation,
+    postMotherInformation
+  }
+}
 
 export default {
   create

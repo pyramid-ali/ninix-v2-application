@@ -10,7 +10,6 @@ class Ble {
   }
 
   addListener(listener, emitCurrentState) {
-    console.log('#Ble<addListener>')
     this.subscription = this.manager.onStateChange(listener, emitCurrentState)
   }
 
@@ -22,13 +21,15 @@ class Ble {
     return this.manager.startDeviceScan(uuidArray, options, listener)
   }
 
+  stopScan() {
+    this.manager.stopDeviceScan()
+  }
+
   state() {
     return this.manager.state()
   }
 
 }
-
-
 
 const instance = new Ble()
 Object.freeze(instance)

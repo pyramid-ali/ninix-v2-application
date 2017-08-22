@@ -18,7 +18,7 @@ const PrimaryNav = StackNavigator({
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'AddDevice',
+  initialRouteName: 'Main',
   navigationOptions: {
     headerStyle: styles.header
   }

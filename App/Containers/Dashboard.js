@@ -50,7 +50,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state, 'app state dashboard')
   return {
   }
 }

@@ -9,6 +9,7 @@ import { AppStateTypes } from '../Redux/AppStateRedux'
 import { SignupTypes } from '../Redux/SignupRedux'
 import { LoginTypes } from '../Redux/LoginRedux'
 import { AccessAbilityTypes } from '../Redux/AccessAbilityRedux'
+import { BluetoothTypes } from '../Redux/BluetoothRedux'
 
 
 /* ------------- Sagas ------------- */
@@ -17,6 +18,7 @@ import { didAppIntroduce } from './AppStateSaga'
 import { startSignup, cancelSignup, requestActivationCode, verifyActivationCode, wrongNumber, finalSignupStep } from './SignupSagas'
 import { login } from './LoginSagas'
 import { checkConnectivity } from './AccessAbilitySagas'
+import { connect } from './BluetoothSagas'
 
 
 /* ------------- API ------------- */
@@ -39,7 +41,8 @@ const root = function * root () {
     takeLatest(SignupTypes.CHECKING_PASSWORD, finalSignupStep, api),
     takeLatest(SignupTypes.CANCEL, cancelSignup),
     takeLatest(LoginTypes.REQUEST, login, api),
-    takeLatest(AccessAbilityTypes.NETWORK_STATUS, checkConnectivity)
+    takeLatest(AccessAbilityTypes.NETWORK_STATUS, checkConnectivity),
+    takeLatest(BluetoothTypes.START_CONNECTING, connect)
   ]
 }
 

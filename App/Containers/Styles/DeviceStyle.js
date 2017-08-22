@@ -11,27 +11,10 @@ export default StyleSheet.create({
     backgroundColor: Colors.white
    },
   navBar: {
-    width: Metrics.screenWidth,
-    position: 'absolute',
-    height: Metrics.navBarHeight,
-    backgroundColor: Colors.primary,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingHorizontal: 10,
-    paddingBottom: 5
+    backgroundColor: Colors.primary
   },
-  barButton: {
+  rightBarButton: {
     color: Colors.white
-  },
-  title: {
-    position: 'absolute',
-    textAlign: 'center',
-    width: Metrics.screenWidth,
-    paddingBottom: 5,
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: 'bold'
   },
   deviceContainer: {
     width: Metrics.screenWidth,
