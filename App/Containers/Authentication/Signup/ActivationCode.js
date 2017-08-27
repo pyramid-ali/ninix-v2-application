@@ -3,14 +3,14 @@ import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-na
 import { connect } from 'react-redux'
 
 // Styles
-import styles from './Styles/ActivationCodeStyle'
-import TextInputWithIcon from '../Components/TextInputWithIcon'
-import Colors from '../Themes/Colors'
+import styles from '../../Styles/ActivationCodeStyle'
+import TextInputWithIcon from '../../../Components/TextInputWithIcon'
+import Colors from '../../../Themes/Colors'
 import EntryTemplate from './EntryTemplate'
 import Config from 'react-native-config'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import CharacterInputSerie from '../Components/CharacterInputSerie'
-import Signup from '../Redux/SignupRedux'
+import CharacterInputSerie from '../../../Components/CharacterInputSerie'
+import Signup from '../../../Redux/SignupRedux'
 
 class ActivationCode extends Component {
   constructor (props) {
@@ -58,7 +58,7 @@ class ActivationCode extends Component {
     return (
       <EntryTemplate
         title="Activation"
-        imageSource={require('../Images/Signup/4-2.png')}>
+        imageSource={require('../../../Images/Signup/4-2.png')}>
         <View style={styles.form}>
           {signup.error ?
             <Text style={styles.error}>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/EntryTemplateStyle'
+import styles from '../../Styles/EntryTemplateStyle'
 
 class EntryTemplate extends Component {
   state = {

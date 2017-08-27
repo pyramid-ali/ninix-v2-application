@@ -1,0 +1,34 @@
+[
+  {
+    "key": "aplus",
+    "value": "A+"
+  },
+  {
+    "key": "aminus",
+    "value": "A-"
+  },
+  {
+    "key": "bplus",
+    "value": "B+"
+  },
+  {
+    "key": "bminus",
+    "value": "B-"
+  },
+  {
+    "key": "abplus",
+    "value": "AB+"
+  },
+  {
+    "key": "abminus",
+    "value": "AB-"
+  },
+  {
+    "key": "oplus",
+    "value": "O+"
+  },
+  {
+    "key": "ominus",
+    "value": "O-"
+  }
+]

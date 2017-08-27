@@ -24,7 +24,7 @@ class Connector {
     })
   }
 
-  scanDevices(listener) {
+  scanDevices() {
     const { bluetooth } = store.getState()
 
     if (bluetooth.state === BluetoothStates.poweredOn) {

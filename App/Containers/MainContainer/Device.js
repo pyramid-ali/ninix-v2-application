@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../Components/NavigationBar'
+import NavigationBar from '../../Components/NavigationBar'
 
 // Styles
-import styles from './Styles/DeviceStyle'
+import styles from '../Styles/DeviceStyle'
 
 
 class Device extends Component {

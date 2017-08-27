@@ -2,18 +2,15 @@ import React, { Component } from 'react'
 import { ScrollView, Text, View, Image, KeyboardAvoidingView, Keyboard, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import TextInputWithIcon from '../../Components/TextInputWithIcon'
+import Button from '../../Components/Button'
+import Signup from '../../Redux/SignupRedux'
+import Login from '../../Redux/LoginRedux'
 
 // Styles
-import styles from './Styles/LoginPageStyle'
-import { Colors } from '../Themes'
-import TextInputWithIcon from '../Components/TextInputWithIcon'
-import Button from '../Components/Button'
-import Signup from '../Redux/SignupRedux'
-import Login from '../Redux/LoginRedux'
-import Config from 'react-native-config'
-import StickyAlert from '../Components/StickyAlert'
+import styles from '../Styles/LoginPageStyle'
+import { Colors } from '../../Themes/index'
+
 
 class LoginPage extends Component {
   state = {
@@ -70,7 +67,7 @@ class LoginPage extends Component {
         style={styles.container}>
         <Image
           style={styles.backgroundImage}
-          source={require('../Images/login-background.jpg')}>
+          source={require('../../Images/login-background.jpg')}>
           <LinearGradient
             start={start}
             end={end}

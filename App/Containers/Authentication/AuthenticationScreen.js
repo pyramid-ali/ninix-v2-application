@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/AuthenticationScreenStyle'
-import AuthenticationNavigation from '../Navigation/AuthenticationNavigation'
-import StickyAlert from '../Components/StickyAlert'
+import styles from '../Styles/AuthenticationScreenStyle'
+import AuthenticationNavigation from '../../Navigation/AuthenticationNavigation'
+import StickyAlert from '../../Components/StickyAlert'
 
 class AuthenticationScreen extends Component {
   constructor (props) {

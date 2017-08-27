@@ -4,12 +4,7 @@ import { Colors, Metrics } from '../../Themes/'
 export default StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: Metrics.navBarHeight,
     backgroundColor: Colors.background
-  },
-  separator: {
-    flex: 1,
-    backgroundColor: Colors.dark,
-    height: 1,
-    marginHorizontal: 40
   }
 })

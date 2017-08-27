@@ -5,11 +5,11 @@ import { connect } from 'react-redux'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/DashboardStyle'
+import styles from '../Styles/DashboardStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NotificationNavigation from '../Navigation/NotificationNavigation'
-import ArrowImage from '../Components/ArrowImage'
-import VitalSignsBox from '../Components/VitalSignsBox'
+import NotificationNavigation from '../../Navigation/NotificationNavigation'
+import ArrowImage from '../../Components/ArrowImage'
+import VitalSignsBox from '../../Components/VitalSignsBox'
 
 class Dashboard extends Component {
   static navigationOptions = {

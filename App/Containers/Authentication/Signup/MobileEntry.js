@@ -6,12 +6,12 @@ import EntryTemplate from './EntryTemplate'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/MobileEntryStyle'
-import TextInputWithIcon from '../Components/TextInputWithIcon'
-import Colors from '../Themes/Colors'
-import Button from '../Components/Button'
+import styles from '../../Styles/MobileEntryStyle'
+import TextInputWithIcon from '../../../Components/TextInputWithIcon'
+import Colors from '../../../Themes/Colors'
+import Button from '../../../Components/Button'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Signup from '../Redux/SignupRedux'
+import Signup from '../../../Redux/SignupRedux'
 
 class MobileEntry extends Component {
   constructor (props) {
@@ -28,7 +28,7 @@ class MobileEntry extends Component {
       <EntryTemplate
         title="Signup"
         leftBarButton={this.leftBarButton()}
-        imageSource={require('../Images/Signup/4-3.png')}>
+        imageSource={require('../../../Images/Signup/4-3.png')}>
         <View style={styles.form}>
           {signup.error ?
             <Text style={styles.error}>

@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, BackHandler, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import Connector from '../Bluetooth/Connector'
-import NinixDevice from '../Components/NinixDevice'
+import Connector from '../../Bluetooth/Connector'
+import NinixDevice from '../../Components/NinixDevice'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../Components/NavigationBar'
-import FoundedDeviceItem from '../Components/FoundedDeviceItem'
-import BluetoothState from '../Bluetooth/BluetoothState'
-import BluetoothAction from '../Redux/BluetoothRedux'
+import NavigationBar from '../../Components/NavigationBar'
+import FoundedDeviceItem from '../../Components/FoundedDeviceItem'
+import BluetoothState from '../../Bluetooth/BluetoothState'
+import BluetoothAction from '../../Redux/BluetoothRedux'
 
 // Styles
-import styles from './Styles/AddDeviceStyle'
-import Colors from '../Themes/Colors'
-import ModalDeviceConnect from '../Components/ModalDeviceConnect'
+import styles from '../Styles/AddDeviceStyle'
+import Colors from '../../Themes/Colors'
+import ModalDeviceConnect from '../../Components/ModalDeviceConnect'
 
 class AddDevice extends Component {
   constructor (props) {
@@ -20,14 +20,11 @@ class AddDevice extends Component {
   }
 
   componentDidMount() {
-    const { bluetooth } = this.props
-    this.backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.goBack(null)
-    })
+
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress')
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -78,7 +75,10 @@ class AddDevice extends Component {
           style={styles.navBar}
           textStyle={styles.title}
           leftButton={this.renderLeftBarButton()}
-          onPressLeftButton={() => this.props.navigation.goBack(null)}
+          onPressLeftButton={() => {
+            this.props.navigation.goBack(null)
+            Connector.stopScan()
+          }}
         >
           Add Device
         </NavigationBar>

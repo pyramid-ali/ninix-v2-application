@@ -6,12 +6,12 @@ import EntryTemplate from './EntryTemplate'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/PasswordEntryStyle'
-import TextInputWithIcon from '../Components/TextInputWithIcon'
-import Colors from '../Themes/Colors'
-import Button from '../Components/Button'
+import styles from '../../Styles/PasswordEntryStyle'
+import TextInputWithIcon from '../../../Components/TextInputWithIcon'
+import Colors from '../../../Themes/Colors'
+import Button from '../../../Components/Button'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Signup from '../Redux/SignupRedux'
+import Signup from '../../../Redux/SignupRedux'
 
 class PasswordEntry extends Component {
   constructor (props) {
@@ -29,7 +29,7 @@ class PasswordEntry extends Component {
       <EntryTemplate
         title="Choose Password"
         leftBarButton={this.leftBarButton()}
-        imageSource={require('../Images/Signup/4-1.png')}>
+        imageSource={require('../../../Images/Signup/4-1.png')}>
         <View style={styles.form}>
           {signup.error ?
             <Text style={styles.error}>

@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
-import { ScrollView, Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+
 
 // Styles
-import styles from './Styles/SettingsStyle'
+import styles from '../Styles/ChartsStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ChartNavigation from '../../Navigation/ChartNavigation'
 
-class Settings extends Component {
+class Charts extends Component {
   static navigationOptions = {
-    tabBarLabel: 'Settings',
+    tabBarLabel: 'Charts',
     tabBarIcon: ({ tintColor }) => (
       <Icon
         size={20}
-        name="cog"
+        name="area-chart"
         color={tintColor}
       />
     ),
@@ -27,9 +27,14 @@ class Settings extends Component {
 
   render () {
     return (
-      <ScrollView style={styles.container}>
-        <Text>Settings Container</Text>
-      </ScrollView>
+      <View style={styles.container}>
+        <View style={styles.top}>
+
+        </View>
+        <View style={styles.bottom}>
+          <ChartNavigation />
+        </View>
+      </View>
     )
   }
 }
@@ -44,4 +49,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings)
+export default connect(mapStateToProps, mapDispatchToProps)(Charts)
