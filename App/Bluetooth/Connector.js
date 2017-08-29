@@ -72,15 +72,11 @@ class Connector {
       if(char) {
         let str = atob(char.value)
         let bytes = []
-
         for (let i = 0; i < str.length; ++i) {
           const code = str.charCodeAt(i)
           bytes = bytes.concat([code])
         }
-        let byteString = ''
-        bytes.forEach((byte) => {
-          byteString += byte.toString(16)
-        })
+
         store.dispatch(DataAction.receiveData(bytes, moment().unix()))
       }
     })
@@ -88,8 +84,6 @@ class Connector {
   }
 
 }
-
-console.log('<Connector>')
 
 const instance = new Connector()
 export default instance

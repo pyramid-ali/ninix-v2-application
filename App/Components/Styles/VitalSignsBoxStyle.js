@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import Colors from '../../Themes/Colors'
 
 export default StyleSheet.create({
   container: {
@@ -34,4 +35,9 @@ export default StyleSheet.create({
   statText: {
     color: 'white'
   },
+  iconImage: {
+    width: 35,
+    height: 35,
+    tintColor: Colors.white
+  }
 })

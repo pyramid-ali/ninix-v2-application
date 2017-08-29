@@ -10,6 +10,7 @@ import { SignupTypes } from '../Redux/SignupRedux'
 import { LoginTypes } from '../Redux/LoginRedux'
 import { AccessAbilityTypes } from '../Redux/AccessAbilityRedux'
 import { BluetoothTypes } from '../Redux/BluetoothRedux'
+import { DataTypes } from '../Redux/DataRedux'
 
 
 /* ------------- Sagas ------------- */
@@ -19,6 +20,7 @@ import { startSignup, cancelSignup, requestActivationCode, verifyActivationCode,
 import { login } from './LoginSagas'
 import { checkConnectivity } from './AccessAbilitySagas'
 import { connect } from './BluetoothSagas'
+import { receiveData } from './DataSagas'
 
 
 /* ------------- API ------------- */
@@ -42,7 +44,8 @@ const root = function * root () {
     takeLatest(SignupTypes.CANCEL, cancelSignup),
     takeLatest(LoginTypes.REQUEST, login, api),
     takeLatest(AccessAbilityTypes.NETWORK_STATUS, checkConnectivity),
-    takeLatest(BluetoothTypes.START_CONNECTING, connect)
+    takeLatest(BluetoothTypes.START_CONNECTING, connect),
+    takeLatest(DataTypes.RECEIVE_DATA, receiveData)
   ]
 }
 

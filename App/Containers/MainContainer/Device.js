@@ -26,6 +26,9 @@ class Device extends Component {
   }
 
   render () {
+
+    const { bluetooth } = this.props
+    const { battery, isConnected } = bluetooth
     return (
       <View style={styles.wrapper}>
         <NavigationBar
@@ -39,8 +42,8 @@ class Device extends Component {
           <View style={styles.deviceContainer}>
             <View style={styles.deviceShapeContainer}>
               <View style={styles.deviceShape}>
-                <Text style={styles.batteryCharge}>72%</Text>
-                <Text style={styles.batteryChargeFooter}>Battery Charge</Text>
+                <Text style={styles.batteryCharge}> {battery >= 0 ? battery + '%' : 'Offline'}</Text>
+                <Text style={styles.batteryChargeFooter}>{ isConnected ? 'Battery Charge' : 'No Device Connected'}</Text>
               </View>
               <View style={styles.deviceShapeHead}/>
             </View>
@@ -73,7 +76,9 @@ class Device extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { bluetooth } = state
   return {
+    bluetooth
   }
 }
 

@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 export default class EditableImage extends Component {
   // Prop type warnings
   static propTypes = {
-    source: PropTypes.number.isRequired,
+
   }
 
   // Defaults for props

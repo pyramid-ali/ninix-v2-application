@@ -8,6 +8,7 @@ export const INITIAL_STATE = Immutable({
   isSyncing: false,
   isScanning: false,
   isConnecting: false,
+  battery: null,
   devices: [],
   connectedDevice: null
 })
@@ -22,6 +23,7 @@ const { Types, Creators } = createActions({
   startConnecting: ['device'],
   cancelConnection: null,
   successConnect: ['device'],
+  updateBattery: ['battery'],
   disconnect: null
 }, {
   prefix: 'BLUETOOTH_'
@@ -118,7 +120,16 @@ export const disconnect = (state = INITIAL_STATE, action) => {
     isScanning: false,
     isConnecting: false,
     devices: [],
-    connectedDevice: null
+    connectedDevice: null,
+    battery: null
+  }
+}
+
+export const updateBattery = (state = INITIAL_STATE, action) => {
+  const { battery } = action
+  return {
+    ...state,
+    battery
   }
 }
 
@@ -132,7 +143,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.START_CONNECTING]: startConnecting,
   [Types.CANCEL_CONNECTION]: cancelConnection,
   [Types.SUCCESS_CONNECT]: successConnect,
-  [Types.DISCONNECT]: disconnect
+  [Types.DISCONNECT]: disconnect,
+  [Types.UPDATE_BATTERY]: updateBattery,
 })
 
 

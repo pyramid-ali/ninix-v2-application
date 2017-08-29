@@ -135,6 +135,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     compile project(':realm')
     compile project(':react-native-ble-plx')
     compile project(':react-native-linear-gradient')

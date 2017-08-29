@@ -4,29 +4,31 @@ import BluetoothStates from '../Bluetooth/BluetoothState'
 import moment from 'moment'
 
 export const INITIAL_STATE = Immutable({
-  data: []
+  vitalSigns: []
 })
 
 const { Types, Creators } = createActions({
   receiveData: ['data', 'time'],
-  removeData: null
+  removeData: null,
+  extractData: ['vitalSign']
 }, {
   prefix: 'DATA_'
 })
 
 export const DataTypes = Types
 
-export const receiveData = (state = INITIAL_STATE, action) => {
-  const { data, time } = action
-  const fiveMinuteAgo = moment().subtract(5, 'm')
-  const filteredData = state.data.filter((item, index) => {
-      return item.time > fiveMinuteAgo.unix()
+export const receiveExtractData = (state = INITIAL_STATE, action) => {
+  const { vitalSign } = action
+
+  const fiveMinutesAgo = moment().subtract(5, 'm')
+  const filteredData = state.vitalSigns.filter((item, index) => {
+      return item.registerAt > fiveMinutesAgo.unix()
   })
   return {
     ...state,
-    data: [
+    vitalSigns: [
       ...filteredData,
-      {data, time}
+      vitalSign
     ]
   }
 }
@@ -39,7 +41,7 @@ export const emptyData = (state = INITIAL_STATE, action) => {
 }
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.RECEIVE_DATA]: receiveData,
+  [Types.EXTRACT_DATA]: receiveExtractData,
   [Types.REMOVE_DATA]: emptyData,
 })
 

@@ -3,6 +3,7 @@ import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
+import ImagePicker from 'react-native-image-picker'
 
 // Styles
 import styles from '../Styles/ProfileStyle'
@@ -18,12 +19,17 @@ class Profile extends Component {
         name="user-circle"
         color={tintColor}
       />
-    ),
+    )
   }
 
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      babyImage: require('../../Images/Profile/3-3.jpg'),
+      motherImage: require('../../Images/Profile/3-2.jpg'),
+      fatherImage: require('../../Images/Profile/3-1.jpg'),
+
+    }
   }
 
   render () {
@@ -45,7 +51,8 @@ class Profile extends Component {
                   <EditableImage
                     size={80}
                     style={styles.parentImage}
-                    source={require('../../Images/Profile/3-2.jpg')}
+                    source={this.state.motherImage}
+                    onPress={this.showMotherImagePicker.bind(this)}
                   />
                   <Text style={styles.parentText}>Mother</Text>
                 </View>
@@ -54,14 +61,16 @@ class Profile extends Component {
                   <EditableImage
                     style={styles.babyImage}
                     size={120}
-                    source={require('../../Images/Profile/3-3.jpg')}
+                    source={this.state.babyImage}
+                    onPress={this.showBabyImagePicker.bind(this)}
                   />
                 </View>
                 <View style={styles.parentContainer}>
                   <EditableImage
                     size={80}
                     style={styles.parentImage}
-                    source={require('../../Images/Profile/3-1.jpg')}
+                    source={this.state.fatherImage}
+                    onPress={this.showFatherImagePicker.bind(this)}
                   />
                   <Text style={styles.parentText}>Father</Text>
                 </View>
@@ -88,6 +97,49 @@ class Profile extends Component {
   onPressRightBarButton () {
     const { navigation } = this.props
     navigation.navigate('EditProfile')
+  }
+
+  showBabyImagePicker () {
+    this.ShowImagePicker((response) => {
+      let source = { uri: response.uri }
+      this.setState({
+        babyImage: source
+      });
+    })
+  }
+
+  showFatherImagePicker () {
+    this.ShowImagePicker((response) => {
+      let source = { uri: response.uri }
+      this.setState({
+        fatherImage: source
+      });
+    })
+  }
+
+  showMotherImagePicker () {
+    this.ShowImagePicker((response) => {
+      let source = { uri: response.uri }
+      this.setState({
+        motherImage: source
+      });
+    })
+  }
+
+  ShowImagePicker (callback) {
+    ImagePicker.showImagePicker(options = null, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else {
+        callback(response)
+      }
+    })
   }
 }
 

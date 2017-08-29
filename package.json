@@ -36,6 +36,7 @@
     "react-native-config": "^0.6.0",
     "react-native-device-info": "^0.11.0",
     "react-native-drawer": "^2.3.0",
+    "react-native-image-picker": "^0.26.4",
     "react-native-linear-gradient": "^2.2.0",
     "react-native-pages": "^0.5.3",
     "react-native-vector-icons": "^4.3.0",

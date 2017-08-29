@@ -11,16 +11,12 @@ export function *connect(action) {
     const { device } = action
     Ble.stopScan()
     yield delay(500)
-    console.log(device, '<BluetoothSagas#connect>')
     const connectedDevice = yield call(Connector.connect, device)
-    console.log(connectedDevice, '<BluetoothSagas#connect>', 'connected device')
     const discoveredServicesDevice = yield call(Connector.discover, connectedDevice)
-    console.log(discoveredServicesDevice, '<BluetoothSagas#connect>', 'discoverd services device')
     const services = yield call(Connector.services, discoveredServicesDevice)
-    console.log(services, '<BluetoothSagas#connect>', 'services')
+
     for (let i = 0; i < services.length; i++) {
       const service = services[i]
-      console.log(service, 'serivce')
       if (service.uuid === mainService) {
         const characteristics = yield call(Connector.characteristicsForService, discoveredServicesDevice)
         for (let j = 0; j < characteristics.length; j++) {
@@ -32,10 +28,9 @@ export function *connect(action) {
     }
 
     yield put(BluetoothAction.successConnect(device))
-    console.log('end')
   }
+
   catch (e) {
-    console.log(e, 'scan stop')
     yield put(BluetoothAction.cancelConnection())
   }
 
