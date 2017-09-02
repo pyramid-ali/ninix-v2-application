@@ -22,11 +22,20 @@ export default StyleSheet.create({
     borderBottomColor: `rgba(${Colors.blackRGB}, 0.1)`,
   },
   icon: {
-    paddingRight: 5
+    paddingRight: 5,
+    width: 25,
+    alignSelf: 'center'
   },
   textInput: {
     fontSize: 16,
     padding: 0,
-    color: Colors.primary
+    color: Colors.primary,
+    flex: 1
+  },
+  inputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   }
 })

@@ -3,6 +3,7 @@ import { View, DatePickerAndroid, TouchableOpacity, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { parentSettings } from '../../Services/SettingInfo'
 import SettingComponent from '../../Components/SettingComponent'
+import ParentAction from '../../Redux/ParentRedux'
 
 
 // Styles
@@ -14,9 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 class ProfileSetting extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      language: 'java'
-    }
   }
 
   render () {
@@ -35,29 +33,25 @@ class ProfileSetting extends Component {
         <View style={styles.container}>
           <SettingComponent
             settings={setting}
-            onChange={(settings) => {}}
+            onChange={this.onChangeSetting.bind(this)}
           />
-          <TouchableOpacity onPress={this.openDatePicker}>
-            <Text>Open Date</Text>
-          </TouchableOpacity>
         </View>
       </View>
     )
   }
 
-  async openDatePicker() {
-    try {
-      const {action, year, month, day} = await DatePickerAndroid.open({
-        // Use `new Date()` for current date.
-        // May 25 2020. Month 0 is January.
-        date: new Date(1990, 0, 1)
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        // Selected year, month (0-11), day
-      }
-    } catch ({code, message}) {
-      console.warn('Cannot open date picker', message);
+  onChangeSetting (settings) {
+    let payload = {}
+    if(Array.isArray(settings)) {
+      settings.forEach((item, index) => {
+        payload = {
+          ...payload,
+          [item.key]: item.value
+        }
+      })
     }
+
+    this.updateParentSetting(payload)
   }
 
   goBack() {
@@ -71,6 +65,18 @@ class ProfileSetting extends Component {
     const { type } = navigation.state.params
     return type === 'father' ? father : mother
   }
+
+  updateParentSetting (payload) {
+    const { type } = this.props.navigation.state.params
+    if (type === 'father') {
+      this.props.updateFather(payload)
+      // TODO: sent settings to server
+    }
+    else if (type === 'mother') {
+      this.props.updateMother(payload)
+    }
+  }
+
 }
 
 const mapStateToProps = (state) => {
@@ -83,6 +89,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateMother: (payload) => dispatch(ParentAction.updateMother(payload)),
+    updateFather: (payload) => dispatch(ParentAction.updateFather(payload)),
   }
 }
 

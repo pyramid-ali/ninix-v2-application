@@ -6,6 +6,7 @@ import StringSetting from './Setting/StringSetting'
 import BooleanSetting from './Setting/BooleanSetting'
 import SliderSetting from './Setting/SliderSetting'
 import ListSetting from './Setting/ListSettings'
+import DateSetting from './Setting/DateSetting'
 
 export default class SettingComponent extends Component {
   // // Prop type warnings
@@ -58,6 +59,8 @@ export default class SettingComponent extends Component {
         return this.renderSliderItem(value)
       case 'list':
         return this.renderListItem(value)
+      case 'date':
+        return this.renderDateItem(value)
       default:
         return null
     }
@@ -90,7 +93,6 @@ export default class SettingComponent extends Component {
   renderBooleanItem (value) {
     const { item, index } = value
     const current = this.settings[index]
-    console.log(current, 'current setting')
     let currentValue = current.value
 
     return (
@@ -116,7 +118,26 @@ export default class SettingComponent extends Component {
   renderListItem (value) {
     const {index, item} = value
     return (
-      <ListSetting />
+      <ListSetting
+        onSelect={() => this.showList = true}
+        title="Blood Group"
+        onBack={() => console.log('as')}
+      />
+    )
+  }
+
+  renderDateItem (value) {
+    const {index, item} = value
+    const current = this.settings[index]
+    let currentValue = current.value
+    return (
+      <DateSetting
+        title={item.title}
+        value={currentValue}
+        onChange={(year, month, day) => {
+          this.onDateChange(new Date(year, month, day), index)
+        }}
+      />
     )
   }
 
@@ -150,6 +171,20 @@ export default class SettingComponent extends Component {
 
   }
 
+  onDateChange (value, index) {
+    const currentSetting = this.settings[index]
+    console.log(value, index, currentSetting, 'date setting')
+    const settings = this.changeCurrentSetting(
+      {
+        ...currentSetting,
+        value: value
+      }, index)
+
+    this.didSettingsChanged(settings)
+    console.log(settings, 'date settings')
+    this.forceUpdate()
+  }
+
   changeCurrentSetting (currentSetting, index) {
     const settings = [
       ...this.settings.slice(0, index),
@@ -160,7 +195,7 @@ export default class SettingComponent extends Component {
   }
 
   didSettingsChanged (settings) {
-    this.settings = settings;
+    this.settings = settings
     this.props.onChange(this.settings)
   }
 }

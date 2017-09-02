@@ -19,26 +19,29 @@ export default class StringSetting extends Component {
 
   render () {
     const { title, icon, ...props } = this.props
+
     return (
-      <View
-        style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.titleContainer}>
-          { icon ?
-            <Icon name={icon} size={14} style={styles.icon} /> :
-            null
-          }
           <Text
             style={styles.title}>
             {title}
           </Text>
         </View>
-        <TextInput
-          autoCapitalize="words"
-          style={styles.textInput}
-          underlineColorAndroid={'transparent'}
-          {...props}
-        />
+        <View style={styles.inputContainer}>
+          { icon ?
+            <Icon name={icon} size={16} style={styles.icon} /> :
+            null
+          }
+          <TextInput
+            autoCapitalize="words"
+            style={styles.textInput}
+            underlineColorAndroid={'transparent'}
+            {...props}
+          />
+        </View>
       </View>
     )
   }
+
 }

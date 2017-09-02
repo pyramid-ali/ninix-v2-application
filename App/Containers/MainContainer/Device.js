@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
+import moment from 'moment'
 
 // Styles
 import styles from '../Styles/DeviceStyle'
+import DeviceLogItem from '../../Components/DeviceLogItem'
 
 
 class Device extends Component {
@@ -27,8 +29,32 @@ class Device extends Component {
 
   render () {
 
+    const data = [
+      {
+        key: 1,
+        status: 'Disconnected',
+        date: moment().subtract(10, 'm')
+      },
+      {
+        key: 2,
+        status: 'Connected',
+        date: moment().subtract(100, 'm')
+      },
+      {
+        key: 3,
+        status: 'Disconnected',
+        date: moment().subtract(1000, 'm')
+      },
+      {
+        key: 4,
+        status: 'Connected',
+        date: moment().subtract(1000, 'm')
+      }
+    ]
+
     const { bluetooth } = this.props
     const { battery, isConnected } = bluetooth
+
     return (
       <View style={styles.wrapper}>
         <NavigationBar
@@ -42,7 +68,7 @@ class Device extends Component {
           <View style={styles.deviceContainer}>
             <View style={styles.deviceShapeContainer}>
               <View style={styles.deviceShape}>
-                <Text style={styles.batteryCharge}> {battery >= 0 ? battery + '%' : 'Offline'}</Text>
+                <Text style={styles.batteryCharge}> { Number.isInteger(battery) ? battery + '%' : 'Unknown'}</Text>
                 <Text style={styles.batteryChargeFooter}>{ isConnected ? 'Battery Charge' : 'No Device Connected'}</Text>
               </View>
               <View style={styles.deviceShapeHead}/>
@@ -53,11 +79,21 @@ class Device extends Component {
             </View>
           </View>
           <View style={styles.logContainer}>
-            <Text>this is log</Text>
+            <FlatList
+              data={data}
+              renderItem={({item}) => this.renderItem(item)}
+              ItemSeparatorComponent={this.renderDivider}
+            />
           </View>
         </ScrollView>
       </View>
 
+    )
+  }
+
+  renderItem (item) {
+    return (
+      <DeviceLogItem status={item.status} date={item.date} />
     )
   }
 
@@ -72,6 +108,16 @@ class Device extends Component {
   pressRightBarButton () {
     const { navigation } = this.props
     navigation.navigate('AddDevice')
+  }
+
+  renderDivider () {
+    return (
+      <View style={styles.dividerContainer}>
+        <View style={styles.dividerLine} />
+        <View style={styles.dividerCenter} />
+        <View style={styles.dividerLine} />
+      </View>
+    )
   }
 }
 

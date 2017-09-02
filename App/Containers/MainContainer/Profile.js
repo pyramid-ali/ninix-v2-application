@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
 import ImagePicker from 'react-native-image-picker'
+import ParentAction from '../../Redux/ParentRedux'
 
 // Styles
 import styles from '../Styles/ProfileStyle'
 import EditableImage from '../../Components/EditableImage'
+import GrowthChart from '../GrowthChart'
 
 
 class Profile extends Component {
@@ -24,15 +26,18 @@ class Profile extends Component {
 
   constructor (props) {
     super(props)
+    const { mother, father } = props
     this.state = {
       babyImage: require('../../Images/Profile/3-3.jpg'),
-      motherImage: require('../../Images/Profile/3-2.jpg'),
-      fatherImage: require('../../Images/Profile/3-1.jpg'),
-
+      motherImage: mother.image ? {uri: mother.image} : require('../../Images/Profile/3-2.jpg'),
+      fatherImage: father.image ? {uri: father.image} : require('../../Images/Profile/3-1.jpg'),
     }
   }
 
   render () {
+
+    const { mother, father } = this.props
+
     return (
       <View style={{flex: 1}}>
         <NavigationBar
@@ -54,7 +59,7 @@ class Profile extends Component {
                     source={this.state.motherImage}
                     onPress={this.showMotherImagePicker.bind(this)}
                   />
-                  <Text style={styles.parentText}>Mother</Text>
+                  <Text style={styles.parentText}>{mother.name ? mother.name : 'Mother'}</Text>
                 </View>
                 <View style={styles.babyContainer}>
                   <Text style={styles.babyText}>Masht Mamad</Text>
@@ -72,14 +77,14 @@ class Profile extends Component {
                     source={this.state.fatherImage}
                     onPress={this.showFatherImagePicker.bind(this)}
                   />
-                  <Text style={styles.parentText}>Father</Text>
+                  <Text style={styles.parentText}>{father.name ? father.name : 'Father'}</Text>
                 </View>
               </View>
-              <Text style={styles.bottomText}>Lorem Ipsum is simply dummy text of the printing and typesetting industry</Text>
+              <Text style={styles.bottomText}>A child's love could simply be one of the most beautiful sounds in the world.</Text>
             </View>
           </Image>
           <View style={styles.bottomContainer}>
-            <Text>Bottom</Text>
+            <GrowthChart />
           </View>
         </ScrollView>
       </View>
@@ -113,8 +118,10 @@ class Profile extends Component {
       let source = { uri: response.uri }
       this.setState({
         fatherImage: source
-      });
+      })
+      this.props.updateFatherImage({image: response.uri})
     })
+
   }
 
   showMotherImagePicker () {
@@ -122,7 +129,8 @@ class Profile extends Component {
       let source = { uri: response.uri }
       this.setState({
         motherImage: source
-      });
+      })
+      this.props.updateMotherImage({image: response.uri})
     })
   }
 
@@ -144,12 +152,16 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { mother, father } = state
   return {
+    mother, father
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateFatherImage: (payload) => dispatch(ParentAction.updateFather(payload)),
+    updateMotherImage: (payload) => dispatch(ParentAction.updateMother(payload))
   }
 }
 

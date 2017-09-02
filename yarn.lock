@@ -3913,6 +3913,10 @@ react-native-ble-plx@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-0.6.1.tgz#c970f192eb62dab468f0cac07c0da53d31d2fea1"
 
+react-native-charts-wrapper@^0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/react-native-charts-wrapper/-/react-native-charts-wrapper-0.2.10.tgz#39485a29e6c3f1e9c76bb134305664754d03f9df"
+
 react-native-config@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-0.6.0.tgz#0f71631ab5ac4b568637dcb8e9f6ab85ffb380ed"

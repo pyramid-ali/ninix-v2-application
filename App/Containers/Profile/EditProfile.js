@@ -17,20 +17,20 @@ class EditProfile extends Component {
   // }
 
   render () {
-
+    const { mother, father } = this.props
     const data = [
       {
         key: 1,
         title: 'Father',
-        text: 'Masoud Jahani',
-        image: require('../../Images/Profile/3-1.jpg'),
+        text: father.name,
+        image: father.image ? {uri: father.image} : require('../../Images/Profile/3-1.jpg'),
         type: 'father'
       },
       {
         key: 2,
         title: 'Mother',
-        text: 'Tanaz Hosseini',
-        image: require('../../Images/Profile/3-2.jpg'),
+        text: mother.name,
+        image: mother.image ? {uri: mother.image} : require('../../Images/Profile/3-2.jpg'),
         type: 'mother'
       },
       {
@@ -73,7 +73,7 @@ class EditProfile extends Component {
 
   renderItem (value) {
     const { item } = value
-    console.log(item, 'item')
+
     return (
       <View style={styles.itemContainer}>
         <View style={styles.itemImageContainer}>
@@ -103,7 +103,10 @@ class EditProfile extends Component {
 
 
 const mapStateToProps = (state) => {
+  const { father, mother } = state
   return {
+    father,
+    mother
   }
 }
 

@@ -13,55 +13,23 @@ export default class ListSettings extends Component {
   //   someSetting: PropTypes.bool.isRequired,
   // }
   //
-  // // Defaults for props
-  // static defaultProps = {
-  //   someSetting: false
-  // }
-
-  constructor (props) {
-    super(props)
-    this.state = {
-      showList : false
-    }
+  // Defaults for props
+  static defaultProps = {
+    showList: false
   }
 
   render () {
-    const data = [
-      {
-        key: '1',
-        value: 'A+'
-      },
-      {
-        key: '2',
-        value: 'A-'
-      }
-    ]
+    const { onSelect, title } = this.props
+
     return (
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.touch}
-          onPress={() => this.setState({showList: true})}
+          onPress={onSelect.bind(this)}
         >
-          <Text>Blood Group</Text>
+          <Text>{title.toUpperCase()}</Text>
           <Icon name="angle-right" size={16} />
         </TouchableOpacity>
-        <Modal
-          visible={this.state.showList}
-          onRequestClose={() => this.setState({showList: false})}
-          animationType="slide"
-        >
-          <View style={styles.navBar}>
-            <TouchableOpacity onPress={() => this.setState({showList: false})}>
-              <Icon style={styles.navBarIcon} name="arrow-left" size={18} />
-            </TouchableOpacity>
-            <Text>{'Profile Setting'.toUpperCase()}</Text>
-          </View>
-          <FlatList
-            data={data}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={this.renderItem.bind(this)}
-          />
-        </Modal>
       </View>
     )
   }

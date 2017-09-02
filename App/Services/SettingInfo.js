@@ -22,6 +22,7 @@ export const parentSettings = (values: object) => {
       icon: 'mobile',
       title: 'Mobile',
       type: 'string',
+      keyboardType: 'phone-pad',
       placeholder: 'Enter your mobile (11 digits)',
       value: values.mobile
     },
@@ -30,6 +31,7 @@ export const parentSettings = (values: object) => {
       icon: 'phone',
       title: 'Phone',
       type: 'string',
+      keyboardType: 'phone-pad',
       placeholder: 'Enter your phone',
       value: values.phone
     },
@@ -38,20 +40,21 @@ export const parentSettings = (values: object) => {
       icon: 'envelope',
       title: 'Email',
       type: 'string',
+      keyboardType: 'email-address',
       placeholder: 'Enter your email',
       value: values.email
-    },
-    {
-      key: 'smoke',
-      title: 'Are you smoke?',
-      type: 'boolean',
-      value: false
     },
     {
       key: 'bloodGroup',
       title: 'Blood Group',
       type: 'list'
-    }
+    },
+    {
+      key: 'birthDate',
+      title: 'Birth Date',
+      type: 'date'
+    },
+
   ]
 }
 

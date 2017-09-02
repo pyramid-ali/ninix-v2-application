@@ -62,6 +62,7 @@ export default StyleSheet.create({
     paddingBottom: 10
   },
   bottomContainer: {
-    flex: 1
+    flex: 1,
+    height: 300
   }
 })

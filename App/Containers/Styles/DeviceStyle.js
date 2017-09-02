@@ -18,7 +18,7 @@ export default StyleSheet.create({
   },
   deviceContainer: {
     width: Metrics.screenWidth,
-    height: Metrics.screenHeight * 0.35,
+    height: Metrics.screenHeight * 0.3,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -55,7 +55,6 @@ export default StyleSheet.create({
   },
   logContainer: {
     marginTop: 15,
-    backgroundColor: Colors.dark
   },
   firmwareDetails: {
 
@@ -67,5 +66,36 @@ export default StyleSheet.create({
   firmwareButton: {
     textAlign: 'center',
     color: Colors.primary
+  },
+
+
+  /*
+   * divider
+   */
+
+  dividerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 3
+  },
+  dividerLine: {
+    width: 100,
+    height: 1,
+    backgroundColor: Colors.black
+  },
+  dividerCenter: {
+    width: 10,
+    height: 10,
+    backgroundColor: Colors.transparent,
+    borderWidth: 1,
+    borderColor: Colors.black,
+    marginHorizontal: 1,
+    transform: [
+      {
+        rotate: '45deg'
+      }
+    ]
   }
 })
