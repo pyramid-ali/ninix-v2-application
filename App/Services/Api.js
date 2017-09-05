@@ -34,7 +34,7 @@ const createAuthorized = (baseURL = Config.API_URL) => {
   const { token } = store.getState()
   const revokeTime = moment().unix() - (24 * 60 * 60) // revoke time is one day before expire time
 
-
+  console.log('authorized api')
 
   const authorizedApi = apisauce.create({
     baseURL,
@@ -60,5 +60,6 @@ const createAuthorized = (baseURL = Config.API_URL) => {
 }
 
 export default {
-  create
+  create,
+  createAuthorized
 }

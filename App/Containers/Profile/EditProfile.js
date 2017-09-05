@@ -17,7 +17,7 @@ class EditProfile extends Component {
   // }
 
   render () {
-    const { mother, father } = this.props
+    const { mother, father, baby } = this.props
     const data = [
       {
         key: 1,
@@ -36,8 +36,8 @@ class EditProfile extends Component {
       {
         key: 3,
         title: 'Infant',
-        text: 'Amir Ali',
-        image: require('../../Images/Profile/3-3.jpg'),
+        text: baby.name,
+        image: baby.image ? {uri: baby.image} : require('../../Images/Profile/3-3.jpg'),
         type: 'infant'
       }
     ]
@@ -84,7 +84,14 @@ class EditProfile extends Component {
           <Text style={styles.itemText}>{item.text}</Text>
         </View>
         <View style={styles.itemButtonContainer}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileSetting', {type: item.type})}>
+          <TouchableOpacity onPress={() => {
+            if (value.index === 2) {
+              this.props.navigation.navigate('BabySettings')
+            }
+            else {
+              this.props.navigation.navigate('ProfileSetting', {type: item.type})
+            }
+          }}>
             <Text style={styles.itemTextButton}>
               Edit <Icon name="angle-right" size={24} />
             </Text>
@@ -103,10 +110,11 @@ class EditProfile extends Component {
 
 
 const mapStateToProps = (state) => {
-  const { father, mother } = state
+  const { father, mother, baby } = state
   return {
     father,
-    mother
+    mother,
+    baby
   }
 }
 

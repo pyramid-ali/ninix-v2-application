@@ -49,9 +49,8 @@ class ProfileSetting extends Component {
           [item.key]: item.value
         }
       })
+      this.updateParentSetting(payload)
     }
-
-    this.updateParentSetting(payload)
   }
 
   goBack() {

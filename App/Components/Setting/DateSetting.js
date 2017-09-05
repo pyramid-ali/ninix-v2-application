@@ -20,7 +20,7 @@ export default class DateSetting extends Component {
 
   render () {
     const { title, value } = this.props
-    console.log(title, value, 'render dateSetting')
+
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>

@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 15
   },
   dateContainer: {

@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga/effects'
+import { takeLatest, select } from 'redux-saga/effects'
 import API from '../Services/Api'
 import FixtureAPI from '../Services/FixtureApi'
 import DebugConfig from '../Config/DebugConfig'
@@ -11,6 +11,7 @@ import { LoginTypes } from '../Redux/LoginRedux'
 import { AccessAbilityTypes } from '../Redux/AccessAbilityRedux'
 import { BluetoothTypes } from '../Redux/BluetoothRedux'
 import { DataTypes } from '../Redux/DataRedux'
+import { ParentTypes } from '../Redux/ParentRedux'
 
 
 /* ------------- Sagas ------------- */
@@ -21,10 +22,10 @@ import { login } from './LoginSagas'
 import { checkConnectivity } from './AccessAbilitySagas'
 import { connect } from './BluetoothSagas'
 import { receiveData } from './DataSagas'
+import { syncFather, syncMother } from './ParentSagas'
 
 
 /* ------------- API ------------- */
-
 // The API we use is only used from Sagas, so we create it here and pass along
 // to the sagas which need it.
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
@@ -45,7 +46,9 @@ const root = function * root () {
     takeLatest(LoginTypes.REQUEST, login, api),
     takeLatest(AccessAbilityTypes.NETWORK_STATUS, checkConnectivity),
     takeLatest(BluetoothTypes.START_CONNECTING, connect),
-    takeLatest(DataTypes.RECEIVE_DATA, receiveData)
+    takeLatest(DataTypes.RECEIVE_DATA, receiveData),
+    takeLatest(ParentTypes.UPDATE_FATHER, syncFather),
+    takeLatest(ParentTypes.UPDATE_MOTHER, syncMother),
   ]
 }
 

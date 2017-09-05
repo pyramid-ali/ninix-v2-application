@@ -1,5 +1,6 @@
 import { StackNavigator } from 'react-navigation'
-import GrowthChart from '../Containers/GrowthChart'
+import BabySettings from '../Containers/Profile/BabySettings'
+import GrowthChart from '../Containers/Profile/GrowthChart'
 import ProfileSetting from '../Containers/Profile/ProfileSetting'
 import EditProfile from '../Containers/Profile/EditProfile'
 import AddDevice from '../Containers/Device/AddDevice'
@@ -13,6 +14,7 @@ import styles from './Styles/NavigationStyles'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  BabySettings: { screen: BabySettings },
   ProfileSetting: { screen: ProfileSetting },
   EditProfile: { screen: EditProfile },
   AddDevice: { screen: AddDevice },
@@ -23,7 +25,7 @@ const PrimaryNav = StackNavigator({
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'Main',
+  initialRouteName: 'IntroductionPage',
   navigationOptions: {
     headerStyle: styles.header
   }

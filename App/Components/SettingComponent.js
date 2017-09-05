@@ -117,11 +117,13 @@ export default class SettingComponent extends Component {
 
   renderListItem (value) {
     const {index, item} = value
+    const current = this.settings[index]
+    let currentValue = current.value
     return (
       <ListSetting
-        onSelect={() => this.showList = true}
-        title="Blood Group"
-        onBack={() => console.log('as')}
+        onSelect={(itemValue, itemIndex) => this.onChangeList(itemValue, itemIndex, index)}
+        {...item}
+        value={currentValue}
       />
     )
   }
@@ -161,6 +163,18 @@ export default class SettingComponent extends Component {
       {
         ...currentSetting,
         value: value
+      }, index)
+
+    this.didSettingsChanged(settings)
+    this.forceUpdate()
+  }
+
+  onChangeList (itemValue, itemIndex, index) {
+    const currentSetting = this.settings[index]
+    const settings = this.changeCurrentSetting(
+      {
+        ...currentSetting,
+        value: itemValue
       }, index)
 
     this.didSettingsChanged(settings)

@@ -15,7 +15,7 @@ const { Types, Creators } = createActions({
   refreshToken: null,
   logout: null
 }, {
-  prefix: 'LOGIN'
+  prefix: 'LOGIN_'
 })
 
 export const LoginTypes = Types

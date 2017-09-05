@@ -14,6 +14,7 @@ export default () => {
     bluetooth: require('./BluetoothRedux').reducer,
     mother: require('./ParentRedux').motherReducer,
     father: require('./ParentRedux').fatherReducer,
+    baby: require('./BabyRedux').reducer,
     data: require('./DataRedux').reducer
   })
 

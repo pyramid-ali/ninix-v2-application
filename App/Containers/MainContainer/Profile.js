@@ -5,11 +5,12 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
 import ImagePicker from 'react-native-image-picker'
 import ParentAction from '../../Redux/ParentRedux'
+import BabyAction from '../../Redux/BabyRedux'
 
 // Styles
 import styles from '../Styles/ProfileStyle'
 import EditableImage from '../../Components/EditableImage'
-import GrowthChart from '../GrowthChart'
+import GrowthChart from '../Profile/GrowthChart'
 
 
 class Profile extends Component {
@@ -36,7 +37,7 @@ class Profile extends Component {
 
   render () {
 
-    const { mother, father } = this.props
+    const { mother, father, baby } = this.props
 
     return (
       <View style={{flex: 1}}>
@@ -62,7 +63,7 @@ class Profile extends Component {
                   <Text style={styles.parentText}>{mother.name ? mother.name : 'Mother'}</Text>
                 </View>
                 <View style={styles.babyContainer}>
-                  <Text style={styles.babyText}>Masht Mamad</Text>
+                  <Text style={styles.babyText}>{baby.name ? baby.name : 'Baby'}</Text>
                   <EditableImage
                     style={styles.babyImage}
                     size={120}
@@ -110,6 +111,7 @@ class Profile extends Component {
       this.setState({
         babyImage: source
       });
+      this.props.updateBabyImage({image: response.uri})
     })
   }
 
@@ -152,16 +154,17 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { mother, father } = state
+  const { mother, father, baby } = state
   return {
-    mother, father
+    mother, father, baby
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateFatherImage: (payload) => dispatch(ParentAction.updateFather(payload)),
-    updateMotherImage: (payload) => dispatch(ParentAction.updateMother(payload))
+    updateMotherImage: (payload) => dispatch(ParentAction.updateMother(payload)),
+    updateBabyImage: (payload) => dispatch(BabyAction.update(payload))
   }
 }
 

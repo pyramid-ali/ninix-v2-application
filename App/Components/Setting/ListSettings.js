@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import PropTypes from 'prop-types';
-import { View, Text, FlatList, Modal, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Modal, TouchableOpacity, Picker } from 'react-native'
 import styles from './Styles/ListSettingsStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../NavigationBar'
@@ -19,17 +19,26 @@ export default class ListSettings extends Component {
   }
 
   render () {
-    const { onSelect, title } = this.props
+    const { onSelect, title, items, value } = this.props
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.touch}
-          onPress={onSelect.bind(this)}
-        >
-          <Text>{title.toUpperCase()}</Text>
-          <Icon name="angle-right" size={16} />
-        </TouchableOpacity>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.placeholder}>
+          <Text style={styles.placeholderText}>{value ? value : 'Select'}</Text>
+          <Icon style={styles.icon} name="sliders" size={18} color={Colors.dark} />
+        </View>
+        <Picker
+          style={styles.picker}
+          selectedValue={value}
+          onValueChange={(itemValue, itemIndex) => {onSelect(itemValue, itemIndex)}}>
+          {items.map((item, index) => {
+            return (
+              <Picker.Item key={index} label={item.label ? item.label : item.value} value={item.value} />
+            )
+          })}
+        </Picker>
+
       </View>
     )
   }

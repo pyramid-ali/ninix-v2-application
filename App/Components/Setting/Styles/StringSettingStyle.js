@@ -4,9 +4,9 @@ import Colors from '../../../Themes/Colors'
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15,
+    // paddingHorizontal: 15,
     backgroundColor: Colors.white,
-    paddingBottom: 10
+    // paddingBottom: 10
   },
   titleContainer: {
     flex: 1,

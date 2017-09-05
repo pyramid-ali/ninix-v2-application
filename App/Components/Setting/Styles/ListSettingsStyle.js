@@ -5,49 +5,35 @@ import Metrics from '../../../Themes/Metrics'
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    backgroundColor: Colors.white
-  },
-  navBar: {
-    //flex: 1,
-    height: Metrics.navBarHeight,
-    backgroundColor: Colors.light,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: `rgba(${Colors.blackRGB}, 0.5)`
-  },
-  navBarIcon: {
-    marginHorizontal: 10
-  },
-  navBarText: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  touch: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  title: {
-    fontSize: 16
-  },
-  itemContainer: {
-    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 0,
+    paddingVertical: 5,
+    backgroundColor: Colors.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 20
+    alignItems: 'center'
   },
-  itemText: {
-    fontSize: 18,
-    color: Colors.dark
+  title: {
+    fontSize: 16,
+    flex: 1
   },
-  separator: {
-    flex: 1,
-    borderWidth: 0.25,
-    marginHorizontal: 10,
-    borderColor: `rgba(${Colors.blackRGB}, 0.2)`
+  picker: {
+    flex:1,
+    opacity: 0,
+    zIndex: 10
+  },
+  placeholder: {
+    position: 'absolute',
+    right: 15,
+    flexDirection: 'row',
+    zIndex: 9
+  },
+  placeholderText: {
+    fontSize: 14,
+  },
+  icon: {
+    marginLeft: 5,
+    padding: 0,
   }
+
 })

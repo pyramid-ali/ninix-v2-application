@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import {BarChart} from 'react-native-charts-wrapper';
 
 // Styles
-import styles from './Styles/GrowthChartStyle'
+import styles from '../Styles/GrowthChartStyle'
 
 class GrowthChart extends Component {
   constructor (props) {

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default class ParenModel {
 
   static fromJson (json) {
@@ -6,7 +8,7 @@ export default class ParenModel {
       birthDate: json.birth_date,
       job: json.job,
       mobile: json.mobile,
-      bloodType: json.blood_type,
+      bloodGroup: json.blood_type,
       phone: json.phone,
       email: json.email
     }
@@ -15,10 +17,10 @@ export default class ParenModel {
   static toJson(model) {
     return {
       name: model.name,
-      birth_date: model.birthDate,
+      birth_date: moment(model.birthDate).toJSON(),
       job: model.job,
       mobile: model.mobile,
-      blood_type: model.bloodType,
+      blood_type: model.bloodGroup,
       phone: model.phone,
       email: model.email
     }
