@@ -13,23 +13,12 @@ class RootContainer extends Component {
 
   componentDidMount() {
 
-    const { changeNetInfo, checkConnectivity } = this.props
+    const { changeNetInfo } = this.props
     NetInfo.addEventListener('change', (event) => {
       changeNetInfo(event)
     })
     Connector.addEventListener()
     this.backHandler()
-  }
-
-  backHandler() {
-    const { nav } = this.props
-    const backAction = NavigationActions.back({
-      key: null
-    })
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.dispatch(backAction)
-      return true
-    });
   }
 
   componentWillUnmount () {
@@ -48,13 +37,25 @@ class RootContainer extends Component {
       </View>
     )
   }
+
+  backHandler() {
+    const { nav } = this.props
+    const backAction = NavigationActions.back({
+      key: null
+    })
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      this.props.dispatch(backAction)
+      return true
+    });
+  }
+
 }
+
 
 // wraps dispatch to create nicer functions to call within our component
 const mapDispatchToProps = (dispatch) => {
   return {
     changeNetInfo: (status) => dispatch(AccessAbility.networkStatus(status)),
-    checkConnectivity: (status) => dispatch(AccessAbility.networkConnectivity(status)),
     dispatch: (action) => dispatch(action)
   }
 }

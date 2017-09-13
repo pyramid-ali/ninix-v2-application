@@ -24,7 +24,7 @@ class AuthenticationScreen extends Component {
             null :
             <StickyAlert
               leftIcon="info">
-              There is no Internet Connection, Please check your device connectivity to proceed
+              No Internet Connection
             </StickyAlert>
         }
         <AuthenticationNavigation />

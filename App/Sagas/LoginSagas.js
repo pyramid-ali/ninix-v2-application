@@ -4,6 +4,7 @@ import LoginModel from '../Models/loginModel'
 import Login from '../Redux/LoginRedux'
 import TokenModel from '../Models/TokenModel'
 import AccessToken from '../Redux/AcccessTokenRedux'
+import Sync from '../Services/Sync'
 
 const goToMainPage = NavigationActions.reset({
   index: 0,
@@ -23,10 +24,17 @@ export function *login(api, action) {
     yield put(AccessToken.issueToken(payload))
     yield put(Login.success())
     yield put(goToMainPage)
+    Sync.start()
   }
   else {
     const { message } = response.data
-    yield put(Login.failure(message))
+    if (message) {
+      yield put(Login.failure(message))
+    }
+    else {
+      yield put(Login.failure(response.problem))
+    }
+
   }
 
 }

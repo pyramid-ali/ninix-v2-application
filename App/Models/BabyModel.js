@@ -1,16 +1,13 @@
 import moment from 'moment'
 
-export default class ParentModel {
+export default class BabyModel {
 
   static fromJson (json) {
     return {
       name: json.name,
-      birthDate: moment(json.birth_date),
-      job: json.job,
-      mobile: json.mobile,
+      birthDate: json.birth_date ? moment(json.birth_date) : null,
       bloodGroup: json.blood_type,
-      phone: json.phone,
-      email: json.email,
+      gender: json.gender,
       updatedAt: moment(json.updated_at)
     }
   }
@@ -18,12 +15,9 @@ export default class ParentModel {
   static toJson(model) {
     return {
       name: model.name,
-      birth_date: moment(model.birthDate).toJSON(),
-      job: model.job,
-      mobile: model.mobile,
+      birth_date: model.birthDate ? moment(model.birthDate).toJSON() : null,
       blood_type: model.bloodGroup,
-      phone: model.phone,
-      email: model.email,
+      gender: model.gender,
       updated_at: moment(model.updatedAt).toJSON()
     }
   }

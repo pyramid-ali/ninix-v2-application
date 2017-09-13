@@ -60,9 +60,6 @@ class LoginPage extends Component {
     }
     return (
       <KeyboardAvoidingView
-        onKeyboardChange={(event) => {
-          console.log(event, 'keyboard changed')
-        }}
         behavior='padding'
         style={styles.container}>
         <Image
@@ -85,11 +82,14 @@ class LoginPage extends Component {
                 login.error ?
                   <Text style={styles.error}>
                     {login.error}
-                  </Text> :
+                  </Text>
+                :
                   null
               }
                 <TextInputWithIcon
+                  editable={!login.isFetchingUser}
                   keyboardType="phone-pad"
+                  maxLength={11}
                   containerStyle={styles.textInputContainerStyle}
                   style={styles.textInput}
                   size={20}
@@ -100,6 +100,7 @@ class LoginPage extends Component {
                   value={mobile}
                   placeholder='Mobile Number' />
                 <TextInputWithIcon
+                  editable={!login.isFetchingUser}
                   containerStyle={styles.textInputContainerStyle}
                   style={styles.textInput}
                   size={20}
@@ -136,7 +137,6 @@ class LoginPage extends Component {
                 <Text
                   onPress={() => {
                     this.props.signup(this.props.navigation)
-                    //this.props.navigation.navigate('MobileEntry')
                   }}
                   style={styles.footerText}>Signup</Text>
               </View>

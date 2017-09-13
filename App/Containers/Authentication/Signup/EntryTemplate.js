@@ -24,13 +24,21 @@ class EntryTemplate extends Component {
   }
 
   _keyboardDidShow () {
-    Animated.timing(
-      this.state.marginTop,
-      {
-        toValue: -400,
-        duration: 1000
-      }
-    ).start()
+    Animated.sequence([
+      Animated.timing(
+        this.state.marginTop,
+        {
+          toValue: -150,
+          duration: 1
+        }),
+      Animated.timing(
+        this.state.marginTop,
+        {
+          toValue: -400,
+          duration: 1000
+        })
+    ])
+    .start()
   }
 
   _keyboardDidHide () {

@@ -14,5 +14,15 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.black
+  },
+  hover: {
+    position: 'absolute',
+    alignSelf: 'center',
+    backgroundColor: `rgba(${Colors.blackRGB}, 0.5)`,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  progressText: {
+    color: Colors.white,
   }
 })

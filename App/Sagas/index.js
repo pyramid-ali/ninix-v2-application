@@ -12,6 +12,7 @@ import { AccessAbilityTypes } from '../Redux/AccessAbilityRedux'
 import { BluetoothTypes } from '../Redux/BluetoothRedux'
 import { DataTypes } from '../Redux/DataRedux'
 import { ParentTypes } from '../Redux/ParentRedux'
+import { BabyTypes } from '../Redux/BabyRedux'
 
 
 /* ------------- Sagas ------------- */
@@ -22,8 +23,8 @@ import { login } from './LoginSagas'
 import { checkConnectivity } from './AccessAbilitySagas'
 import { connect } from './BluetoothSagas'
 import { receiveData } from './DataSagas'
-import { syncFather, syncMother } from './ParentSagas'
-
+import { syncFather, syncMother, retrieveFather, retrieveMother } from './ParentSagas'
+import { syncBaby, retrieveBaby } from './BabySagas'
 
 /* ------------- API ------------- */
 // The API we use is only used from Sagas, so we create it here and pass along
@@ -48,7 +49,11 @@ const root = function * root () {
     takeLatest(BluetoothTypes.START_CONNECTING, connect),
     takeLatest(DataTypes.RECEIVE_DATA, receiveData),
     takeLatest(ParentTypes.UPDATE_FATHER, syncFather),
+    takeLatest(ParentTypes.RETRIEVE_FATHER, retrieveFather),
     takeLatest(ParentTypes.UPDATE_MOTHER, syncMother),
+    takeLatest(ParentTypes.RETRIEVE_MOTHER, retrieveMother),
+    takeLatest(BabyTypes.UPDATE, syncBaby),
+    takeLatest(BabyTypes.RETRIEVE, retrieveBaby),
   ]
 }
 

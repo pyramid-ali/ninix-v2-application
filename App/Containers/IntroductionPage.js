@@ -4,21 +4,13 @@ import { connect } from 'react-redux'
 import { Pages} from 'react-native-pages'
 import introductions from '../Fixtures/IntroductionContent'
 import { AppState } from '../Redux/AppStateRedux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import Introduction from '../Components/Introduction'
+import PageIndicator from '../Components/PageIndicator'
 
 // Styles
 import styles from './Styles/IntroductionPageStyle'
-import Introduction from '../Components/Introduction'
-import PageIndicator from '../Components/PageIndicator'
-import { Metrics } from '../Themes/'
-import StickyAlert from '../Components/StickyAlert'
 
 class IntroductionPage extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
 
   render () {
     return (

@@ -1,3 +1,36 @@
+const bloodGropus = [
+  {
+    value: 'A-'
+  },
+  {
+    value: 'A+'
+  },
+  {
+    value: 'B-'
+  },
+  {
+    value: 'B+'
+  },
+  {
+    value: 'AB-'
+  },
+  {
+    value: 'AB+'
+  },
+  {
+    value: 'O-'
+  },
+  {
+    value: 'O+'
+  },
+  {
+    value: 'A+'
+  },
+  {
+    value: 'A+'
+  }
+]
+
 
 export const parentSettings = (values: object) => {
   return [
@@ -44,38 +77,7 @@ export const parentSettings = (values: object) => {
       title: 'Blood Group',
       type: 'list',
       value: values.bloodGroup,
-      items: [
-        {
-          value: 'A-'
-        },
-        {
-          value: 'A+'
-        },
-        {
-          value: 'B-'
-        },
-        {
-          value: 'B+'
-        },
-        {
-          value: 'AB-'
-        },
-        {
-          value: 'AB+'
-        },
-        {
-          value: 'O-'
-        },
-        {
-          value: 'O+'
-        },
-        {
-          value: 'A+'
-        },
-        {
-          value: 'A+'
-        }
-      ]
+      items: bloodGropus
     },
     {
       key: 'birthDate',
@@ -97,25 +99,33 @@ export const babySettings = (values) => {
       value: values.name
     },
     {
-      key: 'height',
-      icon: 'user-circle-o',
-      title: 'Birth Date Height (CM)',
-      type: 'string',
-      value: values.height
+      key: 'bloodGroup',
+      title: 'Blood Group',
+      type: 'list',
+      value: values.bloodGroup,
+      items: bloodGropus
     },
     {
-      key: 'weight',
-      icon: 'user-circle-o',
-      title: 'Birth Date Weight (gr)',
-      type: 'string',
-      value: values.weight
+      key: 'gender',
+      title: 'Gender',
+      type: 'list',
+      value: values.gender,
+      items: [
+        {
+          label: 'boy',
+          value: 'm'
+        },
+        {
+          label: 'girl',
+          value: 'f'
+        }
+      ]
     },
     {
-      key: 'head',
-      icon: 'user-circle-o',
-      title: 'Birth Date Head Circumference (CM)',
-      type: 'string',
-      value: values.head
+      key: 'birthDate',
+      title: 'Birth Date',
+      type: 'date',
+      value: values.birthDate
     },
   ]
 }

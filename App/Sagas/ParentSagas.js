@@ -1,6 +1,7 @@
 import { put, call, select } from 'redux-saga/effects'
 import Api from '../Services/Api'
-import ParenModel from '../Models/ParentModel'
+import ParentModel from '../Models/ParentModel'
+import ParentAction from '../Redux/ParentRedux'
 
 
 
@@ -8,20 +9,67 @@ export function *syncFather (action) {
   const { payload } = action
   const { accessAbility } = yield select()
   const api = Api.createAuthorized()
-  console.log(payload, 'payload', action)
+
   if (accessAbility.wifiOn) {
-    console.log('wifi is on')
-    const fatherFields = ParenModel.toJson(payload)
-    console.log(fatherFields, 'father fields')
+    const fatherFields = ParentModel.toJson(payload)
     const response = yield call(api.postFatherInformation, fatherFields)
-    console.log(response, 'response')
+
     if (response.ok) {
-      console.log('response is ok')
+      const data = response.data
+      const parent = ParentModel.fromJson(data)
+      yield put(ParentAction.syncFather(parent))
+    }
+    else {
+      // TODO: Show user error when sending data to database
     }
   }
 
 }
 
-export function *syncMother (api, action) {
+export function *retrieveFather (action) {
+  console.log('retrieveFather')
+  const api = Api.createAuthorized()
+  const response = yield call(api.retrieveFatherInformation)
+  if (response.ok) {
+    const data = response.data
+    const parent = ParentModel.fromJson(data)
+    yield put(ParentAction.syncFather(parent))
+  }
+  else {
+    // TODO: handle error when an error occurred in retrieving information
+  }
+}
 
+export function *syncMother (action) {
+  const { payload } = action
+  const { accessAbility } = yield select()
+  const api = Api.createAuthorized()
+
+  if (accessAbility.wifiOn) {
+    const motherFields = ParentModel.toJson(payload)
+    const response = yield call(api.postMotherInformation, motherFields)
+
+    if (response.ok) {
+      const data = response.data
+      const parent = ParentModel.fromJson(data)
+      yield put(ParentAction.syncMother(parent))
+    }
+    else {
+      // TODO: Show user error when sending data to database
+    }
+  }
+}
+
+export function *retrieveMother (action) {
+  const api = Api.createAuthorized()
+  const response = yield call(api.retrieveMotherInformation)
+
+  if (response.ok) {
+    const data = response.data
+    const parent = ParentModel.fromJson(data)
+    yield put(ParentAction.syncMother(parent))
+  }
+  else {
+    // TODO: handle error when an error occurred in retrieving information
+  }
 }

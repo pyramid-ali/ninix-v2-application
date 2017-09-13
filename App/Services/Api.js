@@ -48,14 +48,27 @@ const createAuthorized = (baseURL = Config.API_URL) => {
 
   const retrieveFatherInformation = () => authorizedApi.get('parents/sync/father')
   const retrieveMotherInformation = () => authorizedApi.get('parents/sync/mother')
+  const retrieveBabyInformation = () => authorizedApi.get('baby/sync')
   const postFatherInformation = (parentFields) => authorizedApi.post('parents/sync/father', parentFields)
   const postMotherInformation = (parentFields) => authorizedApi.post('parents/sync/mother', parentFields)
+  const postBabyInformation = (babyFields) => authorizedApi.post('baby/sync', babyFields)
+
+  const uploadPhoto = (url, image, onUploadProgress) => authorizedApi.post(url, image, {onUploadProgress})
+
+  const uploadBabyImage = (image, onUploadProgress) => uploadPhoto('uploads/avatar/baby', image, onUploadProgress)
+  const uploadFatherImage = (image, onUploadProgress) => uploadPhoto('uploads/avatar/father', image, onUploadProgress)
+  const uploadMotherImage = (image, onUploadProgress) => uploadPhoto('uploads/avatar/mother', image, onUploadProgress)
 
   return {
     retrieveFatherInformation,
     retrieveMotherInformation,
+    retrieveBabyInformation,
     postFatherInformation,
-    postMotherInformation
+    postMotherInformation,
+    postBabyInformation,
+    uploadBabyImage,
+    uploadFatherImage,
+    uploadMotherImage
   }
 }
 

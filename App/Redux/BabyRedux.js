@@ -5,17 +5,20 @@ import Immutable from 'seamless-immutable'
 export const INITIAL_STATE = Immutable({
   name: null,
   birthDate: null,
-  weight: null,
-  height: null,
-  head: null,
+  gender: null,
   image: null,
-  sync: false
+  progress: null,
+  bloodGroup: null,
+  changeDate: null,
+  sync: true
 })
 
 // define types and actions
 const { Types, Creators } = createActions({
   update: ['payload'],
-  sync: null
+  sync: ['payload'],
+  updateWithoutSync: ['payload'],
+  retrieve: null
 }, {
   prefix: 'BABY_'
 })
@@ -31,6 +34,14 @@ export const update = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const updateWithoutSync = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    ...payload
+  }
+}
+
 export const sync = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -41,7 +52,8 @@ export const sync = (state = INITIAL_STATE, action) => {
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.UPDATE]: update,
-  [Types.SYNC]: sync
+  [Types.SYNC]: sync,
+  [Types.UPDATE_WITHOUT_SYNC]: updateWithoutSync,
 })
 
 
