@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "apisauce": "^0.14.0",
+    "base-64": "^0.1.0",
     "format-json": "^1.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",

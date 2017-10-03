@@ -25,24 +25,23 @@ export class DataHandler {
 
   getRespiratory () {
     const { rawRespiratory } = this.rawData
-    return (rawRespiratory * 300 / 256)
+    return this.round(rawRespiratory * 300 / 256)
   }
 
   getTemperature () {
     const { rawTemperature } = this.rawData
     const a = rawTemperature * 32 + 26612
-    return (a * (175.72 / 65536) - 46.85)
+    return this.round((a * (175.72 / 65536) - 46.85), 1)
   }
 
   getOrientation () {
     const { rawOrientationAndHumidity } = this.rawData
-    return (rawOrientationAndHumidity & 0x03)
+    return this.round(rawOrientationAndHumidity & 0x03)
   }
 
   getHumidity () {
     const { rawOrientationAndHumidity } = this.rawData
-    return  ((rawOrientationAndHumidity & 0x1c) >> 2)
-
+    return  this.round((rawOrientationAndHumidity & 0x1c) >> 2)
   }
 
   getBattery () {
@@ -76,4 +75,9 @@ export class DataHandler {
       battery: this.getBattery()
     }
   }
+
+  round (number, degree = 0) {
+    return Math.round(number * Math.pow(10, degree)) / Math.pow(10, degree)
+  }
+
 }

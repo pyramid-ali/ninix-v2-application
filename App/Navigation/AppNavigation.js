@@ -1,6 +1,5 @@
 import { StackNavigator } from 'react-navigation'
 import BabySettings from '../Containers/Profile/BabySettings'
-import GrowthChart from '../Containers/Profile/GrowthChart'
 import ProfileSetting from '../Containers/Profile/ProfileSetting'
 import EditProfile from '../Containers/Profile/EditProfile'
 import AddDevice from '../Containers/Device/AddDevice'

@@ -1,4 +1,4 @@
-import { takeLatest, select } from 'redux-saga/effects'
+import { takeLatest, takeEvery, all } from 'redux-saga/effects'
 import API from '../Services/Api'
 import FixtureAPI from '../Services/FixtureApi'
 import DebugConfig from '../Config/DebugConfig'
@@ -22,7 +22,7 @@ import { startSignup, cancelSignup, requestActivationCode, verifyActivationCode,
 import { login } from './LoginSagas'
 import { checkConnectivity } from './AccessAbilitySagas'
 import { connect } from './BluetoothSagas'
-import { receiveData } from './DataSagas'
+import { receiveData, checkUnsyncedData } from './DataSagas'
 import { syncFather, syncMother, retrieveFather, retrieveMother } from './ParentSagas'
 import { syncBaby, retrieveBaby } from './BabySagas'
 
@@ -34,7 +34,7 @@ const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
 /* ------------- Connect Types To Sagas ------------- */
 
 const root = function * root () {
-  yield [
+  yield all([
     takeLatest(StartupTypes.STARTUP, startup),
     takeLatest(AppStateTypes.INTRODUCE_APP, didAppIntroduce),
     takeLatest(SignupTypes.START, startSignup),
@@ -47,14 +47,15 @@ const root = function * root () {
     takeLatest(LoginTypes.REQUEST, login, api),
     takeLatest(AccessAbilityTypes.NETWORK_STATUS, checkConnectivity),
     takeLatest(BluetoothTypes.START_CONNECTING, connect),
-    takeLatest(DataTypes.RECEIVE_DATA, receiveData),
+    takeEvery(DataTypes.RECEIVE_DATA, receiveData),
+    takeEvery(DataTypes.RECEIVE_UNSYNC_DATA, checkUnsyncedData),
     takeLatest(ParentTypes.UPDATE_FATHER, syncFather),
     takeLatest(ParentTypes.RETRIEVE_FATHER, retrieveFather),
     takeLatest(ParentTypes.UPDATE_MOTHER, syncMother),
     takeLatest(ParentTypes.RETRIEVE_MOTHER, retrieveMother),
     takeLatest(BabyTypes.UPDATE, syncBaby),
     takeLatest(BabyTypes.RETRIEVE, retrieveBaby),
-  ]
+  ])
 }
 
 export default root

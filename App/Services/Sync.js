@@ -49,4 +49,8 @@ export default class Sync {
     }
   }
 
+  syncData () {
+
+  }
+
 }

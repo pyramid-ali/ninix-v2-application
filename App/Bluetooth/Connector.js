@@ -5,6 +5,7 @@ import { store } from '../Containers/App'
 import {mainService, serviceUUIDs} from './UUID'
 import DataAction from '../Redux/DataRedux'
 import moment from 'moment'
+const base64 = require('base-64');
 
 class Connector {
 
@@ -70,13 +71,12 @@ class Connector {
   notify (characteristic) {
     characteristic.monitor( (error, char) => {
       if(char) {
-        let str = atob(char.value)
+        let str = base64.decode(char.value)
         let bytes = []
         for (let i = 0; i < str.length; ++i) {
           const code = str.charCodeAt(i)
           bytes = bytes.concat([code])
         }
-
         store.dispatch(DataAction.receiveData(bytes, moment().unix()))
       }
     })

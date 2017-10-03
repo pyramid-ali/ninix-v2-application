@@ -59,6 +59,8 @@ const createAuthorized = (baseURL = Config.API_URL) => {
   const uploadFatherImage = (image, onUploadProgress) => uploadPhoto('uploads/avatar/father', image, onUploadProgress)
   const uploadMotherImage = (image, onUploadProgress) => uploadPhoto('uploads/avatar/mother', image, onUploadProgress)
 
+  const sendData = (data) => uploadPhoto('stream/notify', {data})
+
   return {
     retrieveFatherInformation,
     retrieveMotherInformation,
@@ -68,7 +70,8 @@ const createAuthorized = (baseURL = Config.API_URL) => {
     postBabyInformation,
     uploadBabyImage,
     uploadFatherImage,
-    uploadMotherImage
+    uploadMotherImage,
+    sendData
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView, Text } from 'react-native'
 import { connect } from 'react-redux'
+import Storage from '../../Realm/Storage'
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
@@ -23,6 +24,10 @@ class Settings extends Component {
   constructor (props) {
     super(props)
     this.state = {}
+  }
+
+  componentDidMount () {
+    Storage.get()
   }
 
   render () {

@@ -21,7 +21,6 @@ export function *connect(action) {
         const characteristics = yield call(Connector.characteristicsForService, discoveredServicesDevice)
         for (let j = 0; j < characteristics.length; j++) {
           const characteristic = characteristics[j]
-          console.log(characteristic, 'characteristic')
           yield call(Connector.notify, characteristic)
         }
       }
@@ -32,6 +31,7 @@ export function *connect(action) {
 
   catch (e) {
     yield put(BluetoothAction.cancelConnection())
+    console.log(e.getMessage(), e, 'bluetooth error in bluetoothSagas')
   }
 
 }

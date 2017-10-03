@@ -12,7 +12,6 @@ import { ImageInput } from '../../Models/ImageModel'
 // Styles
 import styles from '../Styles/ProfileStyle'
 import EditableImage from '../../Components/EditableImage'
-import GrowthChart from '../Profile/GrowthChart'
 
 
 class Profile extends Component {
@@ -92,7 +91,6 @@ class Profile extends Component {
             </View>
           </Image>
           <View style={styles.bottomContainer}>
-            <GrowthChart />
           </View>
         </ScrollView>
       </View>
@@ -129,7 +127,7 @@ class Profile extends Component {
   }
 
   showFatherImagePicker () {
-    const currentImage = this.props.baby.image
+    const currentImage = this.props.father.image
     this.ShowImagePicker((image, data) => {
       this.props.updateFatherImage(image)
       this.api.uploadBabyImage(data, (e) => {
@@ -146,7 +144,7 @@ class Profile extends Component {
   }
 
   showMotherImagePicker () {
-    const currentImage = this.props.baby.image
+    const currentImage = this.props.mother.image
     this.ShowImagePicker((image, data) => {
       this.props.updateMotherImage(image)
       this.api.uploadBabyImage(data, (e) => {

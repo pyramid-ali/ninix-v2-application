@@ -4,13 +4,18 @@ import BluetoothStates from '../Bluetooth/BluetoothState'
 import moment from 'moment'
 
 export const INITIAL_STATE = Immutable({
-  vitalSigns: []
+  vitalSigns: [],
+  unSynced: [],
+  syncing: false
 })
 
 const { Types, Creators } = createActions({
   receiveData: ['data', 'time'],
-  removeData: null,
-  extractData: ['vitalSign']
+  extractData: ['vitalSign'],
+  receiveUnsyncData: ['vitalSign'],
+  syncData: ['vitalSign'],
+  syncing: null,
+  finishSyncing: null
 }, {
   prefix: 'DATA_'
 })
@@ -33,16 +38,55 @@ export const receiveExtractData = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const emptyData = (state = INITIAL_STATE, action) => {
+export const addUnsyncData = (state = INITIAL_STATE, action) => {
+  console.log('addUnsyncData')
+  const { vitalSign } = action
+  const filteredData = state.unSynced.filter((item) => {
+    return item.registerAt !== vitalSign.registerAt
+  })
   return {
     ...state,
-    data: []
+    unSynced: [
+      ...filteredData,
+      vitalSign
+    ]
   }
 }
 
+export const syncData = (state = INITIAL_STATE, action) => {
+  const { vitalSign } = action
+  const filteredData = state.unSynced.filter((item) => {
+    return item.registerAt !== vitalSign.registerAt
+  })
+  return {
+    ...state,
+    unSynced: [
+      ...filteredData
+    ]
+  }
+}
+
+export const syncing = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    syncing: true
+  }
+}
+
+export const finishSyncing = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    syncing: false
+  }
+}
+
+
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.EXTRACT_DATA]: receiveExtractData,
-  [Types.REMOVE_DATA]: emptyData,
+  [Types.RECEIVE_UNSYNC_DATA]: addUnsyncData,
+  [Types.SYNC_DATA]: syncData,
+  [Types.SYNCING]: syncing,
+  [Types.FINISH_SYNCING]: finishSyncing
 })
 
 

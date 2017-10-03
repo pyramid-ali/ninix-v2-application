@@ -8,8 +8,10 @@ VitalSign.schema = {
     temperature: 'float',
     respiratory: 'int',
     orientation: 'int',
-    humidity: 'int',
-    registerAt: 'date'
+    humidity   : 'int',
+    sync       : {type: 'bool' , default: false},
+    updatedAt  : 'date',
+    registerAt : 'date'
   }
 }
 

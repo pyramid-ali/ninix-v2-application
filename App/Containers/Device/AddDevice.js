@@ -34,7 +34,6 @@ class AddDevice extends Component {
   render () {
     const { bluetooth } = this.props
     const data = bluetooth.devices
-    console.log('render')
     const {logo, blink, color} = (() => {
 
       if (bluetooth.isConnected) {
