@@ -44,38 +44,18 @@ class ActivationCode extends Component {
     clearInterval(this.timer)
   }
 
-  renderTimer() {
-    const { timer } = this.state
-    const minutes = Math.floor(timer / 60)
-    const seconds = timer % 60
-    return `${minutes > 10 ? minutes : '0' + minutes}: ${seconds > 10 ? seconds : '0' + seconds}`
-  }
 
   render () {
     const { timer } = this.state
     const { signup, checkActivationCode } = this.props
-    const disabled = timer === 0 || signup.checkingActivationCode
+    const disabled = timer === 0 || signup.fetching
     return (
       <EntryTemplate
         title="Activation"
         imageSource={require('../../../Images/Signup/4-2.png')}>
         <View style={styles.form}>
-          {signup.error ?
-            <Text style={styles.error}>
-              {signup.error}
-            </Text> :
-            null
-          }
-          {
-            timer === 0 ?
-              <Text style={styles.error}>
-                Your Token has been expired
-              </Text>
-              :
-              <Text style={styles.timerContainerText}>
-                Revoke Time: {this.renderTimer()}
-              </Text>
-          }
+          {this.renderError()}
+          {this.renderTimer()}
           <Text style={styles.description}>
             Enter the activation code that has been sent to { signup.mobile }:
           </Text>
@@ -84,10 +64,10 @@ class ActivationCode extends Component {
             disabled={disabled}
             containerStyle={styles.input}
             onFinish={(code) => {
-              checkActivationCode(signup.mobile, code, this.props.navigation)
+              checkActivationCode(code, this.onSuccess.bind(this), this.onFailure.bind(this))
             }}
             size={4} />
-          {signup.isCheckingActivationCode ? <ActivityIndicator /> : null}
+          {signup.fetching ? <ActivityIndicator /> : null}
           {this.renderFooter()}
 
         </View>
@@ -95,17 +75,57 @@ class ActivationCode extends Component {
     )
   }
 
-  leftBarButton() {
+  /***
+   * Display Timer, convert seconds to a clock watch
+   * @returns {string}
+   * @constructor
+   */
+  DisplayTimer() {
+    const { timer } = this.state
+    const minutes = Math.floor(timer / 60)
+    const seconds = timer % 60
+    return `${minutes > 10 ? minutes : '0' + minutes}: ${seconds > 10 ? seconds : '0' + seconds}`
+  }
+
+  /***
+   * if any error occurred during check activation code, this block of function shows it in a proper way
+   * @returns {*}
+   */
+  renderError () {
+    const { signup } = this.props
     return (
-      <TouchableOpacity
-        style={{zIndex: 9999}}
-        onPress={this.props.back}>
-        <Icon name="chevron-left" size={22} color="white" />
-      </TouchableOpacity>
+      signup.error ?
+      <Text style={styles.error}>
+        {signup.error}
+      </Text>
+        :
+      null
     )
   }
 
-  renderFooter() {
+  /***
+   * with help of displayTimer this function render times to expiration of activation code
+   * @returns {XML}
+   */
+  renderTimer () {
+    const { timer } = this.state
+    return (
+      timer === 0 ?
+      <Text style={styles.error}>
+        Your Token has been expired
+      </Text>
+        :
+      <Text style={styles.timerContainerText}>
+        Revoke Time: {this.DisplayTimer()}
+      </Text>
+    )
+  }
+
+  /***
+   * render footer, show control buttons for wrong number, or resend activation code
+   * @returns {XML}
+   */
+  renderFooter () {
     const { timer } = this.state
     const { wrongNumber, signup, navigation } = this.props
     return (
@@ -120,9 +140,9 @@ class ActivationCode extends Component {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          disabled={signup.isCheckingActivationCode}
+          disabled={signup.fetching}
           onPress={() => wrongNumber(navigation)}>
-          <Text style={[styles.link, signup.isCheckingActivationCode ? styles.disableLink : null]}>
+          <Text style={[styles.link, signup.fetching ? styles.disableLink : null]}>
             Wrong Number
           </Text>
         </TouchableOpacity>
@@ -130,6 +150,9 @@ class ActivationCode extends Component {
     )
   }
 
+  /***
+   * render alert
+   */
   renderAlert() {
     return Alert.alert(
       'Resend Activation Code',
@@ -144,6 +167,18 @@ class ActivationCode extends Component {
     )
   }
 
+  /***
+   * this callback used for navigating when activation code was successful
+   */
+  onSuccess (password: string) {
+    console.log('onSuccess Activation code', password)
+    const { navigate } = this.props.navigation
+    navigate('PasswordEntry', {password})
+  }
+
+  onFailure (error: string) {
+
+  }
 }
 
 const mapStateToProps = (state) => {
@@ -155,9 +190,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    checkActivationCode: (mobile, code, navigation) => dispatch(Signup.checkingActivationCode(mobile, code, navigation)),
+    checkActivationCode: (code, callback, failure) => dispatch(Signup.checkToken(code, callback, failure)),
     wrongNumber: (navigation) => dispatch(Signup.wrongNumber(navigation))
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivationCode)
+
+// TODO: we can send digits of activation code to application, therefore when we change activation code length we don't need to update app

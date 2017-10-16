@@ -6,8 +6,10 @@ export const INITIAL_STATE = Immutable({
 })
 
 const { Types, Creators } = createActions({
-  introduceApp: null
-}, {})
+  introduce: null
+}, {
+  prefix: 'APP_STATE_'
+})
 
 export const AppStateTypes = Types
 
@@ -19,7 +21,7 @@ export const introduce = (state = INITIAL_STATE, action) => {
 }
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.INTRODUCE_APP]: introduce
+  [Types.INTRODUCE]: introduce
 })
 
 export const AppState = Creators

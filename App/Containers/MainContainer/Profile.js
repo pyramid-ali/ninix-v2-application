@@ -3,7 +3,7 @@ import { ScrollView, Text, View, Image, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
-import ImagePicker from 'react-native-image-picker'
+
 import ParentAction from '../../Redux/ParentRedux'
 import BabyAction from '../../Redux/BabyRedux'
 import Api from '../../Services/Api'
@@ -28,11 +28,10 @@ class Profile extends Component {
 
   constructor (props) {
     super(props)
-    const { mother, father } = props
   }
 
   componentDidMount () {
-    this.api = Api.createAuthorized()
+
   }
 
   render () {
@@ -62,7 +61,7 @@ class Profile extends Component {
                     size={80}
                     style={styles.parentImage}
                     source={motherImage}
-                    onPress={this.showMotherImagePicker.bind(this)}
+                    onPress={() => null}
                   />
                   <Text style={styles.parentText}>{mother.name ? mother.name : 'Mother'}</Text>
                 </View>
@@ -73,7 +72,7 @@ class Profile extends Component {
                     style={styles.babyImage}
                     size={120}
                     source={babyImage}
-                    onPress={this.showBabyImagePicker.bind(this)}
+                    onPress={() => null}
                   />
                 </View>
                 <View style={styles.parentContainer}>
@@ -82,7 +81,7 @@ class Profile extends Component {
                     size={80}
                     style={styles.parentImage}
                     source={fatherImage}
-                    onPress={this.showFatherImagePicker.bind(this)}
+                    onPress={() => null}
                   />
                   <Text style={styles.parentText}>{father.name ? father.name : 'Father'}</Text>
                 </View>
@@ -110,71 +109,6 @@ class Profile extends Component {
     navigation.navigate('EditProfile')
   }
 
-  showBabyImagePicker () {
-    const currentImage = this.props.baby.image
-    this.ShowImagePicker((image, data) => {
-      this.props.updateBabyImage(image)
-      this.api.uploadBabyImage(data, (e) => {
-        this.props.setBabyImageProgress(this.calculateProgress(e))
-      }).then( response => {
-        this.props.setBabyImageProgress(null)
-        if (!response.ok) {
-          this.failure(response)
-          this.props.updateBabyImage(currentImage)
-        }
-      })
-    })
-  }
-
-  showFatherImagePicker () {
-    const currentImage = this.props.father.image
-    this.ShowImagePicker((image, data) => {
-      this.props.updateFatherImage(image)
-      this.api.uploadBabyImage(data, (e) => {
-        this.props.setFatherImageProgress(this.calculateProgress(e))
-      }).then( response => {
-        this.props.setFatherImageProgress(null)
-        if (!response.ok) {
-          this.failure(response)
-          this.props.updateFatherImage(currentImage)
-        }
-      })
-    })
-
-  }
-
-  showMotherImagePicker () {
-    const currentImage = this.props.mother.image
-    this.ShowImagePicker((image, data) => {
-      this.props.updateMotherImage(image)
-      this.api.uploadBabyImage(data, (e) => {
-        this.props.setMotherImageProgress(this.calculateProgress(e))
-      }).then( response => {
-        this.props.setMotherImageProgress(null)
-        if (!response.ok) {
-          this.failure(response)
-          this.props.updateMotherImage(currentImage)
-        }
-      })
-    })
-  }
-
-  ShowImagePicker (callback) {
-    ImagePicker.showImagePicker(options = null, (response) => {
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else {
-        const data = ImageInput(response.uri, response.type, 'avatar')
-        callback(response, data)
-      }
-    })
-  }
-
   calculateProgress (e) {
     return Math.round(e.loaded / e.total * 100)
   }
@@ -194,12 +128,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateFatherImage: (image) => dispatch(ParentAction.updateFatherWithoutSync({image})),
-    setFatherImageProgress: (progress) => dispatch(ParentAction.updateFatherWithoutSync({progress})),
-    updateMotherImage: (image) => dispatch(ParentAction.updateMotherWithoutSync({image})),
-    setMotherImageProgress: (progress) => dispatch(ParentAction.updateMotherWithoutSync({progress})),
-    updateBabyImage: (image) => dispatch(BabyAction.updateWithoutSync({image})),
-    setBabyImageProgress: (progress) => dispatch(BabyAction.updateWithoutSync({progress})),
+
   }
 }
 

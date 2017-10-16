@@ -1,107 +1,63 @@
 import { put, call, select } from 'redux-saga/effects'
-import { NavigationActions } from 'react-navigation'
-import { AppState } from '../Redux/AppStateRedux'
-import Signup from '../Redux/SignupRedux'
-import SignupModel from '../Models/SignupModel'
-import AccessToken from '../Redux/AcccessTokenRedux'
-import TokenModel from '../Models/TokenModel'
+import SignupAction from '../Redux/SignupRedux'
+import ErrorMessage from '../Transform/ErrorMessage'
+import LoginModel from '../Models/loginModel'
+import LoginAction from '../Redux/LoginRedux'
+import UserAction from '../Redux/UserRedux'
+import Response from '../Services/Response'
 
-const goToSignupPage = NavigationActions.navigate({
-  routeName: 'MobileEntry',
-})
 
-const goToActivationCodePage = NavigationActions.navigate({
-  routeName: 'ActivationCode',
-})
-
-const goToPasswordEntryPage = NavigationActions.navigate({
-  routeName: 'PasswordEntry',
-})
-
-const backToLoginPage = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'AuthenticationScreen'})
-  ]
-})
-
-const goToMainPage = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Main'})
-  ]
-})
-
-const wrongNumberRoute = NavigationActions.back()
-
-export function *startSignup(action) {
-  const { navigation } = action
-  yield navigation.dispatch(goToSignupPage)
-}
-
-export function *cancelSignup(action) {
-  yield put(backToLoginPage)
-}
-
-export function *requestActivationCode(api, action) {
-  const { mobile, navigation } = action
+/***
+ * request token send mobile code and if response is ok then call callback
+ * if response were failed then dispatch failure action of Signup redux
+ * @param api
+ * @param action
+ */
+export function *requestToken (api, action) {
+  const { mobile, callback } = action
   const response = yield call(api.requestActivationCode, mobile)
-  console.log(response, 'request activation code')
-  if (response.ok) {
-    const { mobile } = response.data
-    yield put(Signup.mobileVerified(mobile))
-    yield navigation.dispatch(goToActivationCodePage)
+  console.log(response, 'response request mobile')
+  try {
+    const data = yield call(Response.resolve, response)
+    yield put(SignupAction.successTokenRequest(data.result.mobile))
+    callback()
   }
-  else {
-    const { message, detail } = response.data
-    yield put(Signup.failure(message))
+  catch (error) {
+    yield put(SignupAction.failure(error.message))
   }
+
 }
 
-export function *verifyActivationCode(api, action) {
-
-  const { mobile, code, navigation } = action
-  const response = yield call(api.checkActivationCode, {mobile, token: code})
-
-  if(response.ok) {
-    const { mobile, token, verified } = response.data
-    if(verified) {
-      yield put(Signup.ActivationCodeVerified(token))
-      yield navigation.dispatch(goToPasswordEntryPage)
-    }
-    else {
-      yield put(Signup.failure('Activation code is not correct'))
-    }
-  }
-  else {
-    const { problem } = response
-    yield put(Signup.failure(problem))
-  }
-}
-
-export function *finalSignupStep(api, action) {
-
-  const { password } = action
+/***
+ * check activation code is correct, if activation code is correct try to get access token with provided password
+ * if getting access token failed, call failure callback
+ * if everything was ok, then call callback function
+ * @param api
+ * @param action
+ */
+export function *checkToken(api, action) {
+  console.log('check token')
   const { signup } = yield select()
+  const { token, callback, failure } = action
+  const { mobile } = signup
+  const activationCodeResponse = yield call(api.checkActivationCode, {mobile, token})
+  console.log(activationCodeResponse, 'activation code response')
+  try {
+    const data = yield call(Response.resolve, activationCodeResponse)
+    const { result } = data
+    const { password } = result
 
-  const signupModel = new SignupModel(signup.mobile, password, signup.activationCode)
-  const response = yield call(api.signup, signupModel.fields())
-
-  if(response.ok) {
-    const payload = TokenModel.correctObject(response.data)
-    yield put(AccessToken.issueToken(payload))
-    yield put(Signup.finish())
-    yield put(goToMainPage)
+    yield put(LoginAction.request(mobile, password, () => {
+      console.log('callback in check token')
+      callback(password)
+    }))
+    console.log('end of check token')
+    return
   }
-  else {
-    const { message } = response.data
-    yield put(Signup.failure(message))
+  catch (error) {
+    yield put(SignupAction.failure(error.message))
   }
 
 }
 
-export function *wrongNumber(action) {
-  const { navigation } = action
-  yield navigation.dispatch(wrongNumberRoute)
-}
 

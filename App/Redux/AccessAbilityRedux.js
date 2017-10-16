@@ -5,7 +5,7 @@ export const INITIAL_STATE = Immutable({
   wifiOn: false,
   cellularOn: false,
   bluetoothOn: false,
-  isConnected: false
+  isConnected: true // TODO: isConnected should be false
 })
 
 const { Types, Creators } = createActions({

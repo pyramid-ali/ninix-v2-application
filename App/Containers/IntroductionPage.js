@@ -13,6 +13,10 @@ import styles from './Styles/IntroductionPageStyle'
 class IntroductionPage extends Component {
 
   render () {
+
+    const { introduceApp } = this.props
+    const { navigate } = this.props.navigation
+
     return (
       <View style={styles.container}>
         <Pages renderPager={this.renderPager.bind(this)}>
@@ -30,7 +34,10 @@ class IntroductionPage extends Component {
           })}
         </Pages>
         <TouchableOpacity
-          onPress={this.props.didAppIntroduce}
+          onPress={() => {
+            introduceApp()
+            navigate('AuthenticationScreen')
+          }}
           style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Let's Start</Text>
         </TouchableOpacity>
@@ -38,12 +45,11 @@ class IntroductionPage extends Component {
     )
   }
 
-  renderPager({pages, progress}) {
+  renderPager ({pages, progress}) {
     return <PageIndicator
               pages={pages}
               progress={progress}
-              containerStyle={styles.indicatorContainerStyle}
-            />
+              containerStyle={styles.indicatorContainerStyle} />
   }
 }
 
@@ -54,7 +60,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    didAppIntroduce: () => dispatch(AppState.introduceApp())
+    introduceApp: () => dispatch(AppState.introduce())
   }
 }
 

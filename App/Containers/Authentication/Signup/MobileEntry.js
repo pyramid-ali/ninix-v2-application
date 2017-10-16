@@ -22,8 +22,9 @@ class MobileEntry extends Component {
   }
 
   render () {
-    const { signup, requestActivationCode } = this.props
+    const { signup } = this.props
     const { mobile } = this.state
+
     return (
       <EntryTemplate
         title="Signup"
@@ -46,30 +47,31 @@ class MobileEntry extends Component {
             selectionColor={Colors.dark}
             color={Colors.dark}
             value={mobile}
-            editable={!signup.isCheckingMobile}
+            editable={!signup.fetching}
             onFocus={() => this.setState({ mobile: '09' })}
             onChangeText={(mobile) => this.setState({ mobile })}
             placeholder='Enter your mobile'/>
-          {signup.isCheckingMobile ? <ActivityIndicator size={24} /> : this.renderActivateButton() }
+          {signup.fetching ? <ActivityIndicator size={24} /> : this.renderActivateButton() }
         </View>
       </EntryTemplate>
     )
   }
 
   renderActivateButton() {
-    const { requestActivationCode } = this.props
+    const { requestToken } = this.props
     const { mobile } = this.state
     const { mobileInput } = this.refs
+    const active = new RegExp(/^09\d{9}$/).test(mobile)
 
     return (
       <Button
-        disabled={mobile.length !== 11}
-        onPress={() => {
-          requestActivationCode(mobile, this.props.navigation)
-          mobileInput.blur()
-        }}
+        disabled={!active}
         color={Colors.white}
-        backgroundColor={Colors.dark}>
+        backgroundColor={Colors.dark}
+        onPress={() => {
+          requestToken(mobile, this.onSuccess.bind(this))
+          mobileInput.blur()
+        }}>
         Activate
       </Button>
     )
@@ -77,13 +79,26 @@ class MobileEntry extends Component {
   }
 
   leftBarButton() {
+
+    const { cancel, navigation } = this.props
+    const { goBack } = navigation
+
     return (
       <TouchableOpacity
         style={{zIndex: 9999}}
-        onPress={this.props.back}>
+        onPress={() => {
+          cancel()
+          goBack(null)
+        }}>
         <Icon name="chevron-left" size={22} color="white" />
       </TouchableOpacity>
     )
+  }
+
+  onSuccess () {
+    console.log('on success mobile entry callback')
+    const { navigate } = this.props.navigation
+    navigate('ActivationCode')
   }
 }
 
@@ -96,8 +111,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    back: () => dispatch(Signup.cancel()),
-    requestActivationCode: (mobile, navigation) => dispatch(Signup.checkingMobile(mobile, navigation))
+    cancel: () => dispatch(Signup.cancel()),
+    requestToken: (mobile, callback) => dispatch(Signup.requestToken(mobile, callback))
   }
 }
 

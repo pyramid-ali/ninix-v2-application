@@ -4,8 +4,7 @@ import ActivationCode from '../Containers/Authentication/Signup/ActivationCode'
 import MobileEntry from '../Containers/Authentication/Signup/MobileEntry'
 import LoginPage from '../Containers/Authentication/LoginPage'
 import React from 'react'
-import * as ReactNavigation from 'react-navigation'
-import { connect } from 'react-redux'
+
 
 import styles from './Styles/NavigationStyles'
 

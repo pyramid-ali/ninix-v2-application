@@ -3,111 +3,80 @@ import Immutable from 'seamless-immutable'
 
 // define initial state when for first time launch
 export const INITIAL_STATE = Immutable({
-  start: false,
-  isCheckingMobile: false,
+  fetching: false,
+  error: null,
   mobile: null,
-  isCheckingActivationCode: false,
-  activationCode: null,
-  isCheckingPassword: false,
-  error: null
 })
 
 // define types and actions
 const { Types, Creators } = createActions({
-  start: ['navigation'],
-  checkingMobile: ['mobile', 'navigation'],
-  mobileVerified: ['mobile'],
-  checkingActivationCode: ['mobile', 'code', 'navigation'],
-  ActivationCodeVerified: ['code'],
-  checkingPassword: ['password'],
-  cancel: null,
-  wrongNumber: ['navigation'],
-  finish: null,
-  failure: ['error']
+  requestToken: ['mobile', 'callback'],
+  successTokenRequest: ['mobile'],
+  checkToken: ['token', 'callback', 'failure'],
+  success: null,
+  failure: ['error'],
+  cancel: null
 }, {
   prefix: 'SIGNUP_'
 })
 
 export const SignupTypes = Types
 
-export const start = (state = INITIAL_STATE, action) => {
+const requestToken = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    start: true
-  }
-}
-
-export const checkMobile = (state = INITIAL_STATE, action) => {
-  return {
-    ...state,
-    isCheckingMobile: true
-  }
-}
-
-export const didMobileVerify = (state = INITIAL_STATE, action) => {
-  const { mobile } = action
-  return {
-    ...state,
-    isCheckingMobile: false,
-    error: null,
-    mobile
-  }
-}
-
-export const checkActivationCode = (state = INITIAL_STATE, action) => {
-  return {
-    ...state,
-    isCheckingActivationCode: true,
+    fetching: true,
     error: null
   }
 }
 
-export const didActivationCodeVerify = (state = INITIAL_STATE, action) => {
-  const { code } = action
+const successTokenRequest = (state = INITIAL_STATE, action) => {
+  const { mobile } = action
   return {
     ...state,
-    activationCode: code,
-    isCheckingActivationCode: false
+    mobile,
+    fetching: false,
+    error: null
   }
 }
 
-export const checkPassword = (state = INITIAL_STATE, action) => {
+const checkToken = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isCheckingPassword: true
+    fetching: true,
+    error: null
   }
 }
 
-export const cancel = (state = INITIAL_STATE, action) => {
-  console.log('cancel')
-  return INITIAL_STATE
+const success = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    fetching: false,
+    error: null
+  }
 }
 
-export const wrongNumber = cancel
-
-export const error = (state = INITIAL_STATE, action) => {
+const failure = (state = INITIAL_STATE, action) => {
   const { error } = action
   return {
     ...state,
-    isCheckingMobile: false,
-    isCheckingActivationCode: false,
-    isCheckingPassword: false,
+    fetching: false,
     error
   }
 }
 
-export const reducer = createReducer(INITIAL_STATE, {
-  [Types.START]: start,
-  [Types.CHECKING_MOBILE]: checkMobile,
-  [Types.MOBILE_VERIFIED]: didMobileVerify,
-  [Types.CHECKING_ACTIVATION_CODE]: checkActivationCode,
-  [Types.ACTIVATION_CODE_VERIFIED]: didActivationCodeVerify,
-  [Types.CHECKING_PASSWORD]: checkPassword,
-  [Types.CANCEL]: cancel,
-  [Types.WRONG_NUMBER]: cancel,
-  [Types.FINISH]: cancel,
-  [Types.FAILURE]: error
+const cancel = (state = INITIAL_STATE, action) => {
+  return INITIAL_STATE
+}
 
+
+export const reducer = createReducer(INITIAL_STATE, {
+  [Types.REQUEST_TOKEN]:         requestToken,
+  [Types.SUCCESS_TOKEN_REQUEST]: successTokenRequest,
+  [Types.CHECK_TOKEN]:           checkToken,
+  [Types.SUCCESS]:               success,
+  [Types.FAILURE]:               failure,
+  [Types.CANCEL]:                cancel
 })
 
 export default Creators

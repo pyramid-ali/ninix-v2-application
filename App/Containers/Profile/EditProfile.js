@@ -71,6 +71,8 @@ class EditProfile extends Component {
     )
   }
 
+  // TODO: move render Item to a component
+
   renderItem (value) {
     const { item } = value
 
@@ -89,7 +91,7 @@ class EditProfile extends Component {
               this.props.navigation.navigate('BabySettings')
             }
             else {
-              this.props.navigation.navigate('ProfileSetting', {type: item.type})
+              this.props.navigation.navigate('ParentSettings', {type: item.type})
             }
           }}>
             <Text style={styles.itemTextButton}>

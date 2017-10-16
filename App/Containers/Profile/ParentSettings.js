@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, DatePickerAndroid, TouchableOpacity, Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { parentSettings } from '../../Services/SettingInfo'
 import SettingComponent from '../../Components/SettingComponent'
@@ -12,7 +12,7 @@ import NavigationBar from '../../Components/NavigationBar'
 import Colors from '../../Themes/Colors'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-class ProfileSetting extends Component {
+class ParentSettings extends Component {
   constructor (props) {
     super(props)
   }
@@ -93,4 +93,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileSetting)
+export default connect(mapStateToProps, mapDispatchToProps)(ParentSettings)

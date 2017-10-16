@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation'
 import BabySettings from '../Containers/Profile/BabySettings'
-import ProfileSetting from '../Containers/Profile/ProfileSetting'
+import ParentSettings from '../Containers/Profile/ParentSettings'
 import EditProfile from '../Containers/Profile/EditProfile'
 import AddDevice from '../Containers/Device/AddDevice'
 import AuthenticationScreen from '../Containers/Authentication/AuthenticationScreen'
@@ -14,7 +14,7 @@ import styles from './Styles/NavigationStyles'
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
   BabySettings: { screen: BabySettings },
-  ProfileSetting: { screen: ProfileSetting },
+  ParentSettings: { screen: ParentSettings },
   EditProfile: { screen: EditProfile },
   AddDevice: { screen: AddDevice },
   AuthenticationScreen: { screen: AuthenticationScreen },
@@ -24,7 +24,7 @@ const PrimaryNav = StackNavigator({
 }, {
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'IntroductionPage',
+  initialRouteName: 'Main',
   navigationOptions: {
     headerStyle: styles.header
   }

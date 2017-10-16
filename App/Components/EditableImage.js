@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import styles from './Styles/EditableImageStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Colors from '../Themes/Colors'
+import ImagePicker from 'react-native-image-picker'
 
 export default class EditableImage extends Component {
   // Prop type warnings
@@ -36,12 +37,16 @@ export default class EditableImage extends Component {
         }
 
         <View style={[styles.imageIconContainer, innerStyle.imageIconContainer, iconStyle]}>
-          <TouchableOpacity onPress={onPress}>
+          <TouchableOpacity onPress={() => this.showImagePicker(onPress)}>
             <Icon name={icon} size={size * 0.18} />
           </TouchableOpacity>
         </View>
       </View>
     )
+  }
+
+  showImagePicker (callback, options = null) {
+    ImagePicker.showImagePicker(options = null, callback)
   }
 
   styles () {
@@ -59,5 +64,7 @@ export default class EditableImage extends Component {
       }
     })
   }
+
+
 
 }

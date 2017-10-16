@@ -1,70 +1,85 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 
+
+/***
+ * Initial state of login redux
+ */
 export const INITIAL_STATE = Immutable({
-  isLoggedIn: false,
-  isFetchingUser: false,
+  fetching: false,
   error: null,
-  refreshingToken: false
+  tries: 0
 })
 
+/***
+ * actions:
+ * request: when user press login button
+ * success: when server response ok with token properties
+ * failure: when an error occurred to get user token properties
+ */
 const { Types, Creators } = createActions({
+  request: ['mobile', 'password', 'callback'],
   success: null,
-  request: ['mobile', 'password'],
-  failure: ['error'],
-  refreshToken: null,
-  logout: null
+  failure: ['error']
 }, {
   prefix: 'LOGIN_'
 })
 
 export const LoginTypes = Types
 
-export const success = (state = INITIAL_STATE, action) => {
-  const { payload } = action
-  return {
-    ...state,
-    isLoggedIn: true,
-    error: null,
-    isFetchingUser: false,
-    refreshingToken: false
-  }
-}
-
+/***
+ *
+ * @param state
+ * @param action
+ * @returns {{fetching: boolean, error: null, tries: number}}
+ */
 export const request = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isFetchingUser: true,
+    fetching: true,
+    error: null,
+    tries: state.tries++
+  }
+}
+
+/***
+ *
+ * @param state
+ * @param action
+ * @returns {{fetching: boolean, error: boolean}}
+ */
+export const success = (state = INITIAL_STATE, action) => {
+
+  return {
+    ...state,
+    fetching: false,
     error: null
   }
 }
 
+
+/***
+ *
+ * @param state
+ * @param action
+ * @returns {{error: *, fetching: boolean}}
+ */
 export const failure = (state = INITIAL_STATE, action) => {
   const { error } = action
   return {
     ...state,
     error,
-    isFetchingUser: null
+    fetching: false
   }
 }
 
-export const refreshToken = (state = INITIAL_STATE, action) => {
-  return {
-    ...state,
-    refreshingToken: true
-  }
-}
-
-export const logout = (state = INITIAL_STATE, action) => {
-  return INITIAL_STATE
-}
-
+/***
+ * create reducer
+ */
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SUCCESS]: success,
   [Types.REQUEST]: request,
   [Types.FAILURE]: failure,
-  [Types.LOGOUT]: logout,
-  [Types.REFRESH_TOKEN]: refreshToken
-  })
+})
 
 export default Creators

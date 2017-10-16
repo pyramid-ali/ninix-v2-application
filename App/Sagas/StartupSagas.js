@@ -26,7 +26,7 @@ const goToMainPage = NavigationActions.reset({
 export function *startup (action) {
 
   const { appState, login } = yield select()
-  console.log(appState, login, 'startup saga')
+
   if(appState.didIntroduce) {
     if(login.isLoggedIn)
       yield put(goToMainPage)

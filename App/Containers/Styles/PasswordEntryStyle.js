@@ -23,8 +23,26 @@ export default StyleSheet.create({
     paddingBottom: 5
   },
   link: {
-    color: Colors.primary,
-    textAlign: 'right',
-    marginBottom: 5
+    color: Colors.white,
+    backgroundColor: Colors.primary,
+    textAlign: 'center',
+    borderRadius: 5,
+    flex: -1,
+    paddingVertical: 10,
+    marginVertical: 10,
+    fontSize: 16
+  },
+  linkButton: {
+    color: Colors.white,
+    fontSize: 16,
+    padding: 10,
+    backgroundColor: Colors.primary
+  },
+  password: {
+    color: Colors.dark,
+    fontSize:28,
+    marginBottom: 5,
+    textAlign: 'center',
+    textDecorationLine: 'underline'
   }
 })

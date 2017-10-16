@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import EntryTemplate from './EntryTemplate'
+import { NavigationActions } from 'react-navigation'
+
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
+import UserAction from '../../../Redux/UserRedux'
 
 // Styles
 import styles from '../../Styles/PasswordEntryStyle'
@@ -11,7 +14,7 @@ import TextInputWithIcon from '../../../Components/TextInputWithIcon'
 import Colors from '../../../Themes/Colors'
 import Button from '../../../Components/Button'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Signup from '../../../Redux/SignupRedux'
+
 
 class PasswordEntry extends Component {
   constructor (props) {
@@ -23,23 +26,22 @@ class PasswordEntry extends Component {
   }
 
   render () {
-    const { showPassword, password } = this.state
-    const { signup, sendPassword } = this.props
+    const { showPassword } = this.state
+    const { params } = this.props.navigation.state
+    const { user } = this.props
     return (
       <EntryTemplate
         title="Choose Password"
-        leftBarButton={this.leftBarButton()}
         imageSource={require('../../../Images/Signup/4-1.png')}>
         <View style={styles.form}>
-          {signup.error ?
-            <Text style={styles.error}>
-              {signup.error}
-            </Text> :
-            null
-          }
+
+          {this.renderError(user.error)}
+
+          <Text style={styles.password}>{params.password}</Text>
           <Text style={styles.description}>
-            Choose a password for your account
+            This password automatically generated for your account
           </Text>
+
           <Text
             onPress={() => {
               this.setState({
@@ -47,29 +49,16 @@ class PasswordEntry extends Component {
               })
             }}
             style={styles.link}>
-            {showPassword ? 'Hide' : 'Show'} Password
+            {showPassword ? 'Use Generated Password' : 'Set New Password'}
           </Text>
-          <TextInputWithIcon
-            ref="passwordInput"
-            secureTextEntry={!showPassword}
-            selectionColor="black"
-            icon="key"
-            size={20}
-            color={Colors.dark}
-            onChangeText={(password) => this.setState({password})}
-            placeholder='Password'/>
-          {signup.isCheckingPassword ?
-            <ActivityIndicator /> :
+          {showPassword ?
+            this.renderPasswordBox()
+            :
             <Button
-              disabled={password.length < 6}
-              onPress={() => {
-                const { passwordInput } = this.refs
-                sendPassword(password)
-                passwordInput.blur()
-              }}
+              onPress={this.onSuccess.bind(this)}
               color={Colors.white}
               backgroundColor={Colors.dark}>
-              Finish
+              Accept
             </Button>
           }
         </View>
@@ -77,28 +66,71 @@ class PasswordEntry extends Component {
     )
   }
 
-  leftBarButton() {
+  renderError (error) {
     return (
-      <TouchableOpacity
-        style={{zIndex: 9999}}
-        onPress={this.props.back}>
-        <Text style={styles.barButtonText}>Cancel</Text>
-      </TouchableOpacity>
+      error ?
+      <Text style={styles.error}>
+        {error}
+      </Text> :
+      null
     )
   }
+  renderPasswordBox () {
+    const { user, changePassword } = this.props
+    const { showPassword, password } = this.state
+    const { params } = this.props.navigation.state
+    return (
+      <View>
+        <TextInputWithIcon
+        ref="passwordInput"
+        secureTextEntry={!showPassword}
+        selectionColor="black"
+        icon="key"
+        size={20}
+        color={Colors.dark}
+        onChangeText={(password) => this.setState({password})}
+        placeholder='New Password'/>
+        {user.fetching ?
+          <ActivityIndicator /> :
+          <Button
+            disabled={password.length < 6}
+            onPress={() => {
+              const { passwordInput } = this.refs
+              changePassword(password, params.password, this.onSuccess.bind(this))
+              passwordInput.blur()
+            }}
+            color={Colors.white}
+            backgroundColor={Colors.dark}>
+            Change Password
+          </Button>
+        }
+      </View>
+    )
+  }
+
+  onSuccess () {
+    const navigationAction =  NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Main'})
+      ]
+    })
+    this.props.resetTo(navigationAction)
+  }
+
 }
 
 const mapStateToProps = (state) => {
-  const { signup } = state
+  const { user } = state
   return {
-    signup
+    user
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sendPassword: (password) => dispatch(Signup.checkingPassword(password)),
-    back: () => dispatch(Signup.cancel())
+    changePassword: (newPassword, oldPassword, callback) => dispatch(UserAction.changePassword(newPassword, oldPassword, callback)),
+    resetTo: (action) => dispatch(action)
   }
 }
 

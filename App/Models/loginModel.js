@@ -10,11 +10,13 @@ export default class LoginModel {
   fields() {
     return {
       grant_type: Config.GRANT_TYPE,
-      mobile: this.mobile,
+      username: this.mobile,
       password: this.password,
-      client_secret: Config.CLIENT_SECRET,
+      client_secret: 'bbDi2b3yAQjPBESzu7ULERIc38JaaqZeuE2Srtim',
       client_id: Config.CLIENT_ID,
       scope: '*'
     }
   }
 }
+
+// TODO: Config.CLIENT_SECRET
