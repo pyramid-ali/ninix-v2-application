@@ -14,7 +14,9 @@ export default StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    backgroundColor: `rgba(${Colors.darkRGB}, 0.7)`
+    backgroundColor: `rgba(${Colors.darkRGB}, 0.7)`,
+    width: Metrics.screenWidth,
+    height: (Metrics.screenHeight - Metrics.navBarHeight) / 2,
   },
   imagesContainer: {
     flex: 1,
@@ -52,7 +54,8 @@ export default StyleSheet.create({
   backgroundImage: {
     width: Metrics.screenWidth,
     height: (Metrics.screenHeight - Metrics.navBarHeight) / 2,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
+    position: 'absolute'
   },
   bottomText: {
     fontSize: 16,

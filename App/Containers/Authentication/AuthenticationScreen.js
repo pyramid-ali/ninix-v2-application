@@ -10,23 +10,10 @@ import AuthenticationNavigation from '../../Navigation/AuthenticationNavigation'
 import StickyAlert from '../../Components/StickyAlert'
 
 class AuthenticationScreen extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
 
   render () {
-    const { accessAbility } = this.props
     return (
       <View style={styles.container}>
-        {
-          accessAbility.isConnected ?
-            null :
-            <StickyAlert
-              leftIcon="info">
-              No Internet Connection
-            </StickyAlert>
-        }
         <AuthenticationNavigation />
       </View>
     )
@@ -34,10 +21,7 @@ class AuthenticationScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { accessAbility } = state
-  return {
-    accessAbility
-  }
+  return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

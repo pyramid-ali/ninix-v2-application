@@ -8,7 +8,7 @@ export default class RefreshTokenModel {
 
   fields() {
     return {
-      grant_type: Config.GRANT_TYPE,
+      grant_type: 'refresh_token',
       refresh_token: this.refreshToken,
       client_secret: 'bbDi2b3yAQjPBESzu7ULERIc38JaaqZeuE2Srtim',
       client_id: Config.CLIENT_ID,

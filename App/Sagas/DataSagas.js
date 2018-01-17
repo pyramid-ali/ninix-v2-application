@@ -1,5 +1,6 @@
 import { put, call, select } from 'redux-saga/effects'
 import BluetoothAction from '../Redux/BluetoothRedux'
+import NinixAction from '../Redux/NinixRedux'
 import DataAction from '../Redux/DataRedux'
 import {DataHandler} from '../Bluetooth/DataHandler'
 import Storage from '../Realm/Storage'
@@ -14,13 +15,17 @@ export function *receiveData(action) {
 
   const handler = yield new DataHandler(data)
   const values = yield handler.getExtractedData()
-  yield put(BluetoothAction.updateBattery(values.battery))
+
+  yield put(NinixAction.updateBattery(values.battery))
   yield put(DataAction.extractData({...values, registerAt}))
   try {
     Storage.save(values, registerAt)
   }
   catch (error) {
-    console.log(error, 'error data sagas')
+    console.tron.error({
+      place: '*receiveData',
+      error: error.message
+    })
   }
 
 }

@@ -1,42 +1,41 @@
 import { put, call, select } from 'redux-saga/effects'
-import Api from '../Services/Api'
 import BabyModel from '../Models/BabyModel'
 import BabyAction from '../Redux/BabyRedux'
-import {ImageInput} from '../Models/ImageModel'
+import {setImage} from './UploadSagas';
+import Response from '../Services/Response'
 
-
-
-export function *syncBaby (action) {
-  const { payload } = action
-  const { accessAbility } = yield select()
-  const api = Api.createAuthorized()
-
-  if (accessAbility.wifiOn) {
-    const babyFields = BabyModel.toJson(payload)
-    const response = yield call(api.postBabyInformation, babyFields)
-    console.log(response, 'sync baby')
-    if (response.ok) {
-      const data = response.data
-      const baby = BabyModel.fromJson(data)
-      yield put(BabyAction.sync(baby))
-    }
-    else {
-      // TODO: Show user error when sending data to database
-    }
-  }
-
+export function *setBabyImage (api, action) {
+  // yield setImage(api, action, 'baby', BabyAction.updateWithoutSync)
 }
 
-export function *retrieveBaby (action) {
-  const api = Api.createAuthorized()
-  const response = yield call(api.retrieveBabyInformation)
+export function *saveBabyInformation (api, action) {
+  const { baby, auth } = yield select()
+  const { onSuccess, onFailure } = action
+  const response = yield call(api.sendInformation, 'baby', BabyModel.toJson(baby), auth.accessToken)
 
-  if (response.ok) {
-    const data = response.data
-    const baby = BabyModel.fromJson(data)
-    yield put(BabyAction.sync(baby))
+  try {
+    const data = yield call(Response.resolve, response)
+    yield put(BabyAction.setInformation(BabyModel.fromJson(data.baby)))
+    onSuccess(data)
   }
-  else {
-    // TODO: handle error when an error occurred in retrieving information
+  catch (error) {
+    onFailure(error)
   }
+}
+
+
+export function *getBabyInformation (api, action) {
+
+  const { auth } = yield select()
+
+  const response = yield call(api.getInformation, 'baby', auth.accessToken)
+
+  try {
+    const data = yield call(Response.resolve, response)
+    yield put(BabyAction.setInformation(BabyModel.fromJson(data.baby)))
+  }
+  catch (error) {
+    console.log(error, 'error at baby get information')
+  }
+
 }

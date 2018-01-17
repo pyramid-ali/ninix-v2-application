@@ -3,6 +3,7 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.sentry.RNSentryPackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.imagepicker.ImagePickerPackage;
 import io.realm.react.RealmReactPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSentryPackage(MainApplication.this),
             new MPAndroidChartPackage(),
             new ImagePickerPackage(),
             new RealmReactPackage(),

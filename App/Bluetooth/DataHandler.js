@@ -7,12 +7,14 @@ export class DataHandler {
 
   extractData () {
     const [
-      rawRespiratory,
+      empty,
       rawTemperature,
       rawOrientationAndHumidity,
       lowLevelBattery,
       highLevelBattery
     ] = this.data
+
+    const rawRespiratory = this.data.slice(13, 17)
 
     return {
       rawRespiratory,
@@ -25,7 +27,9 @@ export class DataHandler {
 
   getRespiratory () {
     const { rawRespiratory } = this.rawData
-    return this.round(rawRespiratory * 300 / 256)
+    const float = this.toFloat(rawRespiratory.reverse())
+    const rounded = this.round(float)
+    return rounded > 900 ? 0 : rounded
   }
 
   getTemperature () {
@@ -78,6 +82,13 @@ export class DataHandler {
 
   round (number, degree = 0) {
     return Math.round(number * Math.pow(10, degree)) / Math.pow(10, degree)
+  }
+
+  toFloat (data) {
+    const buff = new ArrayBuffer(4)
+    const view = new DataView(buff)
+    data.forEach((b, i) => view.setUint8(i, b))
+    return view.getFloat32(0)
   }
 
 }

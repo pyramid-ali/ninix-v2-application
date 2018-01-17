@@ -34,6 +34,13 @@ const privateApi = (api) => {
   const getPhoto = (type: string) => api.get('api/photo/' + type)
 
   /***
+   * send photo to server to save in cloud
+   * @param type
+   * @param data
+   */
+  const sendPhoto = (type: string, data, options) => api.post('api/photo/' + type, data, options)
+
+  /***
    * send information of parents or baby
    * @param type string, one of (baby|father|mother)
    * @param options Object
@@ -58,6 +65,7 @@ const privateApi = (api) => {
     getInformation,
     getDeviceLogs,
     getPhoto,
+    sendPhoto,
     sendInformation,
     sendDeviceLog,
     sendData
@@ -66,8 +74,8 @@ const privateApi = (api) => {
 
 
 
-const create = async (baseURL = 'https://2631a8cb.ngrok.io/') => {
-
+const create = async (baseURL = 'https://8d14c115.ngrok.io/') => {
+  console.log('private api create')
   const api = apisauce.create({
     baseURL,
     headers: {
@@ -87,6 +95,7 @@ const create = async (baseURL = 'https://2631a8cb.ngrok.io/') => {
     }
 
     if (token) {
+      console.log('token set', token)
       api.setHeader('Authorization', TokenManager.authorizationHeader(token))
     }
   }

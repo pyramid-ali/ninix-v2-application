@@ -17,13 +17,13 @@ export default class ModalDeviceConnect extends Component {
   }
 
   render () {
-    const { visible, title, children, buttons } = this.props
+    const { visible, title, children, buttons, onRequestClose } = this.props
     return (
       <Modal
         animationType={"slide"}
         transparent={true}
         visible={visible}
-        onRequestClose={() => {alert("Modal has been closed.")}}
+        onRequestClose={onRequestClose ? onRequestClose : () => {}}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalBox}>

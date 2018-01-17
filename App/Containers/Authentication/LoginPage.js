@@ -33,19 +33,13 @@ class LoginPage extends Component {
      * @type {{start: {x: number, y: number}, end: {x: number, y: number}, colors: [string,string,string], locations: [number,number,number]}}
      */
     this.gradient = {
-      start: {
-        x: 0,  y: 0.9
-      },
-      end: {
-        x: 1,  y: 0.1
-      },
       colors: [
-        'rgba(0, 0, 0, 0.9)',
+        'rgba(255, 255, 255, 0.2)',
         'rgba(27, 163, 156, 0.6)',
-        'rgba(255, 255, 255, 0.4)'
+        'rgba(0, 0, 0, 0.9)',
       ],
       locations: [
-        0, 0.6, 0.85
+        0, 0.35, 0.75
       ]
     }
   }
@@ -84,63 +78,63 @@ class LoginPage extends Component {
         style={styles.container}>
         <Image
           style={styles.backgroundImage}
-          source={require('../../Images/login-background.jpg')}>
-          <LinearGradient
-            {...this.gradient}
-            style={styles.gradientBackground}>
-            {this.state.keyboardOpen ? null : <View style={styles.logoContainer}>
-            <Text style={styles.logo}>
-              NiNiX
+          source={require('../../Images/login-background.jpg')} />
+        <LinearGradient
+          colors={this.gradient.colors}
+          style={styles.gradientBackground}>
+          {this.state.keyboardOpen ? null : <View style={styles.logoContainer}>
+          <Text style={styles.logo}>
+            NiNiX
+          </Text>
+          </View>}
+
+          <View style={styles.formContainer}>
+            {this.showError()}
+
+            <TextInputWithIcon
+              editable={!login.fetching}
+              keyboardType="phone-pad"
+              maxLength={11}
+              containerStyle={styles.textInputContainerStyle}
+              style={styles.textInput}
+              size={20}
+              icon='mobile'
+              color="white"
+              placeholderTextColor='white'
+              onChangeText={(mobile) => this.setState({mobile})}
+              value={mobile}
+            placeholder='Mobile Number' />
+            <TextInputWithIcon
+              editable={!login.fetching}
+              containerStyle={styles.textInputContainerStyle}
+              style={styles.textInput}
+              size={20}
+              icon='unlock-alt'
+              color="white"
+              placeholderTextColor='white'
+              secureTextEntry={true}
+              onChangeText={(password) => this.setState({password})}
+              value={password}
+              placeholder='Password' />
+
+            {this.showActivityIndicator()}
+
+            <Text
+              style={styles.linkContainer}>
+              Forgot Your Login Details?
+              <Text
+                onPress={() => alert('forgot password')}
+                style={styles.link}> Retrieve Now</Text>
             </Text>
-            </View>}
+            <Text
+              onPress={() => {
+                navigate('MobileEntry')
+              }}
+              style={styles.footerText}>Signup</Text>
 
-            <View style={styles.formContainer}>
-              {this.showError()}
+          </View>
+        </LinearGradient>
 
-              <TextInputWithIcon
-                editable={!login.fetching}
-                keyboardType="phone-pad"
-                maxLength={11}
-                containerStyle={styles.textInputContainerStyle}
-                style={styles.textInput}
-                size={20}
-                icon='mobile'
-                color="white"
-                placeholderTextColor='white'
-                onChangeText={(mobile) => this.setState({mobile})}
-                value={mobile}
-              placeholder='Mobile Number' />
-              <TextInputWithIcon
-                editable={!login.fetching}
-                containerStyle={styles.textInputContainerStyle}
-                style={styles.textInput}
-                size={20}
-                icon='unlock-alt'
-                color="white"
-                placeholderTextColor='white'
-                secureTextEntry={true}
-                onChangeText={(password) => this.setState({password})}
-                value={password}
-                placeholder='Password' />
-
-              {this.showActivityIndicator()}
-
-              <Text
-                style={styles.linkContainer}>
-                Forgot Your Login Details?
-                <Text
-                  onPress={() => alert('forgot password')}
-                  style={styles.link}> Retrieve Now</Text>
-              </Text>
-              <Text
-                onPress={() => {
-                  navigate('MobileEntry')
-                }}
-                style={styles.footerText}>Signup</Text>
-
-            </View>
-          </LinearGradient>
-        </Image>
       </KeyboardAvoidingView>
     )
   }
@@ -150,10 +144,9 @@ class LoginPage extends Component {
    * @returns {boolean}
    */
   verification () {
-    const {accessAbility} = this.props
     const {mobile, password} = this.state
     const regex = new RegExp(/^09\d{9}$/)
-    return regex.test(mobile) && password.length > 0 // TODO: && accessAbility.isConnected
+    return regex.test(mobile) && password.length > 0
   }
 
   /***
@@ -186,7 +179,7 @@ class LoginPage extends Component {
           color={Colors.white}
           backgroundColor={Colors.primary}
           onPress={() => {
-            loginRequest(mobile, password, this.onSuccess.bind(this))
+            loginRequest(mobile, password)
             Keyboard.dismiss()
           }}
         >
@@ -194,32 +187,19 @@ class LoginPage extends Component {
         </Button>
     )
   }
-
-  onSuccess () {
-    const navigationAction =  NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Main'})
-      ]
-    })
-    this.props.resetTo(navigationAction)
-  }
-
 }
 
 const mapStateToProps = (state) => {
-  const { login, accessAbility } = state
+  const { login } = state
   return {
-    login,
-    accessAbility
+    login
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     signup: (navigation) => dispatch(Signup.start(navigation)),
-    loginRequest: (mobile, password, callback) => dispatch(Login.request(mobile, password, callback)),
-    resetTo: (action) => dispatch(action)
+    loginRequest: (mobile, password) => dispatch(Login.request(mobile, password)),
   }
 }
 

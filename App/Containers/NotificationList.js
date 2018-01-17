@@ -23,21 +23,21 @@ class NotificationList extends Component {
         key: '1',
         date: new Date(),
         type: 'danger',
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`,
+        text: `Respiratory rate goes under 20 bps, please be aware, check your baby`,
         problem: 'tangie-nafas'
       },
       {
         key: '2',
         date: new Date(),
         type: 'warning',
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`,
+        text: `your baby is on prone, please rotate your baby to normal orientation`,
         problem: 'tangie-nafas'
       },
       {
         key: '3',
         date: new Date(),
         type: 'normal',
-        text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`,
+        text: `maybe your baby pooped, please  check his diaper`,
         problem: 'tangie-nafas'
       }
     ]

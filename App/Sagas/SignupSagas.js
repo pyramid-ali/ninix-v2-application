@@ -1,10 +1,10 @@
 import { put, call, select } from 'redux-saga/effects'
 import SignupAction from '../Redux/SignupRedux'
-import ErrorMessage from '../Transform/ErrorMessage'
 import LoginModel from '../Models/loginModel'
-import LoginAction from '../Redux/LoginRedux'
-import UserAction from '../Redux/UserRedux'
 import Response from '../Services/Response'
+import AppAction from '../Redux/AppRedux'
+import AuthAction from '../Redux/AuthRedux'
+import { setToken } from '../Services/TokenManager'
 
 
 /***
@@ -37,22 +37,24 @@ export function *requestToken (api, action) {
  */
 export function *checkToken(api, action) {
   console.log('check token')
+
   const { signup } = yield select()
-  const { token, callback, failure } = action
+  const { token, callback } = action
   const { mobile } = signup
   const activationCodeResponse = yield call(api.checkActivationCode, {mobile, token})
-  console.log(activationCodeResponse, 'activation code response')
+
   try {
     const data = yield call(Response.resolve, activationCodeResponse)
     const { result } = data
     const { password } = result
 
-    yield put(LoginAction.request(mobile, password, () => {
-      console.log('callback in check token')
-      callback(password)
-    }))
-    console.log('end of check token')
-    return
+    // TODO: check login
+    const response = yield call(api.login, (new LoginModel(mobile, password)).fields())
+    const token = yield call(Response.resolve, response)
+    yield put(AuthAction.issueToken(token))
+    yield put(AppAction.sync())
+    callback(password)
+
   }
   catch (error) {
     yield put(SignupAction.failure(error.message))

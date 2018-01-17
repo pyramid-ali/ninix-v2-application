@@ -5,7 +5,7 @@ import Immutable from 'seamless-immutable'
 export const INITIAL_STATE = Immutable({
   fetching: false,
   error: null,
-  mobile: null,
+  mobile: null
 })
 
 // define types and actions
@@ -55,6 +55,7 @@ const success = (state = INITIAL_STATE, action) => {
     error: null
   }
 }
+
 
 const failure = (state = INITIAL_STATE, action) => {
   const { error } = action

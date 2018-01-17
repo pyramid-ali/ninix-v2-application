@@ -1,6 +1,7 @@
 import { put, call, select } from 'redux-saga/effects'
 import UserAction from '../Redux/UserRedux'
 import ErrorMessage from '../Transform/ErrorMessage';
+import TokenManager from '../Services/Token/TokenManager';
 
 
 export function *changePassword (api, action) {
@@ -27,5 +28,12 @@ export function *changePassword (api, action) {
     yield put(UserAction.failure(error || response.message))
   }
 
+
+}
+
+// TODO: we can send logout date to server
+export function *logout (api, action) {
+
+  yield call(TokenManager.remove)
 
 }

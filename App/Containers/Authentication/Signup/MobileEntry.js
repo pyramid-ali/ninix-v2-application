@@ -17,7 +17,7 @@ class MobileEntry extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      mobile: ''
+      mobile: null
     }
   }
 
@@ -48,7 +48,7 @@ class MobileEntry extends Component {
             color={Colors.dark}
             value={mobile}
             editable={!signup.fetching}
-            onFocus={() => this.setState({ mobile: '09' })}
+            onFocus={this.onFocus.bind(this)}
             onChangeText={(mobile) => this.setState({ mobile })}
             placeholder='Enter your mobile'/>
           {signup.fetching ? <ActivityIndicator size={24} /> : this.renderActivateButton() }
@@ -99,6 +99,13 @@ class MobileEntry extends Component {
     console.log('on success mobile entry callback')
     const { navigate } = this.props.navigation
     navigate('ActivationCode')
+  }
+
+  onFocus () {
+    const { mobile } = this.state
+    if (!mobile) {
+      this.setState({ mobile: '09' })
+    }
   }
 }
 

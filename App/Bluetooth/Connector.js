@@ -9,27 +9,11 @@ const base64 = require('base-64');
 
 class Connector {
 
-  constructor() {
-
-  }
-
-  addEventListener() {
-    // check for first time
-    Ble.state().then((state) => {
-      store.dispatch(BluetoothAction.changeState(state))
-    })
-
-    // listen to changes
-    Ble.addListener((state) => {
-      store.dispatch(BluetoothAction.changeState(state))
-    })
-  }
-
   scanDevices() {
     const { bluetooth } = store.getState()
 
     if (bluetooth.state === BluetoothStates.poweredOn) {
-      store.dispatch(BluetoothAction.startScan())
+      store.dispatch(BluetoothAction.scan())
       Ble.scanDevice(serviceUUIDs, {allowDuplicates: false}, (error, device) => {
         store.dispatch(BluetoothAction.addDevice(device))
       })
@@ -40,12 +24,12 @@ class Connector {
 
   }
 
-  stopScan() {
+  stopScan () {
     store.dispatch(BluetoothAction.stopScan())
     Ble.stopScan()
   }
 
-  connect(device) {
+  connect (device) {
     device.onDisconnected((error, device) => {
       console.log(error, 'disconnect')
       console.log('disconnect time', moment())
@@ -54,23 +38,29 @@ class Connector {
     return device.connect()
   }
 
-  discover(device) {
-    console.log('connect time', moment())
+  disconnect () {
+    const { ninix } = store.getState()
+    Ble.disconnect(ninix.device).then((device) => {
+      console.log(device, 'disconnect')
+    })
+  }
+
+  discover (device) {
     return device.discoverAllServicesAndCharacteristics()
   }
 
-  services(device) {
+  services (device) {
     return device.services()
   }
 
-  characteristicsForService(device) {
+  characteristicsForService (device) {
     return device.characteristicsForService(mainService)
   }
 
 
   notify (characteristic) {
     characteristic.monitor( (error, char) => {
-      if(char) {
+      if (char) {
         let str = base64.decode(char.value)
         let bytes = []
         for (let i = 0; i < str.length; ++i) {
@@ -82,7 +72,6 @@ class Connector {
     })
     return true
   }
-
 }
 
 const instance = new Connector()

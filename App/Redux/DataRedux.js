@@ -25,9 +25,27 @@ export const DataTypes = Types
 export const receiveExtractData = (state = INITIAL_STATE, action) => {
   const { vitalSign } = action
 
-  const fiveMinutesAgo = moment().subtract(5, 'm')
+  const upperTimeThreshold = moment().subtract(30, 's')
+  const lowerTimeThreshold = moment().subtract(60, 'm')
   const filteredData = state.vitalSigns.filter((item, index) => {
-      return item.registerAt > fiveMinutesAgo.unix()
+
+    if (moment(item.registerAt).unix() < lowerTimeThreshold.unix()) {
+      return false
+    }
+
+    if (moment(item.registerAt).unix() > upperTimeThreshold.unix()) {
+      return true
+    }
+
+    if (state.vitalSigns.length > index + 1) {
+      if (isEqual(state.vitalSigns[index], state.vitalSigns[index + 1])) {
+        return false
+      } else {
+        return true
+      }
+    }
+
+    return false
   })
   return {
     ...state,
@@ -38,18 +56,23 @@ export const receiveExtractData = (state = INITIAL_STATE, action) => {
   }
 }
 
+function isEqual(left, right) {
+  return left.temperature === right.temperature &&
+          left.respiratory === right.respiratory
+}
+
 export const addUnsyncData = (state = INITIAL_STATE, action) => {
-  console.log('addUnsyncData')
+
   const { vitalSign } = action
-  const filteredData = state.unSynced.filter((item) => {
-    return item.registerAt !== vitalSign.registerAt
-  })
+  // const filteredData = state.unSynced.filter((item) => {
+  //   return item.registerAt !== vitalSign.registerAt
+  // })
   return {
     ...state,
-    unSynced: [
-      ...filteredData,
-      vitalSign
-    ]
+    // unSynced: [
+    //   ...filteredData,
+    //   vitalSign
+    // ]
   }
 }
 

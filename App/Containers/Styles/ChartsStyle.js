@@ -2,15 +2,19 @@ import { StyleSheet } from 'react-native'
 import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    backgroundColor: Colors.background
   },
-  top: {
-    flex: 4,
-    backgroundColor: Colors.primary
+  container: {
+    flex: 1/2,
+    backgroundColor: '#F5FCFF',
+    padding: 15
   },
-  bottom: {
-    flex: 6
+  chart: {
+    flex: 1
+  },
+  chartHeader: {
+    textAlign: 'center',
+    paddingVertical: 5,
   }
 })

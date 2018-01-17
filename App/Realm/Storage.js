@@ -62,12 +62,14 @@ export default class Storage {
     Realm.open({schema: schemas})
       .then(realm => {
         let vitalSigns = realm.objects('VitalSign').sorted('updatedAt', true)
-        console.log(vitalSigns, 'vital signs', vitalSigns.length)
-        vitalSigns.forEach((vitalSign) => {
-          console.log(vitalSign, 'vital sign')
+        console.tron.log({
+          vitalSigns
         })
       })
-      .catch(error => console.log(error, '<Storage#save> catch error'))
+      .catch(error => console.tron.error({
+        error,
+        place: 'Realm/Storage/get'
+      }))
   }
 
   static sync (vitalSigns) {

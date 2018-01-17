@@ -2,6 +2,7 @@ import { delay } from 'redux-saga'
 import { put, call } from 'redux-saga/effects'
 import { mainService } from '../Bluetooth/UUID'
 import BluetoothAction from '../Redux/BluetoothRedux'
+import NinixAction from '../Redux/NinixRedux'
 import Connector from '../Bluetooth/Connector'
 import Ble from '../Services/Ble'
 
@@ -26,12 +27,16 @@ export function *connect(action) {
       }
     }
 
-    yield put(BluetoothAction.successConnect(device))
+    yield put(BluetoothAction.didConnect(device))
+    yield put(NinixAction.setDevice(device))
   }
 
-  catch (e) {
+  catch (error) {
     yield put(BluetoothAction.cancelConnection())
-    console.log(e.getMessage(), e, 'bluetooth error in bluetoothSagas')
+    console.tron.error({
+      place: '*connect<BluetoothSagas>',
+      error: error.message
+    })
   }
 
 }

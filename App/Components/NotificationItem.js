@@ -37,7 +37,7 @@ export default class NotificationItem extends Component {
           </Text>
         </View>
         <View style={styles.imageContainer}>
-          <Image source={require('../Images/profile-background.jpg')} style={styles.image} />
+          <Image source={require('../Images/childcare.png')} style={styles.image} />
         </View>
         <View style={styles.textContainer}>
           <Text style={[styles.title, styles[type.toLowerCase()]]}>{type.toUpperCase()}</Text>

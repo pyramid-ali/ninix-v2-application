@@ -1,19 +1,16 @@
-import React, { Component} from 'react'
-import { connect } from 'react-redux'
 import { BleManager } from 'react-native-ble-plx'
-import { store } from '../Containers/App'
 
 class Ble {
 
-  constructor() {
+  constructor () {
     this.manager = new BleManager()
   }
 
-  addListener(listener, emitCurrentState) {
+  addListener (listener, emitCurrentState = true) {
     this.subscription = this.manager.onStateChange(listener, emitCurrentState)
   }
 
-  removeListener() {
+  removeListener () {
     this.subscription.remove()
   }
 
@@ -21,12 +18,16 @@ class Ble {
     return this.manager.startDeviceScan(uuidArray, options, listener)
   }
 
-  stopScan() {
+  stopScan () {
     this.manager.stopDeviceScan()
   }
 
-  state() {
+  state () {
     return this.manager.state()
+  }
+
+  disconnect (device) {
+    return this.manager.cancelDeviceConnection(device.id)
   }
 
 }

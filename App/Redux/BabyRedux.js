@@ -15,17 +15,19 @@ export const INITIAL_STATE = Immutable({
 
 // define types and actions
 const { Types, Creators } = createActions({
-  update: ['payload'],
-  sync: ['payload'],
-  updateWithoutSync: ['payload'],
-  retrieve: null
+  changeInformation: ['payload'],
+  setInformation: ['payload'],
+  saveInformation: ['payload'],
+  getInformation: null,
+  setImage: ['payload'],
+
 }, {
-  prefix: 'BABY_'
+  prefix: 'baby/'
 })
 
 export const BabyTypes = Types
 
-export const update = (state = INITIAL_STATE, action) => {
+export const change = (state = INITIAL_STATE, action) => {
   const { payload } = action
   return {
     ...state,
@@ -34,26 +36,31 @@ export const update = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const updateWithoutSync = (state = INITIAL_STATE, action) => {
+export const set = (state = INITIAL_STATE, action) => {
   const { payload } = action
   return {
     ...state,
-    ...payload
-  }
-}
-
-export const sync = (state = INITIAL_STATE, action) => {
-  return {
-    ...state,
+    ...payload,
     sync: true
   }
 }
 
+export const setImage = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    ...payload,
+    progress: 1
+  }
+}
+
+
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.UPDATE]: update,
-  [Types.SYNC]: sync,
-  [Types.UPDATE_WITHOUT_SYNC]: updateWithoutSync,
+  [Types.CHANGE_INFORMATION]: change,
+  [Types.SET_INFORMATION]: set,
+  [Types.SET_IMAGE]: setImage,
+
 })
 
 

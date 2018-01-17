@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // TODO: user Config.API_URL
-const create = (baseURL = 'https://2631a8cb.ngrok.io/') => {
+const create = (baseURL = 'https://8d14c115.ngrok.io/') => {
 
   /***
    * create new api
@@ -40,7 +40,7 @@ const create = (baseURL = 'https://2631a8cb.ngrok.io/') => {
    * refresh token
    * @param refreshFields
    */
-  const refreshToken = (refreshFields) => api.post('oauth/token/refresh', refreshFields)
+  const refreshToken = (refreshFields) => api.post('oauth/token', refreshFields)
 
 
 

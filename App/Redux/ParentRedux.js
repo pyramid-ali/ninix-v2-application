@@ -19,58 +19,61 @@ export const INITIAL_STATE = Immutable({
 
 // define types and actions
 const { Types, Creators } = createActions({
-  updateMother: ['payload'],
-  updateFather: ['payload'],
-  updateFatherWithoutSync: ['payload'],
-  updateMotherWithoutSync: ['payload'],
-  syncFather: ['payload'],
-  syncMother: ['payload'],
-  retrieveFather: null,
-  retrieveMother: null
+  changeMotherInformation: ['payload'],
+  changeFatherInformation: ['payload'],
+  setMotherInformation: ['payload'],
+  setFatherInformation: ['payload'],
+  setMotherImage: ['payload'],
+  setFatherImage: ['payload'],
+  getFatherInformation: null,
+  getMotherInformation: null,
+  retrieveMother: null,
+  saveMotherInformation: ['onSuccess', 'onFailure'],
+  saveFatherInformation: ['onSuccess', 'onFailure']
 }, {
-  prefix: 'PARENT_'
+  prefix: 'parent/'
 })
 
 export const ParentTypes = Types
 
-export const update = (state = INITIAL_STATE, action) => {
+export const changeInformation = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    ...payload,
+    sync: false
+  }
+}
+
+export const setInformation = (state = INITIAL_STATE, action) => {
   const { payload } = action
   return {
     ...state,
     ...payload,
     updatedAt: moment(),
-    sync: false
-  }
-}
-
-export const updateWithoutSync = (state = INITIAL_STATE, action) => {
-  const { payload } = action
-  return {
-    ...state,
-    ...payload
-  }
-}
-
-export const sync = (state = INITIAL_STATE, action) => {
-  const { payload } = action
-  return {
-    ...state,
-    ...payload,
     sync: true
   }
 }
 
+export const setImage = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    image: payload.image,
+    progress: 1,
+  }
+}
 
 export const motherReducer = createReducer(INITIAL_STATE, {
-  [Types.UPDATE_MOTHER]: update,
-  [Types.UPDATE_MOTHER_WITHOUT_SYNC]: updateWithoutSync,
-  [Types.SYNC_MOTHER]: sync,
+  [Types.CHANGE_MOTHER_INFORMATION]: changeInformation,
+  [Types.SET_MOTHER_INFORMATION]: setInformation,
+  [Types.SET_MOTHER_IMAGE]: setImage,
 })
 
 export const fatherReducer = createReducer(INITIAL_STATE, {
-  [Types.UPDATE_FATHER]: update,
-  [Types.UPDATE_FATHER_WITHOUT_SYNC]: updateWithoutSync,
-  [Types.SYNC_FATHER]: sync
+  [Types.CHANGE_FATHER_INFORMATION]: changeInformation,
+  [Types.SET_FATHER_INFORMATION]: setInformation,
+  [Types.SET_FATHER_IMAGE]: setImage,
 })
 
 export default Creators

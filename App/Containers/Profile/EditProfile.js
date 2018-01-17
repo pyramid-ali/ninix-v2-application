@@ -23,21 +23,21 @@ class EditProfile extends Component {
         key: 1,
         title: 'Father',
         text: father.name,
-        image: father.image ? {uri: father.image} : require('../../Images/Profile/3-1.jpg'),
+        image: father.image ? {uri: father.image.uri} : require('../../Images/Profile/3-1.jpg'),
         type: 'father'
       },
       {
         key: 2,
         title: 'Mother',
         text: mother.name,
-        image: mother.image ? {uri: mother.image} : require('../../Images/Profile/3-2.jpg'),
+        image: mother.image ? {uri: mother.image.uri} : require('../../Images/Profile/3-2.jpg'),
         type: 'mother'
       },
       {
         key: 3,
         title: 'Infant',
         text: baby.name,
-        image: baby.image ? {uri: baby.image} : require('../../Images/Profile/3-3.jpg'),
+        image: baby.image ? {uri: baby.image.uri} : require('../../Images/Profile/3-3.jpg'),
         type: 'infant'
       }
     ]

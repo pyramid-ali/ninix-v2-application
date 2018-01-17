@@ -68,6 +68,23 @@ export default StyleSheet.create({
     color: Colors.primary
   },
 
+  logHeader: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: 10,
+    paddingVertical: 10,
+    backgroundColor: Colors.dark,
+    color: Colors.white
+  },
+
+  logActivityIndicator: {
+    marginTop: 10
+  },
+
+  logHeaderContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
 
   /*
    * divider

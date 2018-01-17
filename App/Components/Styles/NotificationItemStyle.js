@@ -29,9 +29,9 @@ export default StyleSheet.create({
     padding: 5
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50
+    width: 60,
+    height: 60,
+    margin: 15
   },
   textContainer: {
     flex: 2,

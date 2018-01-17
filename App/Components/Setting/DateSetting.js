@@ -36,6 +36,9 @@ export default class DateSetting extends Component {
     if (!value) {
       value = new Date(0)
     }
+    else {
+      value = moment(value).toDate()
+    }
     try {
       const {action, year, month, day} = await DatePickerAndroid.open({
         date: value

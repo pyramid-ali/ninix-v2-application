@@ -1,30 +1,36 @@
-import { put, call } from 'redux-saga/effects'
+import { put, call, race } from 'redux-saga/effects'
+import { NavigationActions } from 'react-navigation'
+
 import LoginModel from '../Models/loginModel'
 import LoginAction from '../Redux/LoginRedux'
-import Sync from '../Services/Sync'
-import UserAction from '../Redux/UserRedux'
 import Response from '../Services/Response'
-import TokenManager from '../Services/Token/TokenManager'
+import AuthAction from '../Redux/AuthRedux'
+import AppAction from '../Redux/AppRedux'
 
+const gotoMainPage = NavigationActions.reset({
+  index: 0,
+  actions: [
+    NavigationActions.navigate({ routeName: 'Main'})
+  ]
+})
 
-export function *login (api, privateApi, action) {
-  console.log('start login')
-  const { mobile, password, callback } = action
+export function *login (api, action) {
+
+  const { mobile, password } = action
   const response = yield call(api.login, new LoginModel(mobile, password).fields())
-  console.log(response)
+  console.log(response, 'login response')
   try {
-    const data = yield call(Response.resolve, response)
-    const token = yield call(TokenManager.save, data)
-    yield call(privateApi.authorize, token)
-    yield put(UserAction.loggedIn())
-    yield put(LoginAction.success())
-
-    callback()
+    const token = yield call(Response.resolve, response)
+    console.tron.log('before race')
+    yield put(AuthAction.saveToken(token))
+    console.tron.log('after race')
+    yield put(AppAction.sync())
+    yield put(gotoMainPage)
     // TODO: start syncing
   }
   catch (error) {
     console.log(error, 'error login')
-    yield put(LoginAction.failure(error.message))
+    yield put(LoginAction.failure(error.message || error.problem))
   }
 
 }

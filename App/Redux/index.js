@@ -5,19 +5,20 @@ import rootSaga from '../Sagas/'
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
-    accessAbility: require('./AccessAbilityRedux').reducer,
+    app:           require('./AppRedux').reducer,
     appState:      require('./AppStateRedux').reducer,
+    auth:          require('./AuthRedux').reducer,
+    baby:          require('./BabyRedux').reducer,
+    bluetooth:     require('./BluetoothRedux').reducer,
+    data:          require('./DataRedux').reducer,
+    father:        require('./ParentRedux').fatherReducer,
     login:         require('./LoginRedux').reducer,
+    logs:          require('./LogRedux').reducer,
+    mother:        require('./ParentRedux').motherReducer,
     nav:           require('./NavigationRedux').reducer,
+    ninix:         require('./NinixRedux').reducer,
     signup:        require('./SignupRedux').reducer,
     user:          require('./UserRedux').reducer,
-    mother:        require('./ParentRedux').motherReducer,
-    father:        require('./ParentRedux').fatherReducer,
-    baby:          require('./BabyRedux').reducer,
-
-
-    // bluetooth: require('./BluetoothRedux').reducer,
-    // data: require('./DataRedux').reducer
   })
 
   return configureStore(rootReducer, rootSaga)

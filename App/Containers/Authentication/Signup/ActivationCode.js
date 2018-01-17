@@ -141,7 +141,7 @@ class ActivationCode extends Component {
         </TouchableOpacity>
         <TouchableOpacity
           disabled={signup.fetching}
-          onPress={() => wrongNumber(navigation)}>
+          onPress={this.wrongNumber.bind(this)}>
           <Text style={[styles.link, signup.fetching ? styles.disableLink : null]}>
             Wrong Number
           </Text>
@@ -178,6 +178,10 @@ class ActivationCode extends Component {
 
   onFailure (error: string) {
 
+  }
+
+  wrongNumber () {
+    this.props.navigation.goBack()
   }
 }
 

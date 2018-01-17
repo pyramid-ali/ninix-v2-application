@@ -10,7 +10,8 @@ export default StyleSheet.create({
     resizeMode: 'cover',
     width: Metrics.screenWidth,
     height: Metrics.screenHeight,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'absolute'
   },
   gradientBackground: {
     flex: 1,

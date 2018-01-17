@@ -22,12 +22,31 @@ export default class NinixDevice extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      blink: new Animated.Value(0)
+      blink: new Animated.Value(0),
+      stopAnimation: false
     }
   }
 
   componentDidMount() {
-    this.startAnimation()
+
+  }
+
+  componentDidUpdate () {
+    if (this.props.blink) {
+      if (this.state.stopAnimation) {
+        this.setState({
+          stopAnimation: false
+        })
+      }
+      this.startAnimation()
+    }
+    else {
+      if (!this.state.stopAnimation) {
+        this.setState({
+          stopAnimation: true
+        })
+      }
+    }
   }
 
   startAnimation() {
@@ -38,14 +57,14 @@ export default class NinixDevice extends Component {
       duration: 1000
     }).start(() => {
       blink.setValue(0)
-      if(this.props.blink)
+      if (!this.state.stopAnimation) {
         this.startAnimation()
+      }
     })
-
   }
 
   render () {
-    const { containerStyle, lightColor, logo, blink, onPress } = this.props
+    const { containerStyle, lightColor, logo, onPress } = this.props
     const { outerCircleStyle, innerCircleStyle, lightContainerStyle, lightStyle, logoStyle } = this.styleSheets()
 
     const backgroundColor = this.state.blink.interpolate({

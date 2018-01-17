@@ -3,11 +3,19 @@ import Immutable from 'seamless-immutable'
 import Reactotron from 'reactotron-react-native'
 import { reactotronRedux as reduxPlugin } from 'reactotron-redux'
 import sagaPlugin from 'reactotron-redux-saga'
+import {NativeModules} from 'react-native';
 
 if (Config.useReactotron) {
-  // https://github.com/infinitered/reactotron for more options!
+
+  let scriptHostname;
+  if (__DEV__) {
+    const scriptURL = NativeModules.SourceCode.scriptURL;
+    scriptHostname = scriptURL.split('://')[1].split(':')[0];
+  }
+
+  console.log(scriptHostname, "script host name")
   Reactotron
-    .configure({ name: 'Ignite App' })
+    .configure({ name: 'NINIX' })
     .useReactNative()
     .use(reduxPlugin({ onRestore: Immutable }))
     .use(sagaPlugin())

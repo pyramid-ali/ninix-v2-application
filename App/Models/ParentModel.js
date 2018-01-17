@@ -18,7 +18,7 @@ export default class ParentModel {
   static toJson(model) {
     return {
       name: model.name,
-      birth_date: moment(model.birthDate).toJSON(),
+      birth_date: model.birthDate ? moment(model.birthDate).toDate().toDateString() : null,
       job: model.job,
       mobile: model.mobile,
       blood_type: model.bloodGroup,

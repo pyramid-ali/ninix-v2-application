@@ -15,30 +15,16 @@ import Colors from '../../Themes/Colors'
 import ModalDeviceConnect from '../../Components/ModalDeviceConnect'
 
 class AddDevice extends Component {
-  constructor (props) {
-    super(props)
-  }
-
-  componentDidMount() {
-
-  }
-
-  componentWillUnmount() {
-
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  }
 
   render () {
     const { bluetooth } = this.props
     const data = bluetooth.devices
+
     const {logo, blink, color} = (() => {
 
       if (bluetooth.isConnected) {
         return {
-          logo: 'Connected',
+          logo: 'Connected\nTap To cancel',
           blink: false,
           color: Colors.primary
         }
@@ -100,10 +86,9 @@ class AddDevice extends Component {
         </View>
         <ModalDeviceConnect
           buttons={[{
-            onPress: () => this.props.cancelConnection()    ,
+            onPress: () => this.props.cancelConnection(),
             text: 'Cancel'
-          }
-          ]}
+          }]}
           visible={bluetooth.isConnecting}>
           <Text>We're connecting to NINIX_DEMO</Text>
         </ModalDeviceConnect>
@@ -120,14 +105,14 @@ class AddDevice extends Component {
     )
   }
 
-  renderItem (item) {
+  renderItem (device) {
     return (
-      <FoundedDeviceItem onPress={() => this.connect(item)} text={item.device.name} key={item.id} />
+      <FoundedDeviceItem onPress={() => this.connect(device)} text={device.name} key={device.id} />
     )
   }
 
-  connect (item) {
-    this.props.startConnection(item.device)
+  connect (device) {
+    this.props.startConnection(device)
   }
 
   listHeaderComponent () {
@@ -145,17 +130,18 @@ class AddDevice extends Component {
   }
 
   search() {
-    const { isScanning } = this.props.bluetooth
+    const { isScanning, isConnected } = this.props.bluetooth
+    if (isConnected) {
+      Connector.disconnect()
+      return
+    }
     if(isScanning) {
       Connector.stopScan()
       return
     }
-    Connector.scanDevices(this.deviceFound)
+    Connector.scanDevices()
   }
 
-  deviceFound(devices, errors) {
-    console.log('device scanned', devices, errors)
-  }
 }
 
 const mapStateToProps = (state) => {
@@ -167,8 +153,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    startConnection: (device) => dispatch(BluetoothAction.startConnecting(device)),
-    cancelConnection: () => dispatch(BluetoothAction.cancelConnection())
+    startConnection: (device) => dispatch(BluetoothAction.connect(device)),
+    cancelConnection: () => dispatch(BluetoothAction.cancel())
   }
 }
 

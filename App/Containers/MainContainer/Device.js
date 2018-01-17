@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View, FlatList } from 'react-native'
+import { ScrollView, Text, View, FlatList, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
-import moment from 'moment'
+import { PermissionsAndroid } from 'react-native'
+import LogAction from '../../Redux/LogRedux'
+import Realm from '../../Realm/Storage'
 
 // Styles
 import styles from '../Styles/DeviceStyle'
@@ -22,46 +24,30 @@ class Device extends Component {
     ),
   }
 
+  _keyExtractor = (item, index) => index;
+
   constructor (props) {
     super(props)
     this.state = {}
   }
 
+  componentDidMount () {
+    this.props.pullDeviceLogs()
+    Realm.get()
+  }
+
   render () {
 
-    const data = [
-      {
-        key: 1,
-        status: 'Disconnected',
-        date: moment().subtract(10, 'm')
-      },
-      {
-        key: 2,
-        status: 'Connected',
-        date: moment().subtract(100, 'm')
-      },
-      {
-        key: 3,
-        status: 'Disconnected',
-        date: moment().subtract(1000, 'm')
-      },
-      {
-        key: 4,
-        status: 'Connected',
-        date: moment().subtract(1000, 'm')
-      }
-    ]
-
-    const { bluetooth } = this.props
-    const { battery, isConnected } = bluetooth
+    const { device } = this.props.logs
+    const { isConnected } = this.props.bluetooth
+    const { battery } = this.props.ninix
 
     return (
       <View style={styles.wrapper}>
         <NavigationBar
           rightButton={this.renderRightBarButton()}
           onPressRightButton={this.pressRightBarButton.bind(this)}
-          style={styles.navBar}
-        >
+          style={styles.navBar}>
           Device
         </NavigationBar>
         <ScrollView style={styles.container}>
@@ -78,10 +64,18 @@ class Device extends Component {
               <Text style={styles.firmwareButton}>Check for updates</Text>
             </View>
           </View>
+          <View style={styles.logHeaderContainer}>
+            <Text style={styles.logHeader}>Connection History</Text>
+            {this.props.logs.fetching ?
+              <ActivityIndicator style={styles.logActivityIndicator} size="small" color="#000" animating={this.props.logs.fetching}/> :
+              null
+            }
+          </View>
           <View style={styles.logContainer}>
             <FlatList
-              data={data}
-              renderItem={({item}) => this.renderItem(item)}
+              data={device}
+              keyExtractor={this._keyExtractor}
+              renderItem={(row) => this.renderItem(row)}
               ItemSeparatorComponent={this.renderDivider}
             />
           </View>
@@ -91,9 +85,10 @@ class Device extends Component {
     )
   }
 
-  renderItem (item) {
+  renderItem (row) {
+    const { item } = row
     return (
-      <DeviceLogItem status={item.status} date={item.date} />
+      <DeviceLogItem status={item.status} date={item.created_at} />
     )
   }
 
@@ -122,14 +117,15 @@ class Device extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { bluetooth } = state
+  const { bluetooth, logs, ninix } = state
   return {
-    bluetooth
+    bluetooth, logs, ninix
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    pullDeviceLogs: () => dispatch(LogAction.pullDeviceLogs())
   }
 }
 

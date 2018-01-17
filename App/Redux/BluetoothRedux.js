@@ -4,34 +4,31 @@ import BluetoothStates from '../Bluetooth/BluetoothState'
 
 export const INITIAL_STATE = Immutable({
   state: BluetoothStates.unknown,
-  isConnected: false,
-  isSyncing: false,
-  isScanning: false,
-  isConnecting: false,
-  battery: null,
   devices: [],
-  connectedDevice: null
+  isConnected: false,
+  isConnecting: false,
+  isScanning: false
 })
 
 const { Types, Creators } = createActions({
-  changeState: ['status'],
-  startScan: null,
+
+  scan: null,
   stopScan: null,
+  cancel: null,
   addDevice: ['device'],
-  changeConnectivity: ['status'],
-  setSyncingStatus: ['status'],
-  startConnecting: ['device'],
-  cancelConnection: null,
-  successConnect: ['device'],
-  updateBattery: ['battery'],
-  disconnect: null
+  didStateChange: ['status'],
+  didDeviceDiscover: ['device'],
+  connect: ['device'],
+  didConnect: null,
+  disconnect: null,
+
 }, {
-  prefix: 'BLUETOOTH_'
+  prefix: 'bluetooth/'
 })
 
 export const BluetoothTypes = Types
 
-export const changeState = (state = INITIAL_STATE, action) => {
+export const didStateChange = (state = INITIAL_STATE, action) => {
   const { status } = action
   return {
     ...state,
@@ -39,24 +36,7 @@ export const changeState = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const changeConnectivity = (state = INITIAL_STATE, action) => {
-  const { status } = action
-  return {
-    ...state,
-    isConnected: status
-  }
-}
-
-export const setSyncingStatus = (state = INITIAL_STATE, action) => {
-  const { status } = action
-  return {
-    ...state,
-    isSyncing: status
-  }
-}
-
-export const startScan = (state = INITIAL_STATE, action) => {
-  const { status } = action
+export const scan = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isScanning: true
@@ -64,7 +44,6 @@ export const startScan = (state = INITIAL_STATE, action) => {
 }
 
 export const stopScan = (state = INITIAL_STATE, action) => {
-  const { status } = action
   return {
     ...state,
     isScanning: false,
@@ -72,7 +51,26 @@ export const stopScan = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const cancel = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    isConnected: false,
+    isConnecting: false,
+  }
+}
+
 export const addDevice = (state = INITIAL_STATE, action) => {
+  const { device } = action
+  const devices = state.devices.filter((d) => {
+    return d.id !== device.id
+  })
+  return {
+    ...state,
+    devices: [...devices, device]
+  }
+}
+
+export const didDeviceDiscover = (state = INITIAL_STATE, action) => {
   const { device } = action
   const found = state.devices.find((item) => {
     return item.id === device.id
@@ -86,29 +84,20 @@ export const addDevice = (state = INITIAL_STATE, action) => {
   return state
 }
 
-export const startConnecting = (state = INITIAL_STATE, action) => {
+export const connect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isConnecting: true
   }
 }
 
-export const cancelConnection = (state = INITIAL_STATE, action) => {
+export const didConnect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isConnecting: false,
-  }
-}
-
-export const successConnect = (state = INITIAL_STATE, action) => {
-  const { device } = action
-  return {
-    ...state,
-    connectedDevice: device,
+    devices: [],
     isConnected: true,
-    isScanning: false,
     isConnecting: false,
-    devices: []
+    isScanning: false
   }
 }
 
@@ -116,35 +105,19 @@ export const disconnect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isConnected: false,
-    isSyncing: false,
-    isScanning: false,
-    isConnecting: false,
-    devices: [],
-    connectedDevice: null,
-    battery: null
-  }
-}
-
-export const updateBattery = (state = INITIAL_STATE, action) => {
-  const { battery } = action
-  return {
-    ...state,
-    battery
   }
 }
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.CHANGE_STATE]: changeState,
-  [Types.CHANGE_CONNECTIVITY]: changeConnectivity,
-  [Types.SET_SYNCING_STATUS]: setSyncingStatus,
-  [Types.START_SCAN]: startScan,
+  [Types.SCAN]: scan,
+  [Types.CONNECT]: connect,
+  [Types.CANCEL]: cancel,
   [Types.STOP_SCAN]: stopScan,
   [Types.ADD_DEVICE]: addDevice,
-  [Types.START_CONNECTING]: startConnecting,
-  [Types.CANCEL_CONNECTION]: cancelConnection,
-  [Types.SUCCESS_CONNECT]: successConnect,
+  [Types.DID_STATE_CHANGE]: didStateChange,
+  [Types.DID_DEVICE_DISCOVER]: didDeviceDiscover,
+  [Types.DID_CONNECT]: didConnect,
   [Types.DISCONNECT]: disconnect,
-  [Types.UPDATE_BATTERY]: updateBattery,
 })
 
 

@@ -40,8 +40,8 @@ class Dashboard extends Component {
             <VitalSignsBox vitalSigns={last} />
           </View>
           <View style={styles.statusContainer}>
-            <Text style={styles.status}>Lorem ipsum dolor sit amet</Text>
-            <Text style={[styles.status, styles.statusSecond]}>Lorem ipsum dolor sit amet</Text>
+            <Text style={styles.status}>Normal Condition</Text>
+            <Text style={[styles.status, styles.statusSecond]}>be relax</Text>
           </View>
         </View>
         <View style={styles.bottom}>

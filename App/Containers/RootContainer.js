@@ -1,29 +1,15 @@
 import React, { Component } from 'react'
-import { View, StatusBar, NetInfo, BackHandler } from 'react-native'
+import { View, StatusBar, BackHandler } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import ReduxNavigation from '../Navigation/ReduxNavigation'
 import { connect } from 'react-redux'
 import AccessAbility from '../Redux/AccessAbilityRedux'
-import Connector from '../Bluetooth/Connector'
-import { NavigationActions } from 'react-navigation'
+
 
 // Styles
 import styles from './Styles/RootContainerStyles'
 
 class RootContainer extends Component {
-
-  componentDidMount() {
-
-    const { changeNetInfo } = this.props
-    NetInfo.addEventListener('change', (event) => {
-      changeNetInfo(event)
-    })
-    Connector.addEventListener()
-    this.backHandler()
-  }
-
-  componentWillUnmount () {
-    BackHandler.removeEventListener('hardwareBackPress')
-  }
 
   render () {
     return (
@@ -39,7 +25,6 @@ class RootContainer extends Component {
   }
 
   backHandler() {
-    const { nav } = this.props
     const backAction = NavigationActions.back({
       key: null
     })
@@ -52,12 +37,4 @@ class RootContainer extends Component {
 }
 
 
-// wraps dispatch to create nicer functions to call within our component
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeNetInfo: (status) => dispatch(AccessAbility.networkStatus(status)),
-    dispatch: (action) => dispatch(action)
-  }
-}
-
-export default connect(null, mapDispatchToProps)(RootContainer)
+export default connect()(RootContainer)
