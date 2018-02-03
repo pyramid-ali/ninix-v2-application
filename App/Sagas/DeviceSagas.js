@@ -1,19 +1,16 @@
 import { put, call, select } from 'redux-saga/effects'
-import LogAction from '../Redux/LogRedux'
+import DeviceAction from '../Redux/DeviceRedux'
 import Response from '../Services/Response';
 
 export function *pullDeviceLogs (api, action) {
 
   const { auth } = yield select()
-  console.tron.log({
-    place: '*pullDeviceLogs',
-    auth
-  })
+
   const logs = yield call(api.getDeviceLogs, auth.accessToken)
 
   try {
     const data = yield call(Response.resolve, logs)
-    yield put(LogAction.setDeviceLogs(data.logs))
+    yield put(DeviceAction.setDeviceLogs(data.logs))
   }
   catch (error) {
     console.tron.error({
@@ -35,8 +32,8 @@ export function *pushDeviceLogs (api, action) {
 
   try {
     const data = yield call(Response.resolve, latestLogs)
-    yield put(LogAction.removeDeviceLogs())
-    yield put(LogAction.setDeviceLogs(data.logs))
+    yield put(DeviceAction.removeDeviceLogs())
+    yield put(DeviceAction.setDeviceLogs(data.logs))
   }
   catch (error) {
     console.tron.error({
@@ -47,13 +44,31 @@ export function *pushDeviceLogs (api, action) {
 
 }
 
+export function *getLatestFirmwareVersion (api, action) {
+  const { auth } = yield select();
+  const fvResponse = yield call(api.getLatestFirmwareVersion, auth.accessToken);
+
+  try {
+    const data = yield call(Response.resolve, fvResponse)
+    yield put(DeviceAction.setState({latestFirmwareVersion: data.version}))
+  }
+  catch (error) {
+
+  }
+}
+
+
+export function *getLocalFirmwareVersion (action) {
+
+}
+
 export function *didDeviceConnect (api, action) {
   const { device } = action
   const { auth }= yield select()
   const response = yield call(api.sendDeviceLog, {mac: device.id, status: 'connect'}, auth.accessToken)
   try {
     const data = yield call(Response.resolve, response)
-    yield put(LogAction.con)
+    //yield put(DeviceAction.connect())
   }
   catch (error) {
 

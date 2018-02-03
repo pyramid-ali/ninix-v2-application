@@ -2,7 +2,7 @@
 import apisauce from 'apisauce'
 
 // TODO: user Config.API_URL
-const create = (baseURL = 'https://68d44e55.ngrok.io/') => {
+const create = (baseURL = 'https://5e864d9b.ngrok.io/') => {
 
   /***
    * create new api
@@ -107,7 +107,7 @@ const create = (baseURL = 'https://68d44e55.ngrok.io/') => {
    */
   const sendData = (data: Object[], token: string) => api.post('api/data', date, authorizationHeader(token))
 
-
+  const getLatestFirmwareVersion = (token: string) => api.get('api/firmware/version', {}, authorizationHeader(token))
 
   return {
     login,
@@ -122,7 +122,8 @@ const create = (baseURL = 'https://68d44e55.ngrok.io/') => {
     sendPhoto,
     sendInformation,
     sendDeviceLog,
-    sendData
+    sendData,
+    getLatestFirmwareVersion
   }
 }
 

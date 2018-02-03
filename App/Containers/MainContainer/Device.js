@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import NavigationBar from '../../Components/NavigationBar'
 import { PermissionsAndroid } from 'react-native'
-import LogAction from '../../Redux/LogRedux'
 import Realm from '../../Realm/Storage'
+import DeviceAction from '../../Redux/DeviceRedux'
 
 // Styles
 import styles from '../Styles/DeviceStyle'
@@ -38,7 +38,7 @@ class Device extends Component {
 
   render () {
 
-    const { device } = this.props.logs
+    const { logs, localFirmwareVersion, fetching } = this.props.device
     const { isConnected } = this.props.bluetooth
     const { battery } = this.props.ninix
 
@@ -60,20 +60,17 @@ class Device extends Component {
               <View style={styles.deviceShapeHead}/>
             </View>
             <View style={styles.firmwareDetails}>
-              <Text style={styles.firmwareText}>Firmware Version <Text>v1.0.4</Text></Text>
+              <Text style={styles.firmwareText}>Firmware Version <Text>{ localFirmwareVersion || 'N/A' }</Text></Text>
               <Text style={styles.firmwareButton}>Check for updates</Text>
             </View>
           </View>
           <View style={styles.logHeaderContainer}>
             <Text style={styles.logHeader}>Connection History</Text>
-            {this.props.logs.fetching ?
-              <ActivityIndicator style={styles.logActivityIndicator} size="small" color="#000" animating={this.props.logs.fetching}/> :
-              null
-            }
+            <ActivityIndicator style={styles.logActivityIndicator} size="small" color="#000" animating={fetching} />
           </View>
           <View style={styles.logContainer}>
             <FlatList
-              data={device}
+              data={logs}
               keyExtractor={this._keyExtractor}
               renderItem={(row) => this.renderItem(row)}
               ItemSeparatorComponent={this.renderDivider}
@@ -117,15 +114,15 @@ class Device extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { bluetooth, logs, ninix } = state
+  const { bluetooth, ninix, device } = state
   return {
-    bluetooth, logs, ninix
+    bluetooth, ninix, device
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    pullDeviceLogs: () => dispatch(LogAction.pullDeviceLogs())
+    pullDeviceLogs: () => dispatch(DeviceAction.pullDeviceLogs())
   }
 }
 

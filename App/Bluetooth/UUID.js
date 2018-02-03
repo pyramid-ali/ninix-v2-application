@@ -1,4 +1,4 @@
-const mainService = "00001523-0000-1000-8000-00805f9b34fb"
+  const mainService = "00001523-0000-1000-8000-00805f9b34fb"
 const serviceUUIDs = [mainService]
 
 const characteristics = {

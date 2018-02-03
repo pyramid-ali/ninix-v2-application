@@ -10,7 +10,7 @@ import { DataTypes }      from '../Redux/DataRedux'
 import { LoginTypes }     from '../Redux/LoginRedux'
 import { ParentTypes }    from '../Redux/ParentRedux'
 import { SignupTypes }    from '../Redux/SignupRedux'
-import { LogTypes }       from '../Redux/LogRedux'
+import { DeviceTypes }    from '../Redux/DeviceRedux'
 import { StartupTypes }   from '../Redux/StartupRedux'
 import { UserTypes }      from '../Redux/UserRedux'
 
@@ -23,7 +23,7 @@ const BabySagas = require('./BabySagas')
 const BluetoothSagas  = require('./BluetoothSagas')
 const DataSagas = require('./DataSagas')
 const LoginSagas = require('./LoginSagas')
-const LogSagas = require('./LogSagas')
+const DeviceSagas = require('./DeviceSagas')
 const ParentSagas = require('./ParentSagas')
 const SignupSagas = require('./SignupSagas')
 
@@ -62,9 +62,10 @@ const root = function * root () {
     takeLatest(BabyTypes.SAVE_INFORMATION, BabySagas.saveBabyInformation, api),
     takeLatest(BabyTypes.GET_INFORMATION, BabySagas.getBabyInformation, api),
 
-    // Log Sagas
-    takeLatest(LogTypes.PULL_DEVICE_LOGS, LogSagas.pullDeviceLogs, api),
-    takeLatest(LogTypes.PUSH_DEVICE_LOGS, LogSagas.pushDeviceLogs, api),
+    // Device Sagas
+    takeLatest(DeviceTypes.PULL_DEVICE_LOGS, DeviceSagas.pullDeviceLogs, api),
+    takeLatest(DeviceTypes.PUSH_DEVICE_LOGS, DeviceSagas.pushDeviceLogs, api),
+    // takeLatest(DeviceTypes.GET_LATEST_FIRMWARE_VERSION, DeviceSagas.getLatestFirmwareVersion, api),
 
     // Scanner Sagas
     takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),

@@ -72,6 +72,10 @@ class Connector {
     })
     return true
   }
+
+  read (device, serviceUUID, characteristicUUID) {
+    return device.readCharacteristicForService(serviceUUID, characteristicUUID)
+  }
 }
 
 const instance = new Connector()
