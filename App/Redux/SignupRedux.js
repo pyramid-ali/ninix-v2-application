@@ -12,7 +12,7 @@ export const INITIAL_STATE = Immutable({
 const { Types, Creators } = createActions({
   requestToken: ['mobile', 'callback'],
   successTokenRequest: ['mobile'],
-  checkToken: ['token', 'callback', 'failure'],
+  checkToken: ['token', 'callback'],
   success: null,
   failure: ['error'],
   cancel: null

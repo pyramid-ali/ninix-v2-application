@@ -14,6 +14,7 @@ import { setToken } from '../Services/TokenManager'
  * @param action
  */
 export function *requestToken (api, action) {
+  console.tron.log({action})
   const { mobile, callback } = action
   const response = yield call(api.requestActivationCode, mobile)
   console.log(response, 'response request mobile')
@@ -52,7 +53,7 @@ export function *checkToken(api, action) {
     const response = yield call(api.login, (new LoginModel(mobile, password)).fields())
     const token = yield call(Response.resolve, response)
     yield put(AuthAction.issueToken(token))
-    yield put(AppAction.sync())
+    // yield put(AppAction.sync())
     callback(password)
 
   }

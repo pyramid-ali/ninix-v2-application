@@ -9,13 +9,12 @@ import styles from './Styles/SplashScreenStyle'
 class SplashScreen extends Component {
 
   componentDidMount () {
+    // we should init application here
     this.props.init()
-    // TODO: we can show animation here
   }
 
-  componentWillUnmount() {}
-
   render () {
+    // TODO: we should have interactive animation here, waiting user must be acceptable
     return (
       <View style={styles.container}>
         <Text style={styles.center}>NINIX</Text>

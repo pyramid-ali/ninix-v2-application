@@ -1,6 +1,9 @@
+// import Libraries
 import React from 'react'
 import * as ReactNavigation from 'react-navigation'
 import { connect } from 'react-redux'
+
+// import Dependencies
 import AppNavigation from './AppNavigation'
 
 // here is our redux-aware our smart component

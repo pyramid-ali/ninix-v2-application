@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from '../../Styles/EntryTemplateStyle'
+import styles from './Styles/EntryTemplateStyle'
+import NavigationBar from '../Components/NavigationBar';
 
 class EntryTemplate extends Component {
   state = {
@@ -63,11 +64,10 @@ class EntryTemplate extends Component {
       <KeyboardAvoidingView
         behavior='padding'
         style={styles.wrapper}>
-        <View style={styles.navBar}>
-          {leftBarButton}
-          <Text style={styles.title}>{title.toUpperCase()}</Text>
-          {rightBarButton}
-        </View>
+        <NavigationBar style={styles.navBar}>
+          { title }
+        </NavigationBar>
+
         <View style={styles.container}>
           <View style={[styles.imageHolder]}>
             <Animated.Image

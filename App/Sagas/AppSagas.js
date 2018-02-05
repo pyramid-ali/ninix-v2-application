@@ -15,14 +15,14 @@ import Ble from '../Services/Ble'
 const gotoLoginPage = NavigationActions.reset({
   index: 0,
   actions: [
-    NavigationActions.navigate({ routeName: 'AuthenticationScreen'})
+    NavigationActions.navigate({ routeName: 'Login'})
   ]
 })
 
 const gotoIntroduction = NavigationActions.reset({
   index: 0,
   actions: [
-    NavigationActions.navigate({ routeName: 'IntroductionPage'})
+    NavigationActions.navigate({ routeName: 'Landing'})
   ]
 })
 

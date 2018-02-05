@@ -11,17 +11,6 @@ export default StyleSheet.create({
     backgroundColor: Colors.white
   },
   navBar: {
-    position: 'absolute',
-    height: Metrics.navBarHeight,
-    width: Metrics.screenWidth,
-    top: 0,
-    left: 0,
-    paddingHorizontal: 10,
-    paddingBottom: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    zIndex: 999,
     backgroundColor: Colors.dark
   },
   title: {

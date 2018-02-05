@@ -1,19 +1,14 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity } from 'react-native'
+
+
 import styles from './Styles/NavigationBarStyle'
 
 export default class NavigationBar extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // Defaults for props
+
   static defaultProps = {
-    onPressLeftButton: () => null,
-    onPressRightButton: () => null,
+    onPressLeftButton: () => {},
+    onPressRightButton: () => {},
     leftButton: <Text />,
     rightButton: <Text />
   }

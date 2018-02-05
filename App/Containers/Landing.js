@@ -1,16 +1,21 @@
+// import Libraries
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { Pages} from 'react-native-pages'
-import introductions from '../Fixtures/IntroductionContent'
+
+// import Dependencies
 import { AppState } from '../Redux/AppStateRedux'
 import Introduction from '../Components/Introduction'
 import PageIndicator from '../Components/PageIndicator'
 
-// Styles
-import styles from './Styles/IntroductionPageStyle'
+// import Data
+import introductions from '../Fixtures/IntroductionContent'
 
-class IntroductionPage extends Component {
+// Styles
+import styles from './Styles/LandingStyle'
+
+class Landing extends Component {
 
   render () {
 
@@ -36,9 +41,10 @@ class IntroductionPage extends Component {
         <TouchableOpacity
           onPress={() => {
             introduceApp()
-            navigate('AuthenticationScreen')
+            navigate('Login')
           }}
-          style={styles.buttonContainer}>
+          style={styles.buttonContainer}
+        >
           <Text style={styles.buttonText}>Let's Start</Text>
         </TouchableOpacity>
       </View>
@@ -46,10 +52,13 @@ class IntroductionPage extends Component {
   }
 
   renderPager ({pages, progress}) {
-    return <PageIndicator
-              pages={pages}
-              progress={progress}
-              containerStyle={styles.indicatorContainerStyle} />
+    return (
+      <PageIndicator
+        pages={pages}
+        progress={progress}
+        containerStyle={styles.indicatorContainerStyle}
+      />
+    )
   }
 }
 
@@ -58,10 +67,11 @@ const mapStateToProps = (state) => {
   }
 }
 
+// TODO: don't show landing page after first time
 const mapDispatchToProps = (dispatch) => {
   return {
     introduceApp: () => dispatch(AppState.introduce())
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IntroductionPage)
+export default connect(mapStateToProps, mapDispatchToProps)(Landing)
