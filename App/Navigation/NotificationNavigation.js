@@ -1,5 +1,5 @@
 import { TabNavigator, TabBarTop } from 'react-navigation'
-import NotificationList from '../Containers/NotificationList'
+import NotificationList from '../Components/NotificationList'
 import Colors from '../Themes/Colors'
 import styles from './Styles/NotificationNavigationStyle'
 

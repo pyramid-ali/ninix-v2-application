@@ -1,21 +1,16 @@
-import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
-import { View, Text } from 'react-native'
-import styles from './Styles/DeviceLogItemStyle'
-import NinixDevice from './NinixDevice'
+// Libraries
 import moment from 'moment'
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Dependencies
+import NinixDevice from './NinixDevice'
+
+// Styles
+import styles from './Styles/DeviceLogItemStyle'
 
 export default class DeviceLogItem extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // // Defaults for props
-  static defaultProps = {
-    date: null
-  }
 
   render () {
     const {status, date} = this.props
@@ -33,4 +28,9 @@ export default class DeviceLogItem extends Component {
       </View>
     )
   }
+}
+
+DeviceLogItem.propTypes = {
+  status: PropTypes.string.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired
 }

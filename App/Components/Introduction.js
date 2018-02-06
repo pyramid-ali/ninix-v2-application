@@ -1,24 +1,23 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { View, Text, Image, Animated } from 'react-native'
+import PropTypes from 'prop-types'
+import { View, Text, Animated } from 'react-native'
+
+// Styles
 import styles from './Styles/IntroductionStyle'
 
 export default class Introduction extends Component {
-  static propTypes = {
-    title: PropTypes.string,
-    image: PropTypes.object
-  }
-
-  static defaultProps = {
-    title: '',
-    source: require('../Images/test.png'),
-    styleTitle: null,
-    styleContainer: null,
-    imageStyle: null
-  }
 
   render () {
-    const { source, title, children, containerStyle, titleStyle, imageStyle } = this.props
+    const {
+      children,
+      containerStyle,
+      imageStyle,
+      source,
+      title,
+      titleStyle,
+    } = this.props
+
     const opacity = this.renderAnimation()
     return (
       <View style={[styles.container, containerStyle]}>
@@ -56,4 +55,24 @@ export default class Introduction extends Component {
     })
     return opacity
   }
+}
+
+Introduction.propTypes = {
+  containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+  imageStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+  source: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  titleStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
 }

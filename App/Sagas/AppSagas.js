@@ -93,13 +93,10 @@ export function *setupAppStatusListener (channel) {
   try {
     while (true) {
       const appState = yield take(channel)
-      console.log(appState, 'app state')
       yield put(AppAction.stateChanged(appState))
     }
   }
-  finally {
-    console.log('app state finally')
-  }
+  finally {}
 }
 
 export function setupAppStatusListenerChannel () {

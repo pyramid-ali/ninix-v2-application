@@ -1,28 +1,24 @@
 // import Libraries
 import { StackNavigator } from 'react-navigation'
-import MobileEntranceScreen from '../Containers/MobileEntranceScreen'
-
 
 // import Dependencies
-import AddDevice from '../Containers/Device/AddDevice'
-import BabySettings from '../Containers/Profile/BabySettings'
-import EditProfile from '../Containers/Profile/EditProfile'
+import AddDevice from '../Containers/AddDevice'
+import BabySettings from '../Containers/BabySettings'
+import EditProfile from '../Containers/EditProfile'
 import Landing from '../Containers/Landing'
 import MainNavigation from './MainNavigation'
-import ParentSettings from '../Containers/Profile/ParentSettings'
+import ParentSettings from '../Containers/ParentSettings'
 import SplashScreen from '../Containers/SplashScreen'
 import Signup from '../Containers/Signup'
 import ForgotPassword from '../Containers/ForgotPassword'
 
 // import Styles
 import styles from './Styles/NavigationStyles'
-import Login from '../Containers/Login';
+import Login from '../Containers/Login'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
-  MobileEntranceScreen: { screen: MobileEntranceScreen },
 
-  // new navigation
   Landing: {
     screen: Landing
   },
@@ -49,6 +45,7 @@ const PrimaryNav = StackNavigator({
   Main: {
     screen: MainNavigation
   },
+
   ParentSettings: {
     screen: ParentSettings
   },

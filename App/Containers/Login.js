@@ -1,10 +1,10 @@
-// import Libraries
+// Libraries
 import React, { Component } from 'react'
 import { Text, View, Image, KeyboardAvoidingView, Keyboard, ActivityIndicator } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { connect } from 'react-redux'
 
-// import Dependencies
+// Dependencies
 import Button from '../Components/Button'
 import LoginAction from '../Redux/LoginRedux'
 import TextInputWithIcon from '../Components/TextInputWithIcon'

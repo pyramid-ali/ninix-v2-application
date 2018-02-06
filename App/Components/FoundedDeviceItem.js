@@ -1,11 +1,17 @@
+// Libraries
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity, Animated } from 'react-native'
-import styles from './Styles/FoundedDeviceItemStyle'
-import NinixDevice from './NinixDevice'
-import Colors from '../Themes/Colors'
+import { View, Text, TouchableOpacity } from 'react-native'
+import * as Animatable from 'react-native-animatable'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import * as Animatable from 'react-native-animatable';
+import PropTypes from 'prop-types'
+
+
+// Dependencies
+import NinixDevice from './NinixDevice'
+
+// Styles
+import Colors from '../Themes/Colors'
+import styles from './Styles/FoundedDeviceItemStyle'
 
 export default class FoundedDeviceItem extends Component {
 
@@ -13,15 +19,16 @@ export default class FoundedDeviceItem extends Component {
     statusIcon: 'angle-right',
     iconSize: 16,
     iconColor: Colors.dark,
-    statusText: 'connect'
-  }
-
-  constructor(props) {
-    super(props)
   }
 
   render () {
-    const { containerStyle, statusText, text, statusIcon, iconSize, iconColor, onPress } = this.props
+    const {
+      iconColor,
+      iconSize,
+      onPress,
+      statusIcon,
+      text
+    } = this.props
     const AnimatedIcon = Animatable.createAnimatableComponent(Icon)
 
     return (
@@ -49,4 +56,18 @@ export default class FoundedDeviceItem extends Component {
     )
   }
 
+}
+
+FoundedDeviceItem.propTypes = {
+  iconColor: PropTypes.string,
+  iconSize: PropTypes.number,
+  onPress: PropTypes.func,
+  statusIcon: PropTypes.string,
+  text: PropTypes.string
+}
+
+FoundedDeviceItem.defaultProps = {
+  iconColor: Colors.dark,
+  iconSize: 16,
+  statusIcon: 'angle-right'
 }

@@ -13,7 +13,7 @@ export default class Storage {
 
   static save (data, registerAt) {
     const { temperature, respiratory, orientation, humidity } = data
-    console.log(data, registerAt, 'data registerAt')
+
     Realm.open({schema: schemas})
       .then(realm => {
         let vitalSign = realm.objects('VitalSign').sorted('updatedAt', true)[0]
@@ -55,7 +55,7 @@ export default class Storage {
 
         store.dispatch(DataAction.receiveUnsyncData(vitalSign))
     })
-      .catch(error => console.log(error, '<Storage#save> catch error'))
+      .catch(error => console.tron.log(error, '<Storage#save> catch error'))
   }
 
   static get () {
@@ -83,7 +83,7 @@ export default class Storage {
         })
         store.dispatch(DataAction.finishSyncing())
       })
-      .catch(error => console.log(error, '<Storage#save> catch error'))
+      .catch(error => console.tron.log(error, '<Storage#save> catch error'))
   }
 
 }

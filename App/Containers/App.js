@@ -1,8 +1,8 @@
-// import libraries
+// Libraries
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 
-// import dependencies
+// Dependencies
 import '../Config'
 import createStore from '../Redux'
 import DebugConfig from '../Config/DebugConfig'

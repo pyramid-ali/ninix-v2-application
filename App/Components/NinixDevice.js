@@ -1,23 +1,13 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import { View, Text, Animated, TouchableOpacity, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
 import styles from './Styles/NinixDeviceStyle'
 import Colors from '../Themes/Colors'
 
 export default class NinixDevice extends Component {
-  // Prop type warnings
-  static propTypes = {
-    size: PropTypes.number,
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    size: 250,
-    lightColor: Colors.primary,
-    logo: 'NINIX',
-    blink: true,
-    onPress: () => null
-  }
 
   constructor(props) {
     super(props)
@@ -25,10 +15,6 @@ export default class NinixDevice extends Component {
       blink: new Animated.Value(0),
       stopAnimation: false
     }
-  }
-
-  componentDidMount() {
-
   }
 
   componentDidUpdate () {
@@ -64,8 +50,20 @@ export default class NinixDevice extends Component {
   }
 
   render () {
-    const { containerStyle, lightColor, logo, onPress } = this.props
-    const { outerCircleStyle, innerCircleStyle, lightContainerStyle, lightStyle, logoStyle } = this.styleSheets()
+    const {
+      containerStyle,
+      lightColor,
+      logo,
+      onPress
+    } = this.props
+
+    const {
+      outerCircleStyle,
+      innerCircleStyle,
+      lightContainerStyle,
+      lightStyle,
+      logoStyle
+    } = this.styleSheets()
 
     const backgroundColor = this.state.blink.interpolate({
       inputRange: [0, 1],
@@ -128,4 +126,29 @@ export default class NinixDevice extends Component {
       }
     })
   }
+
+}
+
+NinixDevice.propTypes = {
+  blink: PropTypes.bool,
+  containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+  lightColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  logo: PropTypes.string,
+  onPress: PropTypes.func,
+  size: PropTypes.number
+}
+
+NinixDevice.defaultProps = {
+  blink: true,
+  lightColor: Colors.primary,
+  logo: 'NINIX',
+  onPress: () => null,
+  size: 250,
 }

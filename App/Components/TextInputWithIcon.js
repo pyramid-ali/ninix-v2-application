@@ -1,8 +1,11 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { View, Text, TextInput } from 'react-native'
-import styles from './Styles/TextInputWithIconStyle'
+import { View, TextInput } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import PropTypes from 'prop-types'
+
+// Styles
+import styles from './Styles/TextInputWithIconStyle'
 
 export default class TextInputWithIcon extends Component {
   static propTypes = {
@@ -23,7 +26,14 @@ export default class TextInputWithIcon extends Component {
   }
 
   render () {
-    const {color, size, icon, containerStyle, style, ...textInput} = this.props
+    const {
+      color,
+      size,
+      icon,
+      containerStyle,
+      style,
+      ...textInput
+    } = this.props
 
     return (
       <View style={[styles.container, containerStyle]}>
@@ -48,4 +58,33 @@ export default class TextInputWithIcon extends Component {
   blur() {
     this.refs.textInput.blur()
   }
+
+}
+
+TextInputWithIcon.propTypes = {
+  ...TextInput.propTypes,
+  color: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  size: PropTypes.size,
+  icon: PropTypes.string,
+  containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+  style: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+
+}
+
+TextInputWithIcon.defaultProps = {
+  icon: null,
+  color: null,
+  size: 24,
+  selectionColor: 'white'
 }

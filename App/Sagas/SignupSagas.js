@@ -14,10 +14,10 @@ import { setToken } from '../Services/TokenManager'
  * @param action
  */
 export function *requestToken (api, action) {
-  console.tron.log({action})
+
   const { mobile, callback } = action
   const response = yield call(api.requestActivationCode, mobile)
-  console.log(response, 'response request mobile')
+
   try {
     const data = yield call(Response.resolve, response)
     yield put(SignupAction.successTokenRequest(data.result.mobile))
@@ -37,7 +37,6 @@ export function *requestToken (api, action) {
  * @param action
  */
 export function *checkToken(api, action) {
-  console.log('check token')
 
   const { signup } = yield select()
   const { token, callback } = action

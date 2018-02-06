@@ -1,24 +1,13 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { View, Animated } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
 import styles from './Styles/PageIndicatorStyle'
 import {Metrics, Colors} from '../Themes'
 
 export default class PageIndicator extends Component {
-  static propTypes = {
-    pages: PropTypes.number.isRequired,
-    progress: PropTypes.instanceOf(Animated.Value).isRequired,
-    dot: PropTypes.object
-  };
-
-  static defaultProps = {
-    dot: {
-      size: 10,
-      space: 5,
-      backgroundColor: Colors.light,
-      foregroundColor: Colors.primary
-    }
-  }
 
   render () {
     const { containerStyle } = this.props
@@ -87,5 +76,21 @@ export default class PageIndicator extends Component {
     })
 
     return [animatedDot(), ...dots]
+  }
+
+}
+
+PageIndicator.propTypes = {
+  pages: PropTypes.number.isRequired,
+  progress: PropTypes.instanceOf(Animated.Value).isRequired,
+  dot: PropTypes.object
+}
+
+PageIndicator.defaultProps = {
+  dot: {
+    size: 10,
+    space: 5,
+    backgroundColor: Colors.light,
+    foregroundColor: Colors.primary
   }
 }

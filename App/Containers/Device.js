@@ -1,16 +1,17 @@
+// Libraries
 import React, { Component } from 'react'
-import { ScrollView, Text, View, FlatList, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
+import { ScrollView, Text, View, FlatList, ActivityIndicator } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../../Components/NavigationBar'
-import { PermissionsAndroid } from 'react-native'
-import Realm from '../../Realm/Storage'
-import DeviceAction from '../../Redux/DeviceRedux'
+
+// Dependencies
+import DeviceAction from '../Redux/DeviceRedux'
+import DeviceLogItem from '../Components/DeviceLogItem'
+import NavigationBar from '../Components/NavigationBar'
+import Realm from '../Realm/Storage'
 
 // Styles
-import styles from '../Styles/DeviceStyle'
-import DeviceLogItem from '../../Components/DeviceLogItem'
-
+import styles from './Styles/DeviceStyle'
 
 class Device extends Component {
   static navigationOptions = {

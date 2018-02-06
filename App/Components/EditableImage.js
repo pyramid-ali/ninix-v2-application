@@ -1,27 +1,27 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import styles from './Styles/EditableImageStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Colors from '../Themes/Colors'
 import ImagePicker from 'react-native-image-picker'
+import PropTypes from 'prop-types'
+
+// Styles
+import Colors from '../Themes/Colors'
+import styles from './Styles/EditableImageStyle'
 
 export default class EditableImage extends Component {
-  // Prop type warnings
-  static propTypes = {
-
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    icon: 'pencil',
-    size: 150,
-    progress: 0,
-    onPress: () => null
-  }
 
   render () {
-    const { source, icon, size, style, iconStyle, onPress, progress } = this.props
+    const {
+      icon,
+      iconStyle,
+      onPress,
+      progress,
+      source,
+      size,
+      style
+    } = this.props
+
     const innerStyle = this.styles()
 
     return (
@@ -65,6 +65,29 @@ export default class EditableImage extends Component {
     })
   }
 
+}
 
+EditableImage.propTypes = {
+  icon: PropTypes.string,
+  iconStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ]),
+  onPress: PropTypes.func,
+  progress: PropTypes.number,
+  source: PropTypes.object,
+  size: PropTypes.number,
+  style: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+    PropTypes.object
+  ])
+}
 
+EditableImage.defaultProps = {
+  icon: 'pencil',
+  onPress: () => {},
+  progress: 0,
+  size: 150,
 }

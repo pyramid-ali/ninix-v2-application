@@ -1,19 +1,14 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text, FlatList } from 'react-native'
-import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { View, FlatList } from 'react-native'
+
+// Dependencies
+import NotificationItem from './NotificationItem'
 
 // Styles
 import styles from './Styles/NotificationListStyle'
-import NotificationItem from '../Components/NotificationItem'
 
-class NotificationList extends Component {
-
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
+export default class NotificationList extends Component {
 
   render () {
     const { navigation } = this.props
@@ -43,7 +38,6 @@ class NotificationList extends Component {
     ]
 
     const filtered = this.filter(data, key)
-    console.log(key, 'key')
 
     return (
       <FlatList
@@ -56,7 +50,7 @@ class NotificationList extends Component {
   }
 
   renderItem (input) {
-    const { item, index } = input
+    const { item } = input
     return (
       <NotificationItem {...item} />
     )
@@ -69,13 +63,6 @@ class NotificationList extends Component {
   }
 
   filter (data, key) {
-    // switch (key.toLowerCase()) {
-    //   case 'danger':
-    //     return data.filter((item) => {
-    //       return data.type.toLowerCase() === 'danger'
-    //     })
-    //   case ''
-    // }
 
     if (key.toLowerCase() === 'all') {
       return data
@@ -87,15 +74,3 @@ class NotificationList extends Component {
     }
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationList)

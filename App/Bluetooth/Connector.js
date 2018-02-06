@@ -31,8 +31,6 @@ class Connector {
 
   connect (device) {
     device.onDisconnected((error, device) => {
-      console.log(error, 'disconnect')
-      console.log('disconnect time', moment())
       store.dispatch(BluetoothAction.disconnect())
     })
     return device.connect()
@@ -41,7 +39,7 @@ class Connector {
   disconnect () {
     const { ninix } = store.getState()
     Ble.disconnect(ninix.device).then((device) => {
-      console.log(device, 'disconnect')
+      console.tron.log(device, 'disconnect')
     })
   }
 

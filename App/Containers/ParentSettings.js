@@ -1,17 +1,19 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { parentSettings } from '../../Services/SettingInfo'
-import SettingComponent from '../../Components/SettingComponent'
-import ParentAction from '../../Redux/ParentRedux'
+import { View, Text, Alert } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
+// Dependencies
+import NavigationBar from '../Components/NavigationBar'
+import ModalDeviceConnect from '../Components/ModalDeviceConnect'
+import SettingComponent from '../Components/SettingComponent'
+import ParentAction from '../Redux/ParentRedux'
+import { parentSettings } from '../Services/SettingInfo'
 
 // Styles
-import styles from '../Styles/ProfileSettingStyle'
-import NavigationBar from '../../Components/NavigationBar'
-import Colors from '../../Themes/Colors'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ModalDeviceConnect from '../../Components/ModalDeviceConnect';
+import styles from './Styles/ProfileSettingStyle'
+import Colors from '../Themes/Colors'
 
 class ParentSettings extends Component {
   constructor (props) {
@@ -81,7 +83,7 @@ class ParentSettings extends Component {
         'You have changed some settings, do you want to leave?',
         [
           {text: 'leave', onPress: this.goBack.bind(this)},
-          {text: 'stay', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+          {text: 'stay', onPress: () => {}, style: 'cancel'},
         ],
         { cancelable: false }
       )
@@ -142,13 +144,11 @@ class ParentSettings extends Component {
   onSuccess (success) {
     this.stopSync()
     this.goBack()
-    console.log(success, 'success parent settings')
   }
 
   onFailure (error) {
     this.stopSync()
     alert(error.message || error.problem)
-    console.log(error, 'failure parent settings')
   }
 
 }

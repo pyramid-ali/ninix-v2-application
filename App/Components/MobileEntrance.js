@@ -1,26 +1,27 @@
+// Libraries
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
 import {View, Text, ActivityIndicator} from 'react-native'
+import PropTypes from 'prop-types'
+
+// Dependencies
+import Button from './Button'
+import TextInputWithIcon from './TextInputWithIcon'
+
+// Styles
+import Colors from '../Themes/Colors'
 import styles from './Styles/MobileEntranceStyle'
-import TextInputWithIcon from './TextInputWithIcon';
-import Button from './Button';
-import Colors from '../Themes/Colors';
 
 export default class MobileEntrance extends Component {
 
-  static defaultProps = {
-    title: 'Mobile Number',
-    description: 'Please Enter Your Mobile Number',
-    fetching: false,
-    valid: true,
-    onChangeValue: () => {},
-    onPress: () => {},
-    defaultValue: '09'
-  }
-
   render() {
 
-    const {title, description, onChangeValue, value, fetching} = this.props
+    const {
+      description,
+      fetching,
+      onChangeValue,
+      title,
+      value
+    } = this.props
 
     return (
       <View>
@@ -65,4 +66,24 @@ export default class MobileEntrance extends Component {
     )
 
   }
+
+}
+
+MobileEntrance.propTypes = {
+  description: PropTypes.string,
+  fetching: PropTypes.bool,
+  onChangeValue: PropTypes.func,
+  onPress: PropTypes.func,
+  title: PropTypes.string,
+  valid: PropTypes.bool,
+  value: PropTypes.string
+}
+
+MobileEntrance.defaultProps = {
+  description: 'Please Enter Your Mobile Number',
+  fetching: false,
+  onChangeValue: () => {},
+  onPress: () => {},
+  title: 'Mobile Number',
+  valid: true,
 }

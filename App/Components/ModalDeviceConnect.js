@@ -1,23 +1,21 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import { View, Text, Modal, ActivityIndicator, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
 import styles from './Styles/ModalDeviceConnectStyle'
 
 export default class ModalDeviceConnect extends Component {
-  // Prop type warnings
-  static propTypes = {
-    visible: PropTypes.bool,
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    visible: false,
-    title: 'connecting...',
-    children: <Text>Lorem Ipsum</Text>
-  }
 
   render () {
-    const { visible, title, children, buttons, onRequestClose } = this.props
+    const {
+      buttons,
+      children,
+      onRequestClose,
+      title,
+      visible,
+    } = this.props
     return (
       <Modal
         animationType={"slide"}
@@ -61,4 +59,15 @@ export default class ModalDeviceConnect extends Component {
   {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+}
+
+ModalDeviceConnect.propTypes = {
+  buttons: PropTypes.arrayOf(PropTypes.array),
+  onRequestClose: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  visible: PropTypes.bookmarkLabel.isRequired
+}
+
+ModalDeviceConnect.defaultProps = {
+  onRequestClose: () => {}
 }

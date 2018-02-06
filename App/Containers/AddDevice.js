@@ -1,18 +1,22 @@
+// Libraries
 import React, { Component } from 'react'
-import { ScrollView, Text, BackHandler, View, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import Connector from '../../Bluetooth/Connector'
-import NinixDevice from '../../Components/NinixDevice'
+import { Text, View, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../../Components/NavigationBar'
-import FoundedDeviceItem from '../../Components/FoundedDeviceItem'
-import BluetoothState from '../../Bluetooth/BluetoothState'
-import BluetoothAction from '../../Redux/BluetoothRedux'
+
+// Dependencies
+import BluetoothAction from '../Redux/BluetoothRedux'
+import BluetoothState from '../Bluetooth/BluetoothState'
+import Connector from '../Bluetooth/Connector'
+import NavigationBar from '../Components/NavigationBar'
+import NinixDevice from '../Components/NinixDevice'
+import ModalDeviceConnect from '../Components/ModalDeviceConnect'
+import FoundedDeviceItem from '../Components/FoundedDeviceItem'
 
 // Styles
-import styles from '../Styles/AddDeviceStyle'
-import Colors from '../../Themes/Colors'
-import ModalDeviceConnect from '../../Components/ModalDeviceConnect'
+import styles from './Styles/AddDeviceStyle'
+import Colors from '../Themes/Colors'
+
 
 class AddDevice extends Component {
 

@@ -13,7 +13,6 @@ if (Config.useReactotron) {
     scriptHostname = scriptURL.split('://')[1].split(':')[0];
   }
 
-  console.log(scriptHostname, "script host name")
   Reactotron
     .configure({ name: 'NINIX' })
     .useReactNative()

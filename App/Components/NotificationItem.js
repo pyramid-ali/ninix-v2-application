@@ -1,8 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { View, Text, Image } from 'react-native'
-import styles from './Styles/NotificationItemStyle'
+// Libraries
 import moment from 'moment'
+import React, { Component } from 'react'
+import { View, Text, Image } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
+import styles from './Styles/NotificationItemStyle'
+
 
 export default class NotificationItem extends Component {
   // Prop type warnings
@@ -23,8 +27,12 @@ export default class NotificationItem extends Component {
 
   render () {
 
-    const { date, type, text, problem} = this.props
-    const parseDate = moment(date)
+    const {
+      date,
+      type,
+      text,
+      problem
+    } = this.props
 
     return (
       <View style={styles.container}>
@@ -46,4 +54,12 @@ export default class NotificationItem extends Component {
       </View>
     )
   }
+}
+
+NotificationItem.propTypes = {
+
+}
+
+NotificationItem.defaultProps = {
+
 }

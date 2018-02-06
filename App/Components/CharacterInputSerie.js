@@ -1,33 +1,25 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { View, Text, TextInput } from 'react-native'
+import { View, TextInput } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
 import styles from './Styles/CharacterInputSerieStyle'
 
 export default class CharacterInputSerie extends Component {
-  // Prop type warnings
-  static propTypes = {
-    size: PropTypes.number.isRequired,
-    containerStyle: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array
-    ]),
-    disabled: PropTypes.bool
-  }
 
-  // Defaults for props
-  static defaultProps = {
-    containerStyle: null,
-    disabled: false
-  }
   constructor(props) {
     super(props)
     this.codeArray = new Array(props.size)
   }
 
   render () {
-    const { size, containerStyle, disabled } = this.props
-    const placeholder = ['C', 'O', 'D', 'E']
+    const {
+      containerStyle,
+      disabled,
+      placeholder,
+      size,
+    } = this.props
 
     return (
       <View style={[styles.container, containerStyle]}>
@@ -44,7 +36,7 @@ export default class CharacterInputSerie extends Component {
               selectionColor="black"
               placeholderTextColor='#ccc'
               style={styles.input}
-              placeholder={placeholder[index]}
+              placeholder={placeholder[index] || '-'}
               onChangeText={(text) => this.textInputChange(text, index)}
             />
           )
@@ -74,4 +66,20 @@ export default class CharacterInputSerie extends Component {
       }
     }
   }
+}
+
+CharacterInputSerie.propTypes = {
+  size: PropTypes.number.isRequired,
+  containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array
+  ]),
+  disabled: PropTypes.bool,
+  placeholder: PropTypes.arrayOf(PropTypes.string)
+}
+
+CharacterInputSerie.defaultProps = {
+  disabled: false,
+  placeholder: ['C', 'O', 'D', 'E']
 }

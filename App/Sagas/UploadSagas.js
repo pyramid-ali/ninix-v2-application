@@ -13,7 +13,6 @@ export function *setImage (api, action, type, actionMethod) {
 
   try {
     const response = yield call(() => uploadPhoto)
-    console.log(response, 'response')
     try {
       yield call(Response.resolve, response)
     }

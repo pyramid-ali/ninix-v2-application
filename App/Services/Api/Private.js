@@ -75,7 +75,6 @@ const privateApi = (api) => {
 
 
 const create = async (baseURL = 'https://8d14c115.ngrok.io/') => {
-  console.log('private api create')
   const api = apisauce.create({
     baseURL,
     headers: {
@@ -95,7 +94,6 @@ const create = async (baseURL = 'https://8d14c115.ngrok.io/') => {
     }
 
     if (token) {
-      console.log('token set', token)
       api.setHeader('Authorization', TokenManager.authorizationHeader(token))
     }
   }

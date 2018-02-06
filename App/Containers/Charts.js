@@ -1,16 +1,15 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text, processColor } from 'react-native'
 import { connect } from 'react-redux'
-import moment from 'moment'
-import update from 'immutability-helper'
-import _ from 'lodash'
+import { View, Text, processColor } from 'react-native'
 import {LineChart} from 'react-native-charts-wrapper'
-const COLOR_PURPLE = processColor('#697dfb')
+import Icon from 'react-native-vector-icons/FontAwesome'
+import moment from 'moment'
 
 // Styles
-import styles from '../Styles/ChartsStyle'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ChartNavigation from '../../Navigation/ChartNavigation'
+import styles from './Styles/ChartsStyle'
+const COLOR_PURPLE = processColor('#697dfb')
+
 
 class Charts extends Component {
   static navigationOptions = {
@@ -81,10 +80,7 @@ class Charts extends Component {
     }
   }
 
-  componentDidMount () {
-
-  }
-
+  componentDidMount () {}
 
   render() {
 
@@ -169,8 +165,6 @@ class Charts extends Component {
         }],
       }
     }
-
-
 
     const xAxis = {
       gridColor: processColor('red'),

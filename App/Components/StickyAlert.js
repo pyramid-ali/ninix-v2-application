@@ -1,28 +1,14 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity } from 'react-native'
-import styles from './Styles/StickyAlertStyle'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import PropTypes from 'prop-types'
+
+// Styles
+import styles from './Styles/StickyAlertStyle'
 import Colors from '../Themes/Colors'
 
 export default class StickyAlert extends Component {
-  // Prop type warnings
-  static propTypes = {
-    backgroundColor: PropTypes.string,
-    textColor: PropTypes.string,
-    leftIconColor: PropTypes.string,
-    rightIconColor: PropTypes.string,
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    backgroundColor: `rgba(${Colors.alertRGB}, 0.6)`,
-    textColor: Colors.white,
-    leftIcon: null,
-    rightIcon: null,
-    leftIconColor: Colors.white,
-    rightIconColor: Colors.white
-  }
 
   render () {
     const {
@@ -36,6 +22,7 @@ export default class StickyAlert extends Component {
       onPressRightIcon,
       onPressLeftIcon
     } = this.props
+
     return (
       <View style={[styles.container, {backgroundColor}]}>
         {leftIcon ?
@@ -69,4 +56,36 @@ export default class StickyAlert extends Component {
       </View>
     )
   }
+}
+
+StickyAlert.propTypes = {
+  backgroundColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  leftIcon: PropTypes.string,
+  leftIconColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  onPressLeftIcon: PropTypes.func,
+  onPressRightIcon: PropTypes.func,
+  rightIconColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+  rightIcon: PropTypes.string,
+  textColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]),
+}
+
+StickyAlert.defaultProps = {
+  backgroundColor: `rgba(${Colors.alertRGB}, 0.6)`,
+  leftIcon: null,
+  leftIconColor: Colors.white,
+  rightIcon: null,
+  rightIconColor: Colors.white,
+  textColor: Colors.white,
 }

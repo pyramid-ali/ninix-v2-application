@@ -10,7 +10,7 @@ export function *saveToken(action) {
     yield call(setToken, payload)
   }
   catch (error) {
-    console.log(error, 'issueToken error')
+    console.tron.log(error, 'issueToken error')
   }
 }
 

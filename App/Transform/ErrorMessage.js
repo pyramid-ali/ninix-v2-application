@@ -7,7 +7,7 @@ export default class ErrorMessage {
       const arr = errors[key]
       message = message.concat(key.toUpperCase() + ': ' + arr.join(','))
     })
-    console.log(message, 'error message')
+    
     return message
   }
 

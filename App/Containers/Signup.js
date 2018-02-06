@@ -1,11 +1,11 @@
-// import Libraries
+// Libraries
 import React, { Component } from 'react'
 import {Text, View} from 'react-native'
 import { connect } from 'react-redux'
 
-// import Styles
+// Styles
 import styles from './Styles/SignupStyle'
-import EntryTemplate from './EntryTemplate'
+import EntryTemplate from '../Components/EntryTemplate'
 import MobileEntrance from '../Components/MobileEntrance'
 import TokenEntrance from '../Components/TokenEntrance'
 import SignupAction from '../Redux/SignupRedux'

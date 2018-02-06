@@ -1,17 +1,13 @@
+// Libraries
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
 import { View, Text, Image } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Styles
 import styles from './Styles/VitalSignsBoxStyle'
-import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class VitalSignsBox extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // Defaults for props
+
   static defaultProps = {
     vitalSigns : {
       temperature: null,

@@ -1,15 +1,15 @@
-// import Libraries
+// Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Pages} from 'react-native-pages'
 
-// import Dependencies
+// Dependencies
 import { AppState } from '../Redux/AppStateRedux'
 import Introduction from '../Components/Introduction'
 import PageIndicator from '../Components/PageIndicator'
 
-// import Data
+// Data
 import introductions from '../Fixtures/IntroductionContent'
 
 // Styles
@@ -25,18 +25,9 @@ class Landing extends Component {
     return (
       <View style={styles.container}>
         <Pages renderPager={this.renderPager.bind(this)}>
-          {introductions.map((introduction, index) => {
-            const {title, description, image} = introduction
-            return (
-              <Introduction
-                key={index}
-                title={title}
-                source={image}
-              >
-                {description}
-              </Introduction>
-            )
-          })}
+
+          {this.renderPage(introductions)}
+
         </Pages>
         <TouchableOpacity
           onPress={() => {
@@ -49,6 +40,17 @@ class Landing extends Component {
         </TouchableOpacity>
       </View>
     )
+  }
+
+  renderPage (introductions) {
+    return introductions.map((introduction, index) => {
+      const {title, description, image} = introduction
+      return (
+        <Introduction key={index} title={title} source={image}>
+          {description}
+        </Introduction>
+      )
+    })
   }
 
   renderPager ({pages, progress}) {

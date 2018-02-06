@@ -52,7 +52,7 @@ export function *getFatherInformation (api, action) {
     yield put(ParentAction.setFatherInformation(ParentModel.fromJson(data.parent)))
   }
   catch (error) {
-    console.log(error)
+    console.tron.log(error)
   }
 }
 
@@ -65,6 +65,6 @@ export function *getMotherInformation (api, action) {
     yield put(ParentAction.setMotherInformation(ParentModel.fromJson(data.parent)))
   }
   catch (error) {
-    console.log(error)
+    console.tron.log(error)
   }
 }

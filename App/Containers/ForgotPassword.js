@@ -1,8 +1,7 @@
+// Libraries
 import React, { Component } from 'react'
-import { ScrollView, Text } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { ScrollView, Text } from 'react-native'
 
 // Styles
 import styles from './Styles/ForgotPasswordStyle'

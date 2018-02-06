@@ -1,12 +1,12 @@
-// import libraries
+// Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, StatusBar } from 'react-native'
 
-// import Dependencies
+// Dependencies
 import ReduxNavigation from '../Navigation/ReduxNavigation'
 
-// import Styles
+// Styles
 import styles from './Styles/RootContainerStyles'
 
 class RootContainer extends Component {

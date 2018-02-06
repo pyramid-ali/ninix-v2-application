@@ -1,15 +1,16 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { View, Text } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+
+// Dependencies
+import NotificationNavigation from '../Navigation/NotificationNavigation'
+import ArrowImage from '../Components/ArrowImage'
+import VitalSignsBox from '../Components/VitalSignsBox'
 
 // Styles
-import styles from '../Styles/DashboardStyle'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import NotificationNavigation from '../../Navigation/NotificationNavigation'
-import ArrowImage from '../../Components/ArrowImage'
-import VitalSignsBox from '../../Components/VitalSignsBox'
+import styles from './Styles/DashboardStyle'
 
 class Dashboard extends Component {
   static navigationOptions = {
@@ -36,12 +37,12 @@ class Dashboard extends Component {
       <View style={styles.container}>
         <View style={styles.top}>
           <View style={styles.informationContainer}>
-            <ArrowImage containerStyle={styles.imageContainer} />
+            <ArrowImage containerStyle={styles.imageContainer} source='../Images/login-background.jpg' />
             <VitalSignsBox vitalSigns={last} />
           </View>
           <View style={styles.statusContainer}>
             <Text style={styles.status}>Normal Condition</Text>
-            <Text style={[styles.status, styles.statusSecond]}>be relax</Text>
+            <Text style={[styles.status, styles.statusSecond]}>Be relax</Text>
           </View>
         </View>
         <View style={styles.bottom}>
@@ -60,8 +61,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  }
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

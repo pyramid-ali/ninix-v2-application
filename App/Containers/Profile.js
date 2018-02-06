@@ -1,25 +1,26 @@
+// Libraries
 import React, { Component } from 'react'
-import { ScrollView, Text, View, Image } from 'react-native'
 import { connect } from 'react-redux'
+import { ScrollView, Text, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import NavigationBar from '../../Components/NavigationBar'
-import EditableImage from '../../Components/EditableImage'
 
-// Actions
-import ParentAction from '../../Redux/ParentRedux'
-import BabyAction from '../../Redux/BabyRedux'
+// Dependencies
+import NavigationBar from '../Components/NavigationBar'
+import EditableImage from '../Components/EditableImage'
+import ParentAction from '../Redux/ParentRedux'
+import BabyAction from '../Redux/BabyRedux'
 
 // Styles
-import styles from '../Styles/ProfileStyle'
+import styles from './Styles/ProfileStyle'
 
 class Profile extends Component {
 
   render () {
 
     const { mother, father, baby } = this.props
-    const babyImage   = baby.image   ? {uri: baby.image.uri}   : require('../../Images/Profile/3-3.jpg')
-    const fatherImage = father.image ? {uri: father.image.uri} : require('../../Images/Profile/3-1.jpg')
-    const motherImage = mother.image ? {uri: mother.image.uri} : require('../../Images/Profile/3-2.jpg')
+    const babyImage   = baby.image   ? {uri: baby.image.uri}   : require('../Images/Profile/3-3.jpg')
+    const fatherImage = father.image ? {uri: father.image.uri} : require('../Images/Profile/3-1.jpg')
+    const motherImage = mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg')
 
     return (
       <View style={{flex: 1}}>
@@ -34,7 +35,7 @@ class Profile extends Component {
           style={styles.container}>
           <Image
             style={styles.backgroundImage}
-            source={require('../../Images/profile-background.jpg')} />
+            source={require('../Images/profile-background.jpg')} />
 
           <View
             style={styles.topContainer}>
@@ -72,6 +73,7 @@ class Profile extends Component {
                   onPress={this.setBabyImage.bind(this)}
                 />
               </View>
+
               {/* father view */}
               <View
                 style={styles.parentContainer}>
@@ -103,12 +105,6 @@ class Profile extends Component {
     )
   }
 
-  /***
-   * response from Show Image Picture
-   * in success, we should have data, fileName, fileSize (Byte), height, width, isVertical,
-   * originalRotation, path, type, uri, width
-   * @param response
-   */
   setMotherImage (response) {
     if (response.data) {
       this.props.setMotherImage(response, this.props.mother.image, this.failure)

@@ -18,13 +18,11 @@ export default class Sync {
 
   syncFatherProfile () {
     const { father } = this.state
-    console.log('father sync', father)
+
     if (!father.sync) {
-      console.log('update father')
       return ParentAction.updateFather(father)
     }
     else {
-      console.log('retrieve father')
       return ParentAction.retrieveFather()
     }
   }

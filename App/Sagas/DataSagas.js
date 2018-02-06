@@ -42,7 +42,7 @@ export function *checkUnsyncedData(action) {
   // start data syncing, only true syncing flag
   yield put(DataAction.syncing())
   const { unSynced } = data
-  console.log(unSynced, 'unsync data')
+
   // if no data is available for syncing, don't do anything
   if (unSynced.length === 0) {
     return
@@ -60,7 +60,7 @@ export function *checkUnsyncedData(action) {
 
   const api = Api.createAuthorized()
   const response = yield call(api.sendData, DataModel.toJsonArray(unSynced))
-  console.log(response, 'unsync response data')
+
   if (response.ok) {
     Storage.sync(unSynced)
   }

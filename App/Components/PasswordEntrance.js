@@ -1,10 +1,17 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import {View, Text, ActivityIndicator} from 'react-native'
+import PropTypes from 'prop-types'
+
+// Dependencies
+import Button from './Button'
+import TextInputWithIcon from './TextInputWithIcon'
+
+
+// Styles
 import styles from './Styles/PasswordEntranceStyle'
-import Button from './Button';
-import Colors from '../Themes/Colors';
-import TextInputWithIcon from './TextInputWithIcon';
+import Colors from '../Themes/Colors'
+
 
 export default class PasswordEntrance extends Component {
 
@@ -13,20 +20,6 @@ export default class PasswordEntrance extends Component {
     this.state = {
       showPassword: false
     }
-  }
-
-  // Prop type warnings
-  static propTypes = {
-    password: PropTypes.string.isRequired,
-    valid: PropTypes.bool.isRequired,
-    fetching: PropTypes.bool.isRequired
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    fetching: false,
-    onChangePassword: () => {},
-    onChangeValue: () => {}
   }
 
   render () {
@@ -99,6 +92,21 @@ export default class PasswordEntrance extends Component {
     )
   }
 
+}
 
+PasswordEntrance.propTypes = {
+  fetching: PropTypes.bool,
+  onAccept: PropTypes.func,
+  onChangePassword: PropTypes.func,
+  onChangeValue: PropTypes.func,
+  password: PropTypes.string,
+  valid: PropTypes.bool
+}
 
+PasswordEntrance.defaultProps = {
+  fetching: false,
+  onAccept: () => {},
+  onChangePassword: () => {},
+  onChangeValue: () => {},
+  valid: true
 }

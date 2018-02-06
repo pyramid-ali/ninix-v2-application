@@ -1,14 +1,16 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text, Image, Keyboard, Animated, KeyboardAvoidingView } from 'react-native'
-import { connect } from 'react-redux'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { View, Text, Keyboard, Animated, KeyboardAvoidingView } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Dependencies
+import NavigationBar from './NavigationBar'
 
 // Styles
 import styles from './Styles/EntryTemplateStyle'
-import NavigationBar from '../Components/NavigationBar';
 
-class EntryTemplate extends Component {
+export default class EntryTemplate extends Component {
+
   state = {
     keyboardOpen: false,
     marginTop: new Animated.Value(0)
@@ -54,17 +56,33 @@ class EntryTemplate extends Component {
 
   static defaultProps = {
     leftBarButton: <Text/>,
-    rightBarButton: <Text/>
+    rightBarButton: <Text/>,
+    onPressLeftButton: () => {},
+    onPressRightButton: () => {}
   }
 
   render () {
-    const { children, imageSource, leftBarButton, rightBarButton, title } = this.props
+    const {
+      children,
+      imageSource,
+      leftBarButton,
+      onPressRightBarButton,
+      onPressLeftBarButton,
+      rightBarButton,
+      title
+    } = this.props
     const { marginTop } = this.state
     return (
       <KeyboardAvoidingView
         behavior='padding'
         style={styles.wrapper}>
-        <NavigationBar style={styles.navBar}>
+        <NavigationBar
+          style={styles.navBar}
+          leftButton={leftBarButton}
+          rightButton={rightBarButton}
+          onPressRightButton={onPressRightBarButton}
+          onPressLeftButton={onPressLeftBarButton}
+        >
           { title }
         </NavigationBar>
 
@@ -84,14 +102,22 @@ class EntryTemplate extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-  }
+EntryTemplate.propTypes = {
+  imageSource: PropTypes.object,
+  leftBarButton: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
+  onPressRightBarButton: PropTypes.func,
+  onPressLeftBarButton: PropTypes.func,
+  rightBarButton: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
+  title: PropTypes.string.isRequired
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
+EntryTemplate.defaultProps = {
+  onPressRightBarButton: () => {},
+  onPressLeftBarButton: () => {},
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(EntryTemplate)

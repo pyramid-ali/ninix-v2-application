@@ -1,8 +1,13 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
 import {View, Text, ActivityIndicator, TouchableOpacity, Alert} from 'react-native'
-import styles from './Styles/TokenEntranceStyle'
+import PropTypes from 'prop-types'
+
+// Dependencies
 import CharacterInputSerie from './CharacterInputSerie'
+
+// Styles
+import styles from './Styles/TokenEntranceStyle'
 
 export default class TokenEntrance extends Component {
 
@@ -11,19 +16,6 @@ export default class TokenEntrance extends Component {
     this.state = {
       timer: 120
     }
-  }
-
-  // Prop type warnings
-  static propTypes = {
-    mobile: PropTypes.string.isRequired,
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    fetching: false,
-    onFinish: () => {},
-    wrongNumber: () => {},
-    resendCode: () => {}
   }
 
   componentDidMount() {
@@ -119,10 +111,25 @@ export default class TokenEntrance extends Component {
           this.revokeTimer()
           resendCode()
         }},
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
       ],
       { cancelable: false }
     )
   }
 
+}
+
+TokenEntrance.propTypes = {
+  fetching: PropTypes.bool,
+  mobile: PropTypes.string.isRequired,
+  onFinish: PropTypes.func,
+  resendCode: PropTypes.func,
+  wrongNumber: PropTypes.func
+}
+
+TokenEntrance.defaultProps = {
+  fetching: false,
+  onFinish: () => {},
+  resendCode: () => {},
+  wrongNumber: () => {}
 }

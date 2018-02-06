@@ -1,24 +1,20 @@
+// Libraries
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { View, Text, FlatList } from 'react-native'
-import styles from './Styles/SettingListStyle'
+import { View, FlatList } from 'react-native'
+import PropTypes from 'prop-types'
+
+// Dependencies
 import StringSetting from './Setting/StringSetting'
 import BooleanSetting from './Setting/BooleanSetting'
 import SliderSetting from './Setting/SliderSetting'
 import ListSetting from './Setting/ListSettings'
 import DateSetting from './Setting/DateSetting'
 
+// Styles
+import styles from './Styles/SettingListStyle'
+
 export default class SettingComponent extends Component {
-  // // Prop type warnings
-  // static propTypes = {
-  //   someProperty: PropTypes.object,
-  //   someSetting: PropTypes.bool.isRequired,
-  // }
-  //
-  // // Defaults for props
-  // static defaultProps = {
-  //   someSetting: false
-  // }
+
   constructor(props) {
     super(props)
     this.settings = this.props.settings.map((setting) => {
@@ -29,12 +25,7 @@ export default class SettingComponent extends Component {
     })
   }
 
-  componentDidMount () {
-
-  }
-
   render () {
-    console.log('render')
     const { settings, style, ...props } = this.props
     return (
       <FlatList
@@ -187,7 +178,7 @@ export default class SettingComponent extends Component {
 
   onDateChange (value, index) {
     const currentSetting = this.settings[index]
-    console.log(value, index, currentSetting, 'date setting')
+
     const settings = this.changeCurrentSetting(
       {
         ...currentSetting,
@@ -195,7 +186,6 @@ export default class SettingComponent extends Component {
       }, index)
 
     this.didSettingsChanged(settings)
-    console.log(settings, 'date settings')
     this.forceUpdate()
   }
 

@@ -1,13 +1,14 @@
+// Libraries
 import React, { Component } from 'react'
-import { ScrollView, Text } from 'react-native'
 import { connect } from 'react-redux'
-import Storage from '../../Realm/Storage'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
+import { ScrollView, Text } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+
+// Dependencies
+import Storage from '../Realm/Storage'
 
 // Styles
-import styles from '../Styles/SettingsStyle'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import styles from './Styles/SettingsStyle'
 
 class Settings extends Component {
   static navigationOptions = {

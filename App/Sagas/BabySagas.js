@@ -35,7 +35,7 @@ export function *getBabyInformation (api, action) {
     yield put(BabyAction.setInformation(BabyModel.fromJson(data.baby)))
   }
   catch (error) {
-    console.log(error, 'error at baby get information')
+    console.tron.log(error, 'error at baby get information')
   }
 
 }

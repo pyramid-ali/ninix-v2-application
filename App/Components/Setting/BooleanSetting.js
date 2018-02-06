@@ -16,7 +16,6 @@ export default class BooleanSetting extends Component {
 
   render () {
     const { title, currentValue, ...props } = this.props
-    console.log('re render switch', props.value, currentValue)
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{ title }</Text>

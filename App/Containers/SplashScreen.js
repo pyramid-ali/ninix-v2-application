@@ -1,6 +1,9 @@
+// Libraries
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
+import { View, Text } from 'react-native'
+
+// Dependencies
 import AppAction from '../Redux/AppRedux'
 
 // Styles

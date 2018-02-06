@@ -18,18 +18,15 @@ export function *login (api, action) {
 
   const { mobile, password } = action
   const response = yield call(api.login, new LoginModel(mobile, password).fields())
-  console.log(response, 'login response')
+
   try {
     const token = yield call(Response.resolve, response)
-    console.tron.log('before race')
     yield put(AuthAction.saveToken(token))
-    console.tron.log('after race')
     yield put(AppAction.sync())
     yield put(gotoMainPage)
     // TODO: start syncing
   }
   catch (error) {
-    console.log(error, 'error login')
     yield put(LoginAction.failure(error.message || error.problem))
   }
 
