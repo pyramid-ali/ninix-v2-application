@@ -29,7 +29,7 @@ class Login extends Component {
      */
     this.gradient = {
       colors: [
-        'rgba(255, 255, 255, 0.2)',
+        'rgba(255, 255, 255, 0.1)',
         'rgba(27, 163, 156, 0.6)',
         'rgba(0, 0, 0, 0.9)',
       ],
@@ -90,7 +90,7 @@ class Login extends Component {
       null :
       <View style={styles.logoContainer}>
         <Text style={styles.logo}>
-          NiNiX
+          ninix
         </Text>
       </View>
     );
@@ -137,7 +137,7 @@ class Login extends Component {
 
         <Text
           style={styles.linkContainer}>
-          Forgot Your Login Details?
+          Forgot Your Login Details? { ' ' }
           <Text
             onPress={() => navigate('ForgotPassword')}
             style={styles.link}

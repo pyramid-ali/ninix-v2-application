@@ -23,12 +23,15 @@ export default StyleSheet.create({
   title: {
     textAlign: 'center',
     marginHorizontal: 15,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15
   },
   description: {
     textAlign: Platform.OS === 'ios' ? 'justify': 'center',
-    marginHorizontal: 15
+    marginHorizontal: 15,
+    fontFamily: 'Amaranth-Regular',
+    fontSize: 16
+    // fontWeight: 'bold'
   }
 })

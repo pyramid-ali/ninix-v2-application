@@ -11,24 +11,21 @@ export default class Introduction extends Component {
   render () {
     const {
       children,
-      containerStyle,
-      imageStyle,
       source,
       title,
-      titleStyle,
     } = this.props
 
     const opacity = this.renderAnimation()
     return (
-      <View style={[styles.container, containerStyle]}>
+      <View style={styles.container}>
         <View style={styles.imageContainer}>
           <Animated.Image
-            style={[styles.image, imageStyle, {opacity}]}
+            style={[styles.image, {opacity}]}
             source={source}
           />
         </View>
         <View style={styles.textContainer}>
-          <Text style={[styles.title, titleStyle]}>{title.toUpperCase()}</Text>
+          <Text style={styles.title}>{title.toUpperCase()}</Text>
           <Text style={styles.description}>{children}</Text>
         </View>
       </View>
@@ -49,21 +46,6 @@ export default class Introduction extends Component {
 }
 
 Introduction.propTypes = {
-  containerStyle: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-    PropTypes.object
-  ]),
-  imageStyle: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-    PropTypes.object
-  ]),
   source: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  titleStyle: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-    PropTypes.object
-  ]),
 }

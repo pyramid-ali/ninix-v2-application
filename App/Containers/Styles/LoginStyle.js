@@ -28,10 +28,11 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    fontSize: 70,
-    color: 'white',
+    fontSize: 80,
+    color: Colors.white,
     width: Metrics.screenWidth,
     textAlign: 'center',
+    fontFamily: 'BerkshireSwash-Regular'
   },
   formContainer: {
     flex: 1,
