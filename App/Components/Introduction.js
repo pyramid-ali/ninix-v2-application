@@ -36,24 +36,15 @@ export default class Introduction extends Component {
   }
 
   renderAnimation() {
-    const {progress, index} = this.props
-    const opacity = progress.interpolate({
+    const { progress } = this.props
+    return progress.interpolate({
       inputRange: [
-        -Infinity,
-        -0.5,
-        0,
-        0.5,
-        Infinity
+        -Infinity, -0.5, 0, 0.5, Infinity
       ],
       outputRange: [
-        0,
-        0.5,
-        1,
-        0.5,
-        0
+        0, 0.5, 1, 0.5, 0
       ]
     })
-    return opacity
   }
 }
 

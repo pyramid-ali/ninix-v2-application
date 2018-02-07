@@ -33,8 +33,7 @@ export default class PageIndicator extends Component {
       const initialLeft = freeSpaceWidth + dot.space - 1
       const inputRange = Array.from(new Array(pages * 2), (pages, index) => index / 2)
       const positionOutputRange = inputRange.map((value) => {
-        const newPosition = initialLeft + (value * 2) * (2 * dot.space)
-        return newPosition
+        return initialLeft + (value * 2) * (2 * dot.space)
       })
 
       const widthOutputRange = inputRange.map((value) => {

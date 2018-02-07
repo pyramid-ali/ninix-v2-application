@@ -23,7 +23,7 @@ class Landing extends Component {
       <View style={styles.container}>
         <Pages renderPager={this.renderPager.bind(this)}>
 
-          {this.renderPages(introductions)}
+          {this.renderPages()}
 
         </Pages>
         <TouchableOpacity
@@ -39,7 +39,7 @@ class Landing extends Component {
     )
   }
 
-  renderPages (introductions) {
+  renderPages () {
     return introductions.map((introduction, index) => {
       const {title, description, image} = introduction
       return (
