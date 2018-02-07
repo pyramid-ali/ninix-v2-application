@@ -8,11 +8,11 @@ export const INITIAL_STATE = Immutable({
 })
 
 const { Types, Creators } = createActions({
-  init: [null],
-  sync: [null],
+  init: null,
+  sync: null,
   didConnectivityChange: ['payload'],
   didStateChange: ['payload'],
-  didAppIntroduce: [null]
+  didAppIntroduce: null
 }, {
   prefix: 'app/'
 })
