@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { Pages} from 'react-native-pages'
 
 // Dependencies
-import { AppState } from '../Redux/AppStateRedux'
+import AppAction from '../Redux/AppRedux'
 import Introduction from '../Components/Introduction'
 import PageIndicator from '../Components/PageIndicator'
 
@@ -19,20 +19,17 @@ class Landing extends Component {
 
   render () {
 
-    const { introduceApp } = this.props
-    const { navigate } = this.props.navigation
-
     return (
       <View style={styles.container}>
         <Pages renderPager={this.renderPager.bind(this)}>
 
-          {this.renderPage(introductions)}
+          {this.renderPages(introductions)}
 
         </Pages>
         <TouchableOpacity
           onPress={() => {
-            introduceApp()
-            navigate('Login')
+            this.props.introduceApp()
+            this.props.navigation.navigate('Login')
           }}
           style={styles.buttonContainer}
         >
@@ -42,7 +39,7 @@ class Landing extends Component {
     )
   }
 
-  renderPage (introductions) {
+  renderPages (introductions) {
     return introductions.map((introduction, index) => {
       const {title, description, image} = introduction
       return (
@@ -69,10 +66,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-// TODO: don't show landing page after first time
 const mapDispatchToProps = (dispatch) => {
   return {
-    introduceApp: () => dispatch(AppState.introduce())
+    introduceApp: () => dispatch(AppAction.didAppIntroduce())
   }
 }
 
