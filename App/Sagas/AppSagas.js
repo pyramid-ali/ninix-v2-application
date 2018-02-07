@@ -1,37 +1,15 @@
 import { NetInfo, AppState } from 'react-native'
-import { NavigationActions } from 'react-navigation'
-import { put, call, select, take, fork, join } from 'redux-saga/effects'
+import { put, call, select, take, fork } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
-import moment from 'moment';
 
-import { getToken } from '../Services/TokenManager'
+import { getToken, isTokenValid } from '../Services/TokenManager'
 import AppAction from '../Redux/AppRedux'
 import AuthAction from '../Redux/AuthRedux'
 import ParentAction from '../Redux/ParentRedux'
 import BabyAction from '../Redux/BabyRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import Ble from '../Services/Ble'
-
-const gotoLoginPage = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Login'})
-  ]
-})
-
-const gotoIntroduction = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Landing'})
-  ]
-})
-
-const gotoMainPage = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Main'})
-  ]
-})
+import Router from '../Navigation/Router'
 
 export function *init (action) {
 
@@ -46,45 +24,54 @@ export function *init (action) {
 
     // we need to know current connectivity status
     const isConnected = yield call(NetInfo.isConnected.fetch)
-    yield put(AppAction.connectivityChanged(isConnected))
+    yield put(AppAction.didConnectivityChange(isConnected))
 
     // this section is belong to check user authority
     const token = yield call(getToken)
 
-    if (!app.isIntroduced && !token) {
-      yield put(gotoIntroduction)
-      return
-    }
-
+    // if token doesn't exist, check for app Introduction to showing landing page
     if (!token) {
-      yield put(gotoLoginPage)
+
+      if (app.isIntroduced) {
+        yield put(Router.navigateToLogin)
+      }
+      else {
+        yield put(Router.navigateToLanding)
+      }
+
+      // we don't need go further
       return
     }
 
-
-    if (moment(token.expiresAt).diff(moment(), 'hours')  < 1) {
+    if (!isTokenValid(token)) {
       const refreshToken = token.refreshToken
       if (!refreshToken) {
-        yield put(gotoLoginPage)
+        yield put(Router.navigateToLogin)
+        return
       }
-      // TODO: refresh token, if failed then go to login page
+
+      // TODO: refresh token
     }
 
-
-    // TODO: dispatch get user action
     yield put(AuthAction.issueToken(token))
-    yield put(AppAction.sync())
-
-    yield put(gotoMainPage)
+    // TODO: synchronize app with backend server
+    yield put(Router.navigateToMain)
 
   }
   catch (error) {
-    console.tron.log({
-      place: 'init appSaga',
+    console.tron.error({
+      file: 'Sagas/AppSagas.js',
+      func: 'init',
       error
     })
-    // TODO: dispatch error in app initialize
-    // TODO: goto login page if any error occurred
+
+    // when an error occurred when initializing app
+    if (app.isIntroduced) {
+      yield put(Router.navigateToLogin)
+    }
+    else {
+      yield put(Router.navigateToLanding)
+    }
   }
 
 }
@@ -93,7 +80,7 @@ export function *setupAppStatusListener (channel) {
   try {
     while (true) {
       const appState = yield take(channel)
-      yield put(AppAction.stateChanged(appState))
+      yield put(AppAction.didStateChange(appState))
     }
   }
   finally {}
@@ -116,7 +103,7 @@ export function *setupNetStatusListener (channel) {
     while (true) {
       const isConnected = yield take(channel)
 
-      yield put(AppAction.connectivityChanged(isConnected))
+      yield put(AppAction.didConnectivityChange(isConnected))
     }
   }
   finally {}

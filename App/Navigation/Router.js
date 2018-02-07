@@ -1,20 +1,18 @@
 import { NavigationActions } from 'react-navigation'
 
-const navigateToLogin = NavigationActions.reset({
+const resetTo = (routeName) => NavigationActions.reset({
   index: 0,
   actions: [
-    NavigationActions.navigate({ routeName: 'Login'})
+    NavigationActions.navigate({routeName})
   ]
 })
 
-const navigateToMain = NavigationActions.reset({
-  index: 0,
-  actions: [
-    NavigationActions.navigate({ routeName: 'Main'})
-  ]
-})
+const navigateToLanding = resetTo('Landing')
+const navigateToLogin = resetTo('Login')
+const navigateToMain = resetTo('Main')
 
 export default {
+  navigateToLanding,
   navigateToLogin,
   navigateToMain
 }

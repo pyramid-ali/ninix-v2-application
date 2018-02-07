@@ -12,12 +12,12 @@ import styles from './Styles/SplashScreenStyle'
 class SplashScreen extends Component {
 
   componentDidMount () {
-    // we should init application here
+    // initialize app, show NINIX logo until all works done
     this.props.init()
   }
 
   render () {
-    // TODO: we should have interactive animation here, waiting user must be acceptable
+    // TODO: we should have interactive animation here, user waiting must be acceptable
     return (
       <View style={styles.container}>
         <Text style={styles.center}>NINIX</Text>
@@ -27,8 +27,7 @@ class SplashScreen extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-  }
+  return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
