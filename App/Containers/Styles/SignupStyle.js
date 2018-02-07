@@ -11,5 +11,8 @@ export default StyleSheet.create({
     padding: 5,
     backgroundColor: 'red',
     color: 'white'
+  },
+  barButton: {
+    color: 'white'
   }
 })

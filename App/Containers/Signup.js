@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import {Text, View} from 'react-native'
 import { connect } from 'react-redux'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 // Styles
 import styles from './Styles/SignupStyle'
@@ -11,6 +12,7 @@ import TokenEntrance from '../Components/TokenEntrance'
 import SignupAction from '../Redux/SignupRedux'
 import PasswordEntrance from '../Components/PasswordEntrance'
 import Router from '../Navigation/Router'
+
 
 class Signup extends Component {
   constructor (props) {
@@ -38,7 +40,13 @@ class Signup extends Component {
     return (
       <EntryTemplate
         title="SIGNUP"
-        imageSource={this.images[stage]}>
+        imageSource={this.images[stage]}
+        leftBarButton={this.renderLeftBarButton()}
+        onPressLeftBarButton={() => {
+          this.resetState()
+          this.props.navigation.goBack()
+        }}
+      >
         <View style={styles.formContainer}>
           { error ? <Text style={styles.error}>{ error }</Text> : null }
           { stage === 'mobile' ? this.renderMobileEntrance() : null }
@@ -107,6 +115,21 @@ class Signup extends Component {
     this.setState({stage: 'password'})
   }
 
+  renderLeftBarButton () {
+    return (
+      <Text style={styles.barButton}><Icon name='chevron-left' /> Login</Text>
+    )
+  }
+
+  resetState () {
+    this.setState({
+      stage: 'mobile',
+      mobile: '09',
+      token: '',
+      password: '',
+      newPassword: ''
+    })
+  }
 
 }
 
