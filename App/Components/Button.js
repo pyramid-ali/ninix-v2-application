@@ -49,7 +49,8 @@ Button.propTypes = {
   ]),
   containerStyle: PropTypes.oneOfType([
     PropTypes.array,
-    PropTypes.object
+    PropTypes.object,
+    PropTypes.number
   ]),
   disabled: PropTypes.bool,
   onPress: PropTypes.func
