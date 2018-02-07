@@ -14,7 +14,7 @@ export default class ArrowImage extends Component {
     return (
       <View style={[styles.container, containerStyle]}>
         <View style={[styles.leftArrow, styles.arrow]} />
-        <Image style={[styles.image, imageStyle]} source={require(source)} />
+        <Image style={[styles.image, imageStyle]} source={source} />
         <View style={[styles.rightArrow, styles.arrow]} />
       </View>
     )
@@ -31,5 +31,5 @@ ArrowImage.propTypes = {
     PropTypes.object,
     PropTypes.array
   ]),
-  source: PropTypes.string.isRequired
+  source: PropTypes.object.isRequired
 }

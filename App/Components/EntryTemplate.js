@@ -103,7 +103,7 @@ export default class EntryTemplate extends Component {
 }
 
 EntryTemplate.propTypes = {
-  imageSource: PropTypes.object,
+  imageSource: PropTypes.number.isRequired,
   leftBarButton: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element

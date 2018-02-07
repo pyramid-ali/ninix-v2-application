@@ -65,7 +65,7 @@ ModalDeviceConnect.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.array),
   onRequestClose: PropTypes.func,
   title: PropTypes.string.isRequired,
-  visible: PropTypes.bookmarkLabel.isRequired
+  visible: PropTypes.bool.isRequired
 }
 
 ModalDeviceConnect.defaultProps = {

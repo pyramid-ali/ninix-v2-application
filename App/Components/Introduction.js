@@ -68,7 +68,7 @@ Introduction.propTypes = {
     PropTypes.array,
     PropTypes.object
   ]),
-  source: PropTypes.object.isRequired,
+  source: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   titleStyle: PropTypes.oneOfType([
     PropTypes.number,

@@ -67,7 +67,7 @@ TextInputWithIcon.propTypes = {
     PropTypes.string,
     PropTypes.object
   ]),
-  size: PropTypes.size,
+  size: PropTypes.number,
   icon: PropTypes.string,
   containerStyle: PropTypes.oneOfType([
     PropTypes.number,
@@ -78,8 +78,7 @@ TextInputWithIcon.propTypes = {
     PropTypes.number,
     PropTypes.array,
     PropTypes.object
-  ]),
-
+  ])
 }
 
 TextInputWithIcon.defaultProps = {
