@@ -54,7 +54,7 @@ export function *init (action) {
     }
 
     yield put(AuthAction.issueToken(token))
-    // TODO: synchronize app with backend server
+    yield put(AppAction.sync())
     yield put(Router.navigateToMain)
 
   }

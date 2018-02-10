@@ -1,5 +1,6 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
+import Form from './Form'
 
 // TODO: user Config.API_URL
 const create = (baseURL = 'https://5e864d9b.ngrok.io/') => {
@@ -34,9 +35,10 @@ const create = (baseURL = 'https://5e864d9b.ngrok.io/') => {
 
   /***
    * login with username (mobile) and password
-   * @param credentials
+   * @param mobile
+   * @param password
    */
-  const login = (credentials) => api.post('oauth/token', credentials)
+  const login = (mobile, password) => api.post('oauth/token', Form.login(mobile, password))
 
   /***
    * refresh token

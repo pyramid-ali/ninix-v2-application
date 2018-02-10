@@ -24,12 +24,14 @@ export default class ArrowImage extends Component {
 
 ArrowImage.propTypes = {
   containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.object,
     PropTypes.array
   ]),
   imageStyle: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.object,
     PropTypes.array
   ]),
-  source: PropTypes.object.isRequired
+  source: PropTypes.number.isRequired
 }

@@ -51,8 +51,7 @@ export function *checkToken(api, action) {
     // TODO: check login
     const response = yield call(api.login, (new LoginModel(mobile, password)).fields())
     const token = yield call(Response.resolve, response)
-    yield put(AuthAction.issueToken(token))
-    // yield put(AppAction.sync())
+    yield put(AuthAction.saveToken(token))
     callback(password)
 
   }

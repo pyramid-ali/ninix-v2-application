@@ -76,7 +76,7 @@ EditableImage.propTypes = {
   ]),
   onPress: PropTypes.func,
   progress: PropTypes.number,
-  source: PropTypes.object,
+  source: PropTypes.number,
   size: PropTypes.number,
   style: PropTypes.oneOfType([
     PropTypes.number,

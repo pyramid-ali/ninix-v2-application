@@ -23,10 +23,6 @@ class Login extends Component {
       password: '',
     }
 
-    /***
-     * gradient setting for rendering gradient background on background image
-     * @type {{start: {x: number, y: number}, end: {x: number, y: number}, colors: [string,string,string], locations: [number,number,number]}}
-     */
     this.gradient = {
       colors: [
         'rgba(255, 255, 255, 0.1)',
@@ -93,7 +89,7 @@ class Login extends Component {
           ninix
         </Text>
       </View>
-    );
+    )
   }
 
   renderForm () {
@@ -103,7 +99,7 @@ class Login extends Component {
 
     return (
       <View style={styles.formContainer}>
-        {this.showError()}
+        {this.renderError()}
 
         <TextInputWithIcon
           editable={!login.fetching}
@@ -133,7 +129,7 @@ class Login extends Component {
           placeholder='Password'
         />
 
-        {this.showActivityIndicator()}
+        {this.renderActivityIndicator()}
 
         <Text
           style={styles.linkContainer}>
@@ -153,15 +149,13 @@ class Login extends Component {
     );
   }
 
-  // TODO: it's better to name it something like validation, and put validation logic to a separate module
-  verification () {
+  validate () {
     const {mobile, password} = this.state
     const regex = new RegExp(/^09\d{9}$/)
     return regex.test(mobile) && password.length > 0
   }
 
-  // TODO: rename it to renderError
-  showError () {
+  renderError () {
     const { login } = this.props
     return (
       login.error ?
@@ -171,15 +165,14 @@ class Login extends Component {
     )
   }
 
-  // TODO: rename it to renderActivityIndicator
-  showActivityIndicator () {
+  renderActivityIndicator () {
     const { login, loginRequest } = this.props
     const { mobile, password } = this.state
     return (
       login.fetching ?
       <ActivityIndicator/> :
       <Button
-          disabled={!this.verification()}
+          disabled={!this.validate()}
           containerStyle={styles.buttonStyle}
           color={Colors.white}
           backgroundColor={Colors.primary}

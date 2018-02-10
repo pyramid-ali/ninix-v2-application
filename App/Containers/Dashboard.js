@@ -37,7 +37,7 @@ class Dashboard extends Component {
       <View style={styles.container}>
         <View style={styles.top}>
           <View style={styles.informationContainer}>
-            <ArrowImage containerStyle={styles.imageContainer} source='../Images/login-background.jpg' />
+            <ArrowImage containerStyle={styles.imageContainer} source={ require('../Images/login-background.jpg') } />
             <VitalSignsBox vitalSigns={last} />
           </View>
           <View style={styles.statusContainer}>

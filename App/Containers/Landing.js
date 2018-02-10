@@ -17,6 +17,7 @@ import styles from './Styles/LandingStyle'
 
 class Landing extends Component {
 
+  // TODO: give animation when transient to another page
   render () {
 
     return (

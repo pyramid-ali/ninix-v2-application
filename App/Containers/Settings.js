@@ -4,32 +4,12 @@ import { connect } from 'react-redux'
 import { ScrollView, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-// Dependencies
-import Storage from '../Realm/Storage'
-
 // Styles
 import styles from './Styles/SettingsStyle'
 
+// TODO: we must have following options here
+// 1. Logout functionality should be placed here
 class Settings extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'Settings',
-    tabBarIcon: ({ tintColor }) => (
-      <Icon
-        size={20}
-        name="cog"
-        color={tintColor}
-      />
-    ),
-  }
-
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
-
-  componentDidMount () {
-    Storage.get()
-  }
 
   render () {
     return (
@@ -39,6 +19,19 @@ class Settings extends Component {
     )
   }
 }
+
+// set navigation option
+Settings.navigationOptions = {
+  tabBarLabel: 'Settings',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon
+      size={20}
+      name="cog"
+      color={tintColor}
+    />
+  ),
+}
+
 
 const mapStateToProps = (state) => {
   return {

@@ -20,6 +20,7 @@ export function *revokeToken (action) {
   }
   catch (error) {
     // TODO: error occurred for removing token
+    console.tron.log(error, 'revokeToken error')
   }
 }
 
