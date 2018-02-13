@@ -15,6 +15,7 @@ const { Types, Creators } = createActions({
   scan: null,
   stopScan: null,
   cancel: null,
+  addScannedDevices: ['devices'],
   addDevice: ['device'],
   didStateChange: ['status'],
   didDeviceDiscover: ['device'],
@@ -56,6 +57,14 @@ export const cancel = (state = INITIAL_STATE, action) => {
     ...state,
     isConnected: false,
     isConnecting: false,
+  }
+}
+
+export const addScannedDevices = (state = INITIAL_STATE, action) => {
+  const { devices } = action
+  return {
+    ...state,
+    devices
   }
 }
 
@@ -118,6 +127,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_DEVICE_DISCOVER]: didDeviceDiscover,
   [Types.DID_CONNECT]: didConnect,
   [Types.DISCONNECT]: disconnect,
+  [Types.ADD_SCANNED_DEVICES]: addScannedDevices,
 })
 
 

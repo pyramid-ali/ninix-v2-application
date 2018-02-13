@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 // Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
 import BluetoothState from '../Bluetooth/BluetoothState'
-import Connector from '../Bluetooth/Connector'
 import NavigationBar from '../Components/NavigationBar'
 import NinixDevice from '../Components/NinixDevice'
 import ModalDeviceConnect from '../Components/ModalDeviceConnect'
@@ -22,7 +21,7 @@ class AddDevice extends Component {
 
   render () {
     const { bluetooth } = this.props
-    const data = bluetooth.devices
+    const data = Object.keys(bluetooth.devices).map((item) => bluetooth.devices[item].device)
 
     const {logo, blink, color} = (() => {
 
@@ -56,7 +55,7 @@ class AddDevice extends Component {
             color: Colors.alert
           }
       }
-    })();
+    })()
 
     return (
       <View style={{flex: 1}}>
@@ -66,7 +65,7 @@ class AddDevice extends Component {
           leftButton={this.renderLeftBarButton()}
           onPressLeftButton={() => {
             this.props.navigation.goBack(null)
-            Connector.stopScan()
+            // TODO: when user tap on back
           }}
         >
           Add Device
@@ -89,6 +88,7 @@ class AddDevice extends Component {
           />
         </View>
         <ModalDeviceConnect
+          title='Connecting'
           buttons={[{
             onPress: () => this.props.cancelConnection(),
             text: 'Cancel'
@@ -136,14 +136,15 @@ class AddDevice extends Component {
   search() {
     const { isScanning, isConnected } = this.props.bluetooth
     if (isConnected) {
-      Connector.disconnect()
+      // Connector.disconnect()
       return
     }
     if(isScanning) {
-      Connector.stopScan()
+      this.props.stopScan()
       return
     }
-    Connector.scanDevices()
+
+    this.props.scan()
   }
 
 }
@@ -158,7 +159,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     startConnection: (device) => dispatch(BluetoothAction.connect(device)),
-    cancelConnection: () => dispatch(BluetoothAction.cancel())
+    cancelConnection: () => dispatch(BluetoothAction.cancel()),
+    scan: () => dispatch(BluetoothAction.scan()),
+    stopScan: () => dispatch(BluetoothAction.stopScan())
   }
 }
 

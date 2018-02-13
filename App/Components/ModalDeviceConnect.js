@@ -62,7 +62,7 @@ export default class ModalDeviceConnect extends Component {
 }
 
 ModalDeviceConnect.propTypes = {
-  buttons: PropTypes.arrayOf(PropTypes.array),
+  buttons: PropTypes.arrayOf(PropTypes.object),
   onRequestClose: PropTypes.func,
   title: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired

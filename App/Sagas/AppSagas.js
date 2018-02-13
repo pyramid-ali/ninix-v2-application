@@ -10,6 +10,7 @@ import BabyAction from '../Redux/BabyRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import Ble from '../Services/Ble'
 import Router from '../Navigation/Router'
+import CentralManager from '../Bluetooth/CentralManager'
 
 export function *init (action) {
 
@@ -136,9 +137,9 @@ export function setupBluetoothStatusListenerChannel () {
     const listener = state => {
       emit(state)
     }
-    Ble.addListener(listener, true)
+    const subscription = CentralManager.addStateListener(listener, true)
     return () => {
-      Ble.removeListener()
+      subscription.remove()
     }
   })
 }

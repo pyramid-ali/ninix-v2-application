@@ -69,6 +69,8 @@ const root = function * root () {
 
     // Scanner Sagas
     takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
+    takeLatest(BluetoothTypes.SCAN, BluetoothSagas.scan),
+    takeLatest(BluetoothTypes.STOP_SCAN, BluetoothSagas.stopScan),
     // takeLatest(BluetoothTypes.SUCCESS_CONNECT, BluetoothSagas.didDeviceConnect, api),
 
     // Data Sagas
