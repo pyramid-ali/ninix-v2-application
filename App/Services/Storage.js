@@ -5,8 +5,7 @@ export const setItem = async (key: string, value: string) => {
 }
 
 export const getItem = async (key: string) => {
-  const value = await AsyncStorage.getItem(key);
-  return value;
+  return await AsyncStorage.getItem(key)
 }
 
 export const removeItem = async (key: string) => {

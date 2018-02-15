@@ -17,7 +17,7 @@ const { Types, Creators } = createActions({
   syncing: null,
   finishSyncing: null
 }, {
-  prefix: 'DATA_'
+  prefix: 'data/'
 })
 
 export const DataTypes = Types

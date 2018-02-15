@@ -7,21 +7,22 @@ export const INITIAL_STATE = Immutable({
   devices: [],
   isConnected: false,
   isConnecting: false,
-  isScanning: false
+  isScanning: false,
+  error: null
 })
 
 const { Types, Creators } = createActions({
 
-  scan: null,
+  startScan: null,
   stopScan: null,
-  cancel: null,
-  addScannedDevices: ['devices'],
-  addDevice: ['device'],
+  cancelConnection: null,
+  didDiscover: ['devices'],
   didStateChange: ['status'],
-  didDeviceDiscover: ['device'],
   connect: ['device'],
   didConnect: null,
   disconnect: null,
+  didDisconnect: null,
+  didFail: ['error']
 
 }, {
   prefix: 'bluetooth/'
@@ -37,9 +38,10 @@ export const didStateChange = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const scan = (state = INITIAL_STATE, action) => {
+export const startScan = (state = INITIAL_STATE, action) => {
   return {
     ...state,
+    error: null,
     isScanning: true
   }
 }
@@ -60,7 +62,7 @@ export const cancel = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const addScannedDevices = (state = INITIAL_STATE, action) => {
+export const didDiscover = (state = INITIAL_STATE, action) => {
   const { devices } = action
   return {
     ...state,
@@ -68,35 +70,11 @@ export const addScannedDevices = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const addDevice = (state = INITIAL_STATE, action) => {
-  const { device } = action
-  const devices = state.devices.filter((d) => {
-    return d.id !== device.id
-  })
-  return {
-    ...state,
-    devices: [...devices, device]
-  }
-}
-
-export const didDeviceDiscover = (state = INITIAL_STATE, action) => {
-  const { device } = action
-  const found = state.devices.find((item) => {
-    return item.id === device.id
-  })
-  if (found === undefined) {
-    return {
-      ...state,
-      devices: [...state.devices, { id: device.id, device}]
-    }
-  }
-  return state
-}
-
 export const connect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isConnecting: true
+    isConnecting: true,
+    error: null
   }
 }
 
@@ -110,24 +88,32 @@ export const didConnect = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const disconnect = (state = INITIAL_STATE, action) => {
+export const didDisconnect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isConnected: false,
+    isConnected: false
+  }
+}
+
+export const didFail = (state = INITIAL_STATE, action) => {
+  const { error } = action
+  return {
+    ...state,
+    isConnecting: false,
+    error,
   }
 }
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.SCAN]: scan,
-  [Types.CONNECT]: connect,
-  [Types.CANCEL]: cancel,
+  [Types.START_SCAN]: startScan,
   [Types.STOP_SCAN]: stopScan,
-  [Types.ADD_DEVICE]: addDevice,
-  [Types.DID_STATE_CHANGE]: didStateChange,
-  [Types.DID_DEVICE_DISCOVER]: didDeviceDiscover,
+  [Types.CONNECT]: connect,
   [Types.DID_CONNECT]: didConnect,
-  [Types.DISCONNECT]: disconnect,
-  [Types.ADD_SCANNED_DEVICES]: addScannedDevices,
+  [Types.DID_DISCONNECT]: didDisconnect,
+  [Types.CANCEL_CONNECTION]: cancel,
+  [Types.DID_STATE_CHANGE]: didStateChange,
+  [Types.DID_DISCOVER]: didDiscover,
+  [Types.DID_FAIL]: didFail,
 })
 
 

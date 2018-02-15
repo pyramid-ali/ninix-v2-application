@@ -2,11 +2,10 @@ import { BleManager } from 'react-native-ble-plx'
 import UUID from './UUID'
 import moment from 'moment'
 import Ninix from './Ninix'
+import _ from 'lodash'
 
 class CentralManager {
 
-  scanning = false
-  connected = false
   scannedDevices = []
 
   constructor () {
@@ -26,50 +25,44 @@ class CentralManager {
     )
   }
 
-  scanForDevices (listener = null) {
+  scanForDevices (listener) {
 
     this.timerSubscription = this.timer()
     this.manager.startDeviceScan([UUID.services.main.uuid], { allowDuplicates: true}, (error, device) => {
-      this.scannedDevices = {...this.scannedDevices, [device.id]: {device, time: moment()}}
-      listener(device)
+      const oldScannedDevices = this.scannedDevices
+      this.scannedDevices = {...oldScannedDevices, [device.id]: {device, time: moment()}}
+      if (!_.isEqual(Object.keys(oldScannedDevices), Object.keys(this.scannedDevices))) {
+        listener(device)
+      }
     })
-    this.scanning = true
 
   }
 
   stopScan () {
-    console.tron.log({log: 'stop scan'})
-    if (this.scanning) {
-      this.manager.stopDeviceScan()
-      this.scanning = false
-      this.scannedDevices = []
-      clearInterval(this.timerSubscription)
-    }
+    this.manager.stopDeviceScan()
+    this.scannedDevices = []
+    clearInterval(this.timerSubscription)
   }
 
   async connect (device) {
-    this.stopScan()
     const connected = await device.connect({ autoConnect: true })
     this.ninix = new Ninix(connected)
+    await this.ninix.discover()
+    this.stopScan()
     return this.ninix
   }
 
   async disconnect () {
     const device = await this.ninix.disconnect()
     if (device) {
-      this.connected = false
       return
     }
-    throw new Error('cannot disconnect from device')
+    throw new Error('Cannot disconnect from device')
   }
 
-  onDisconnected () {
-    if (this.dcListener) {
-      this.dcListener.remove()
-    }
-    this.dcListener = this.ninix.device.onDisconnected((error, device) => {
-      this.connected = false
-      this.dcListener.remove()
+  onDisconnected (listener) {
+    return this.ninix.device.onDisconnected((error, device) => {
+      listener(error, device)
     })
   }
 

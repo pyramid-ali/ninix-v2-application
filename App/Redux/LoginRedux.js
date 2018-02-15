@@ -18,11 +18,11 @@ export const INITIAL_STATE = Immutable({
  * failure: when an error occurred to get user token properties
  */
 const { Types, Creators } = createActions({
-  request: ['mobile', 'password', 'callback'],
+  request: ['mobile', 'password'],
   success: null,
   failure: ['error']
 }, {
-  prefix: 'LOGIN_'
+  prefix: 'login/'
 })
 
 export const LoginTypes = Types

@@ -11,6 +11,7 @@ import NavigationBar from '../Components/NavigationBar'
 import NinixDevice from '../Components/NinixDevice'
 import ModalDeviceConnect from '../Components/ModalDeviceConnect'
 import FoundedDeviceItem from '../Components/FoundedDeviceItem'
+import _ from 'lodash'
 
 // Styles
 import styles from './Styles/AddDeviceStyle'
@@ -78,6 +79,7 @@ class AddDevice extends Component {
               blink={blink}
               lightColor={color} />
           </View>
+          { this.props.bluetooth.error ? this.renderError() : null}
           <FlatList
             keyExtractor={(item, index) => item.id}
             ItemSeparatorComponent={this.separatorComponent.bind(this)}
@@ -111,18 +113,14 @@ class AddDevice extends Component {
 
   renderItem (device) {
     return (
-      <FoundedDeviceItem onPress={() => this.connect(device)} text={device.name} key={device.id} />
+      <FoundedDeviceItem onPress={() => this.props.connect(device)} text={device.name} key={device.id} />
     )
-  }
-
-  connect (device) {
-    this.props.startConnection(device)
   }
 
   listHeaderComponent () {
     return (
       <View style={styles.header}>
-        <Text style={styles.headerText}>Founded Devices</Text>
+        <Text style={styles.headerText}>Available Ninix Devices</Text>
       </View>
     )
   }
@@ -136,7 +134,7 @@ class AddDevice extends Component {
   search() {
     const { isScanning, isConnected } = this.props.bluetooth
     if (isConnected) {
-      // Connector.disconnect()
+      this.props.disconnect()
       return
     }
     if(isScanning) {
@@ -144,7 +142,16 @@ class AddDevice extends Component {
       return
     }
 
-    this.props.scan()
+    this.props.startScan()
+  }
+
+  renderError () {
+    return (
+      <View style={styles.error}>
+        <Text style={styles.white}>Error</Text>
+        <Text style={styles.white}>{ _.truncate(this.props.bluetooth.error) }</Text>
+      </View>
+    )
   }
 
 }
@@ -158,10 +165,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    startConnection: (device) => dispatch(BluetoothAction.connect(device)),
-    cancelConnection: () => dispatch(BluetoothAction.cancel()),
-    scan: () => dispatch(BluetoothAction.scan()),
-    stopScan: () => dispatch(BluetoothAction.stopScan())
+    startScan: () => dispatch(BluetoothAction.startScan()),
+    stopScan: () => dispatch(BluetoothAction.stopScan()),
+    connect: (device) => dispatch(BluetoothAction.connect(device)),
+    disconnect: () => dispatch(BluetoothAction.disconnect()),
+    cancelConnection: () => dispatch(BluetoothAction.cancelConnection())
   }
 }
 

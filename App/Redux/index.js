@@ -6,7 +6,6 @@ export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
     app:           require('./AppRedux').reducer,
-    appState:      require('./AppStateRedux').reducer,
     auth:          require('./AuthRedux').reducer,
     baby:          require('./BabyRedux').reducer,
     bluetooth:     require('./BluetoothRedux').reducer,

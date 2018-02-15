@@ -6,7 +6,7 @@ function stream (data) {
   const orientation = getOrientation(data[1])
   const battery = getBattery(data[2], data[3])
   const respiratory = getRespiratory(data.slice(4, 8))
-  const stared = getStared(data[8], data[9])
+  const unreadDataCount = unreadData(data[8], data[9])
   const fullCharged = isFullCharge(data[10])
   const charging = isCharging(data[11])
   const lowBattery = isOnLowBattery(data[12])
@@ -18,7 +18,7 @@ function stream (data) {
     orientation,
     battery,
     respiratory,
-    stared,
+    unreadDataCount,
     fullCharged,
     charging,
     lowBattery,
@@ -103,7 +103,7 @@ function getRespiratory (respiratoryBytes) {
   return rounded > 900 ? 0 : rounded
 }
 
-function getStared (lowByte, highByte) {
+function unreadData (lowByte, highByte) {
   return highByte * 256 + lowByte
 }
 

@@ -44,5 +44,12 @@ export default StyleSheet.create({
     fontSize: 14,
     paddingLeft: 5,
     fontWeight: '100'
+  },
+  error: {
+    backgroundColor: Colors.alert,
+    padding: 10
+  },
+  white: {
+    color: Colors.white
   }
 })

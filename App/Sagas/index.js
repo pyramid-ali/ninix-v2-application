@@ -67,11 +67,12 @@ const root = function * root () {
     takeLatest(DeviceTypes.PUSH_DEVICE_LOGS, DeviceSagas.pushDeviceLogs, api),
     // takeLatest(DeviceTypes.GET_LATEST_FIRMWARE_VERSION, DeviceSagas.getLatestFirmwareVersion, api),
 
-    // Scanner Sagas
-    takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
-    takeLatest(BluetoothTypes.SCAN, BluetoothSagas.scan),
+    // Bluetooth Sagas
+    takeLatest(BluetoothTypes.START_SCAN, BluetoothSagas.startScan),
     takeLatest(BluetoothTypes.STOP_SCAN, BluetoothSagas.stopScan),
-    // takeLatest(BluetoothTypes.SUCCESS_CONNECT, BluetoothSagas.didDeviceConnect, api),
+    takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
+    takeLatest(BluetoothTypes.DISCONNECT, BluetoothSagas.disconnect),
+    takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
 
     // Data Sagas
     takeEvery(DataTypes.RECEIVE_DATA, DataSagas.receiveData)

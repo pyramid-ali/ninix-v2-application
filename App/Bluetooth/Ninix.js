@@ -19,7 +19,7 @@ export default class Ninix {
   }
 
   async disconnect () {
-    return await this.device.disconnect()
+    return await this.device.cancelConnection()
   }
 
   async getServices () {
@@ -70,7 +70,6 @@ export default class Ninix {
             const code = str.charCodeAt(i)
             bytes = bytes.concat([code])
           }
-          console.tron.log({bytes})
           const result = DataHandler.stream(bytes)
           listener(result)
         }
