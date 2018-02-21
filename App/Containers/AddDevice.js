@@ -23,40 +23,7 @@ class AddDevice extends Component {
   render () {
     const { bluetooth } = this.props
     const data = Object.keys(bluetooth.devices).map((item) => bluetooth.devices[item].device)
-
-    const {logo, blink, color} = (() => {
-
-      if (bluetooth.isConnected) {
-        return {
-          logo: 'Connected\nTap To cancel',
-          blink: false,
-          color: Colors.primary
-        }
-      }
-
-      if (bluetooth.isScanning) {
-        return {
-          logo: 'Searching...\nTap To cancel',
-          blink: true,
-          color: Colors.primary
-        }
-      }
-
-      switch (bluetooth.state) {
-        case BluetoothState.poweredOn:
-          return {
-            logo: 'Start Scan',
-            blink: false,
-            color: '#3498DB'
-          }
-        default:
-          return {
-            logo: 'Bluetooth is off',
-            blink: false,
-            color: Colors.alert
-          }
-      }
-    })()
+    const {logo, blink, color} = this.getNinixStatus(bluetooth)
 
     return (
       <View style={{flex: 1}}>
@@ -66,7 +33,6 @@ class AddDevice extends Component {
           leftButton={this.renderLeftBarButton()}
           onPressLeftButton={() => {
             this.props.navigation.goBack(null)
-            // TODO: when user tap on back
           }}
         >
           Add Device
@@ -89,17 +55,42 @@ class AddDevice extends Component {
             renderItem={({item}) => this.renderItem(item)}
           />
         </View>
-        <ModalDeviceConnect
-          title='Connecting'
-          buttons={[{
-            onPress: () => this.props.cancelConnection(),
-            text: 'Cancel'
-          }]}
-          visible={bluetooth.isConnecting}>
-          <Text>We're connecting to NINIX_DEMO</Text>
-        </ModalDeviceConnect>
+        { this.renderModal() }
       </View>
     )
+  }
+
+  getNinixStatus (bluetooth) {
+    if (bluetooth.isConnected) {
+      return {
+        logo: 'Connected\nTap To cancel',
+        blink: false,
+        color: Colors.primary
+      }
+    }
+
+    if (bluetooth.isScanning) {
+      return {
+        logo: 'Searching...\nTap To cancel',
+        blink: true,
+        color: Colors.primary
+      }
+    }
+
+    switch (bluetooth.state) {
+      case BluetoothState.poweredOn:
+        return {
+          logo: 'Start Scan',
+          blink: false,
+          color: '#3498DB'
+        }
+      default:
+        return {
+          logo: 'Bluetooth is off',
+          blink: false,
+          color: Colors.alert
+        }
+    }
   }
 
   renderLeftBarButton() {
@@ -132,7 +123,7 @@ class AddDevice extends Component {
   }
 
   search() {
-    const { isScanning, isConnected } = this.props.bluetooth
+    const { isScanning, isConnected, state } = this.props.bluetooth
     if (isConnected) {
       this.props.disconnect()
       return
@@ -142,7 +133,13 @@ class AddDevice extends Component {
       return
     }
 
-    this.props.startScan()
+    if (state === BluetoothState.poweredOn) {
+      this.props.startScan()
+      return
+    }
+
+    alert('Please turn on bluetooth')
+
   }
 
   renderError () {
@@ -151,6 +148,26 @@ class AddDevice extends Component {
         <Text style={styles.white}>Error</Text>
         <Text style={styles.white}>{ _.truncate(this.props.bluetooth.error) }</Text>
       </View>
+    )
+  }
+
+  renderModal () {
+    const { bluetooth } = this.props
+    return (
+      <ModalDeviceConnect
+        title='Connecting... '
+        visible={bluetooth.isConnecting}
+        buttons={[
+          {
+            text: 'cancel',
+            onPress: () => {
+              this.props.cancelConnection()
+            }
+          }
+        ]}
+      >
+        <Text>We're connecting to NINIX</Text>
+      </ModalDeviceConnect>
     )
   }
 

@@ -73,9 +73,9 @@ const root = function * root () {
     takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
     takeLatest(BluetoothTypes.DISCONNECT, BluetoothSagas.disconnect),
     takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
+    takeLatest(BluetoothTypes.START_SYNC, BluetoothSagas.startSync),
 
-    // Data Sagas
-    takeEvery(DataTypes.RECEIVE_DATA, DataSagas.receiveData)
+    takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData)
   ])
 }
 

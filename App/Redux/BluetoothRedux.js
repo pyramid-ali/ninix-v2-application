@@ -8,7 +8,8 @@ export const INITIAL_STATE = Immutable({
   isConnected: false,
   isConnecting: false,
   isScanning: false,
-  error: null
+  error: null,
+  isSyncing: false
 })
 
 const { Types, Creators } = createActions({
@@ -22,8 +23,9 @@ const { Types, Creators } = createActions({
   didConnect: null,
   disconnect: null,
   didDisconnect: null,
-  didFail: ['error']
-
+  didFail: ['error'],
+  startSync: null,
+  didSyncBegin: null
 }, {
   prefix: 'bluetooth/'
 })
@@ -50,6 +52,7 @@ export const stopScan = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isScanning: false,
+    error: null,
     devices: [],
   }
 }
@@ -91,7 +94,8 @@ export const didConnect = (state = INITIAL_STATE, action) => {
 export const didDisconnect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    isConnected: false
+    isConnected: false,
+    isConnecting: false
   }
 }
 
@@ -100,6 +104,15 @@ export const didFail = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isConnecting: false,
+    error,
+  }
+}
+
+export const didSyncBegin = (state = INITIAL_STATE, action) => {
+  const { error } = action
+  return {
+    ...state,
+    isSyncing: true,
     error,
   }
 }
@@ -114,6 +127,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_STATE_CHANGE]: didStateChange,
   [Types.DID_DISCOVER]: didDiscover,
   [Types.DID_FAIL]: didFail,
+  [Types.DID_SYNC_BEGIN]: didSyncBegin,
 })
 
 

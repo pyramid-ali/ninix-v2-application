@@ -1,19 +1,20 @@
 import { eventChannel } from 'redux-saga'
-import { put, call, take, fork, cancel } from 'redux-saga/effects'
+import { put, call, take, fork } from 'redux-saga/effects'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import CentralManager from '../Bluetooth/CentralManager'
+import DataAction from '../Redux/DataRedux'
 
 export function *connect(action) {
   // TODO: we should save logs in backend server
   const { device } = action
   try {
-    const ninix = yield CentralManager.connect(device)
-    yield call(ninix.bond.bind(ninix))
-    yield put(BluetoothAction.didConnect(device))
+
+    const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
     yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel))
-    console.tron.log({log: 'connect', ninix})
-    yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, ninix))
-    console.tron.log({log: 'connect end'})
+    yield put(BluetoothAction.didConnect(connectedDevice))
+    yield call(CentralManager.start.bind(CentralManager))
+    yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
+
   }
   catch (error) {
     yield CentralManager.disconnect()
@@ -24,8 +25,9 @@ export function *connect(action) {
 }
 
 export function *cancelConnection () {
-  // TODO: cancel connect process
-  // yield cancel(connect)
+  yield CentralManager.disconnect()
+  yield put(BluetoothAction.didDisconnect())
+  // TODO: Cancel Bluetooth Connection
 }
 
 export function *disconnect() {
@@ -47,6 +49,17 @@ export function *startScan() {
 
 export function *stopScan() {
   CentralManager.stopScan()
+}
+
+export function *startSync () {
+  const ninix = CentralManager.ninix
+  console.tron.log({log: 'start sync'})
+  const characteristic = yield call(ninix.sendSyncCommand.bind(ninix))
+  console.tron.log({log: 'start sync char', characteristic})
+  if (characteristic) {
+    yield put(BluetoothAction.didSyncBegin())
+  }
+  yield fork(setupNinixSyncListener, yield call(setupNinixSyncListenerChannel, ninix))
 }
 
 export function *setupScanListener (channel) {
@@ -75,9 +88,8 @@ export function *setupNinixStreamListener (channel) {
   try {
     while (true) {
       const result = yield take(channel)
-      const { temperature, respiratory, orientation, humidity } = result
-      console.tron.log({log: 'result receive'})
-      console.tron.log({result})
+      yield put(DataAction.didReceiveData(result))
+
     }
   }
   finally {}
@@ -89,6 +101,28 @@ export function setupNinixStreamListenerChannel (ninix) {
       emit(result)
     }
     const subscription = ninix.stream(listener)
+    return () => {
+      subscription.remove()
+    }
+  })
+}
+
+export function *setupNinixSyncListener (channel) {
+  try {
+    while (true) {
+      const result = yield take(channel)
+      yield put(DataAction.didReceiveSync(result))
+    }
+  }
+  finally {}
+}
+
+export function setupNinixSyncListenerChannel (ninix) {
+  return eventChannel(emit => {
+    const listener = result => {
+      emit(result)
+    }
+    const subscription = ninix.sync(listener)
     return () => {
       subscription.remove()
     }

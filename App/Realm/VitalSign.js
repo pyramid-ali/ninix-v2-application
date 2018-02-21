@@ -9,9 +9,9 @@ VitalSign.schema = {
     respiratory: 'int',
     orientation: 'int',
     humidity   : 'int',
+    repeat     : {type: 'int' , default: 0},
     sync       : {type: 'bool' , default: false},
-    updatedAt  : 'date',
-    registerAt : 'date'
+    registerAt : 'int'
   }
 }
 

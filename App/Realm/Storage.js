@@ -1,8 +1,6 @@
 import VitalSign from './VitalSign'
-import moment from 'moment'
+import _ from 'lodash'
 const Realm = require('realm')
-import DataAction from '../Redux/DataRedux'
-import { store } from '../Containers/App'
 
 
 export const schemas = [
@@ -11,79 +9,67 @@ export const schemas = [
 
 export default class Storage {
 
-  static save (data, registerAt) {
-    const { temperature, respiratory, orientation, humidity } = data
+  static save (data) {
 
     Realm.open({schema: schemas})
       .then(realm => {
-        let vitalSign = realm.objects('VitalSign').sorted('updatedAt', true)[0]
 
-        if (vitalSign) {
-          const diffTime = moment(registerAt).diff(moment(vitalSign.updatedAt), 'seconds')
-
-          if (diffTime === 0) {
-            return
-          }
-
-          if (temperature === vitalSign.temperature &&
-              respiratory === vitalSign.respiratory &&
-              orientation === vitalSign.orientation &&
-              humidity    === vitalSign.humidity    &&
-              diffTime    === 1
-          ) {
-
-            realm.write(() => {
-              vitalSign.updatedAt = registerAt
-              vitalSign.sync = false
-            })
-
-            store.dispatch(DataAction.receiveUnsyncData(vitalSign))
-            return
-          }
-        }
+        const model = realm.objects('VitalSign').sorted('registerAt', true)[0]
 
         realm.write(() => {
-          vitalSign = realm.create('VitalSign', {
-            temperature,
-            respiratory,
-            orientation,
-            humidity,
-            updatedAt: registerAt,
-            registerAt
+          console.tron.log({compare: compare(data, model)})
+          compare(data, model) ? model.repeat += 1 : realm.create('VitalSign', data)
+        })
+
+    })
+      .catch(error => console.tron.log({
+        error, place: 'Realm/Storage/get',
+        message: error.message
+      }))
+  }
+
+  static saveArray (dataArray) {
+    Realm.open({schema: schemas})
+      .then(realm => {
+
+        realm.write(() => {
+          dataArray.forEach((data) => {
+            const model = realm.objects('VitalSign').sorted('registerAt', true)[0]
+            compare(data, model) ? model.repeat += 1 : realm.create('VitalSign', data)
           })
         })
 
-        store.dispatch(DataAction.receiveUnsyncData(vitalSign))
-    })
-      .catch(error => console.tron.log(error, '<Storage#save> catch error'))
+      })
+      .catch(error => console.tron.log({
+        error, place: 'Realm/Storage/get',
+        message: error.message
+      }))
   }
 
   static get () {
     Realm.open({schema: schemas})
       .then(realm => {
-        let vitalSigns = realm.objects('VitalSign').sorted('updatedAt', true)
+        let vitalSigns = realm.objects('VitalSign').sorted('registerAt', true)
         console.tron.log({
           vitalSigns
         })
       })
       .catch(error => console.tron.error({
         error,
-        place: 'Realm/Storage/get'
+        place: 'Realm/Storage/get',
+        message: error.message
       }))
   }
 
-  static sync (vitalSigns) {
-    Realm.open({schema: schemas})
-      .then(realm => {
-        vitalSigns.forEach((vitalSign) => {
-          realm.write(() => {
-            vitalSign.sync = true
-          })
-          store.dispatch(DataAction.syncData(vitalSign))
-        })
-        store.dispatch(DataAction.finishSyncing())
-      })
-      .catch(error => console.tron.log(error, '<Storage#save> catch error'))
-  }
+}
 
+function compare (first, second) {
+  const keys = [ 'respiratory', 'humidity', 'orientation']
+
+  return _.isEqual(
+    _.pick(first, keys),
+    _.pick(second, keys)
+  ) &&
+    Math.round(first.temperature * 10) === Math.round(second.temperature * 10) &&
+    Math.abs(first.registerAt - second.registerAt) <= 1
 }

@@ -1,5 +1,6 @@
 // import Libraries
 import { StackNavigator } from 'react-navigation'
+import ShowNinixData from '../Containers/ShowNinixData'
 
 // import Dependencies
 import AddDevice from '../Containers/AddDevice'
@@ -18,6 +19,7 @@ import Login from '../Containers/Login'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  ShowNinixData: { screen: ShowNinixData },
 
   Landing: {
     screen: Landing

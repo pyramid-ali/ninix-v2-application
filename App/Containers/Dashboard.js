@@ -31,8 +31,8 @@ class Dashboard extends Component {
 
   render () {
     const { data } = this.props
-    const vitalSigns = data.vitalSigns
-    const last = vitalSigns[vitalSigns.length - 1]
+    const last = data.stream[data.stream.length - 1]
+
     return (
       <View style={styles.container}>
         <View style={styles.top}>

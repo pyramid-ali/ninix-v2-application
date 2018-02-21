@@ -22,6 +22,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  deviceShapeWrapper: {
+    flex: 1,
+  },
   deviceShapeContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -36,6 +39,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderColor: Colors.primary,
     borderRadius: 5
+  },
+  redBorder: {
+    borderColor: Colors.alert,
   },
   deviceShapeHead: {
     width: 30,

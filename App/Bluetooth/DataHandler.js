@@ -1,12 +1,13 @@
 import moment from 'moment'
 
 function stream (data) {
+
   const temperature = getTemperature(data[0])
   const humidity = getHumidity(data[1])
   const orientation = getOrientation(data[1])
-  const battery = getBattery(data[2], data[3])
+  const battery = getBattery(data[2], data[3], data[11])
   const respiratory = getRespiratory(data.slice(4, 8))
-  const unreadDataCount = unreadData(data[8], data[9])
+  const stored = unreadData(data[8], data[9])
   const fullCharged = isFullCharge(data[10])
   const charging = isCharging(data[11])
   const lowBattery = isOnLowBattery(data[12])
@@ -18,7 +19,7 @@ function stream (data) {
     orientation,
     battery,
     respiratory,
-    unreadDataCount,
+    stored,
     fullCharged,
     charging,
     lowBattery,
@@ -33,7 +34,7 @@ function sync (data) {
   const unix = toSignInteger(data.slice(16, 20))
   let result = []
   for (let i = 0; i < size; i++) {
-    const respiratory = 1 // TODO: this should be correct
+    const respiratory = data[i]
     const temperature = getTemperature(data[i + 4])
     const humidity = getHumidity(data[i + 8])
     const orientation = getOrientation(data[i + 8])
@@ -48,7 +49,36 @@ function sync (data) {
     })
   }
 
-  return result
+  // we used reverse to sort array in ascending order of registerAt
+  return mapSyncToStream(result.reverse())
+
+}
+
+function mapSyncToStream (data) {
+
+  const result = []
+
+  for (let i = 0; i < data.length - 1; i++) {
+    const current = data[i]
+    const next = data[i + 1]
+
+    const tempDiff = (next.temperature - current.temperature) / 5
+    const respDiff = (next.respiratory - current.respiratory) / 5
+    const orientationDiff = (next.orientation - current.orientation) / 5
+    const humidityDiff = (next.humidity - current.humidity) / 5
+
+    for (let j = 0; j < 5; j++) {
+      result.push({
+        temperature: round(current.temperature + (tempDiff * i)),
+        respiratory: round(current.respiratory + (respDiff * i)),
+        orientation: round(current.orientation + (orientationDiff * i)),
+        humidity: round(current.humidity + (humidityDiff * i)),
+        registerAt: current.registerAt + i
+      })
+    }
+
+    return result
+  }
 
 }
 
@@ -76,25 +106,57 @@ function getOrientation (decimal) {
   return round(decimal & 0x03)
 }
 
-function getBattery (lowLevelBattery, highLevelBattery) {
+function getBattery (lowLevelBattery, highLevelBattery, charging) {
   let battery = 3.6 * ((highLevelBattery * 256 + lowLevelBattery) / 512)
-  battery = battery < 4.2 ? battery : 4.2
-  const a1 = 7.982
-  const b1 = 4.217
-  const c1 = 0.007831
-  const a2 = 0.02887
-  const b2 = 4.151
-  const c2 = 0.001352
-  const a3 = 95.38
-  const b3 = 4.308
-  const c3 = 0.2244
+  battery = battery > 4.2 ? 4.2 : battery
+  const percentage = charging ? getBatteryOnCharging(battery) : getBatteryOnDischarge(battery)
+  return percentage > 100 ? 100 : percentage
+
+}
+
+function getBatteryOnCharging (battery) {
+  const a1 = 13.01
+  const b1 = 4.116
+  const c1 = 0.04047
+  const a2 = 27.46
+  const b2 = 4.05
+  const c2 = 0.04987
+  const a3 = 21.02
+  const b3 = 3.992
+  const c3 = 0.03878
+  const a4 = 30.56
+  const b4 = 3.931
+  const c4 = 0.05667
+  const a5 = 1.301e+12
+  const b5 = 17.75
+  const c5 = 2.828
+  const a6 = 37.93
+  const b6 = 3.826
+  const c6 = 0.08209
+
   let capacity = (
     a1 * Math.exp(-Math.pow(((battery - b1) / c1), 2)) +
     a2 * Math.exp(-Math.pow(((battery - b2) / c2), 2)) +
-    a3 * Math.exp(-Math.pow(((battery - b3) / c3), 2))
+    a3 * Math.exp(-Math.pow(((battery - b3) / c3), 2)) +
+    a4 * Math.exp(-Math.pow(((battery - b4) / c4), 2)) +
+    a5 * Math.exp(-Math.pow(((battery - b5) / c5), 2)) +
+    a6 * Math.exp(-Math.pow(((battery - b6) / c6), 2))
   )
-  capacity = capacity < 80 ? capacity : 80
-  return round((capacity / 80) * 100)
+
+  return round(capacity * 100 / 120)
+}
+
+function getBatteryOnDischarge (battery) {
+  const a1 = 173.3
+  const b1 = 4.398
+  const c1 = 0.3742
+
+
+  let capacity = (
+    a1 * Math.exp(-Math.pow(((battery - b1) / c1), 2))
+  )
+
+  return round(capacity * 100 / 120)
 }
 
 function getRespiratory (respiratoryBytes) {

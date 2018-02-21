@@ -1,7 +1,7 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text, View, FlatList, ActivityIndicator } from 'react-native'
+import { ScrollView, Text, View, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 // Dependencies
@@ -38,10 +38,11 @@ class Device extends Component {
   }
 
   render () {
-
-    const { logs, localFirmwareVersion, fetching } = this.props.device
-    const { isConnected } = this.props.bluetooth
-    const { battery } = this.props.ninix
+    const { bluetooth, data, device } = this.props
+    const { logs, localFirmwareVersion, fetching } = device
+    const { isConnected } = bluetooth
+    const { stream } = data
+    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
     return (
       <View style={styles.wrapper}>
@@ -53,13 +54,16 @@ class Device extends Component {
         </NavigationBar>
         <ScrollView style={styles.container}>
           <View style={styles.deviceContainer}>
-            <View style={styles.deviceShapeContainer}>
-              <View style={styles.deviceShape}>
-                <Text style={styles.batteryCharge}> { Number.isInteger(battery) ? battery + '%' : 'Unknown'}</Text>
-                <Text style={styles.batteryChargeFooter}>{ isConnected ? 'Battery Charge' : 'No Device Connected'}</Text>
+            <TouchableOpacity style={styles.deviceShapeWrapper} onPress={() => this.props.navigation.navigate('ShowNinixData')}>
+              <View style={styles.deviceShapeContainer}>
+                <View style={[styles.deviceShape, lowBattery ? styles.redBorder : null]}>
+                  <Text style={styles.batteryCharge}> { battery ? battery + '%' : 'Unknown'}</Text>
+                  <Text style={styles.batteryChargeFooter}>{ isConnected ? 'Battery Charge' : 'No Device Connected'}</Text>
+                </View>
+                <View style={[styles.deviceShapeHead, lowBattery ? styles.redBorder : null]}/>
               </View>
-              <View style={styles.deviceShapeHead}/>
-            </View>
+            </TouchableOpacity>
+
             <View style={styles.firmwareDetails}>
               <Text style={styles.firmwareText}>Firmware Version <Text>{ localFirmwareVersion || 'N/A' }</Text></Text>
               <Text style={styles.firmwareButton}>Check for updates</Text>
@@ -115,9 +119,9 @@ class Device extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { bluetooth, ninix, device } = state
+  const { bluetooth, data, device } = state
   return {
-    bluetooth, ninix, device
+    bluetooth, data, device
   }
 }
 

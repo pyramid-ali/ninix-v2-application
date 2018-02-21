@@ -9,21 +9,6 @@ import styles from './Styles/NotificationItemStyle'
 
 
 export default class NotificationItem extends Component {
-  // Prop type warnings
-  static propTypes = {
-    date: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    problem: PropTypes.string.isRequired,
-  }
-
-  // Defaults for props
-  static defaultProps = {
-    date: new Date(),
-    type: 'danger',
-    text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`,
-    problem: 'tangie-nafas'
-  }
 
   render () {
 
@@ -57,9 +42,15 @@ export default class NotificationItem extends Component {
 }
 
 NotificationItem.propTypes = {
-
+  date: PropTypes.object,
+  type: PropTypes.string,
+  text: PropTypes.string,
+  problem: PropTypes.string,
 }
 
 NotificationItem.defaultProps = {
-
+  date: new Date(),
+  type: 'danger',
+  text: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`,
+  problem: 'tangie-nafas'
 }

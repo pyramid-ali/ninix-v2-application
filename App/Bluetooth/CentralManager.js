@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 class CentralManager {
 
+  device = null
   scannedDevices = []
 
   constructor () {
@@ -17,7 +18,7 @@ class CentralManager {
      return setInterval(
       () => {
         Object.keys(this.scannedDevices).forEach((item) => {
-          if (moment().diff(this.scannedDevices[item].time, 's') > 30) {
+          if (moment().diff(this.scannedDevices[item].time, 's') > this.period) {
             delete this.scannedDevices[item]
           }
         })
@@ -28,14 +29,21 @@ class CentralManager {
   scanForDevices (listener) {
 
     this.timerSubscription = this.timer()
-    this.manager.startDeviceScan([UUID.services.main.uuid], { allowDuplicates: true}, (error, device) => {
-      const oldScannedDevices = this.scannedDevices
-      this.scannedDevices = {...oldScannedDevices, [device.id]: {device, time: moment()}}
-      if (!_.isEqual(Object.keys(oldScannedDevices), Object.keys(this.scannedDevices))) {
-        listener(device)
+    this.manager.startDeviceScan(
+      [UUID.services.main.uuid],
+      { allowDuplicates: true },
+      (error, device) => {
+        const oldScannedDevices = this.scannedDevices
+        this.scannedDevices = {
+          ...oldScannedDevices,
+          [device.id]: {device, time: moment()}
+        }
+        // only if a new device scanned notify listener
+        if (!_.isEqual(Object.keys(oldScannedDevices), Object.keys(this.scannedDevices))) {
+          listener(device)
+        }
       }
-    })
-
+    )
   }
 
   stopScan () {
@@ -45,23 +53,27 @@ class CentralManager {
   }
 
   async connect (device) {
-    const connected = await device.connect({ autoConnect: true })
-    this.ninix = new Ninix(connected)
-    await this.ninix.discover()
+    this.device = device
+    this.device = await device.connect({ autoConnect: true })
     this.stopScan()
+    return this.device
+
+  }
+
+  async start () {
+    this.ninix = new Ninix(this.device)
+    await this.ninix.discover()
+    await this.ninix.bond()
     return this.ninix
   }
 
   async disconnect () {
-    const device = await this.ninix.disconnect()
-    if (device) {
-      return
-    }
-    throw new Error('Cannot disconnect from device')
+    this.device = await this.manager.cancelDeviceConnection(this.device.id)
+    this.ninix = null
   }
 
   onDisconnected (listener) {
-    return this.ninix.device.onDisconnected((error, device) => {
+    return this.device.onDisconnected((error, device) => {
       listener(error, device)
     })
   }

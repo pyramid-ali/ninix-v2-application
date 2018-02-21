@@ -8,14 +8,15 @@ import AuthAction from '../Redux/AuthRedux'
 import ParentAction from '../Redux/ParentRedux'
 import BabyAction from '../Redux/BabyRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
-import Ble from '../Services/Ble'
 import Router from '../Navigation/Router'
 import CentralManager from '../Bluetooth/CentralManager'
+import RealmStorage from '../Realm/Storage'
 
 export function *init (action) {
 
   const { app } = yield select()
 
+  // RealmStorage.get()
   // setup listeners for app state change and network connectivity
   yield fork(setupAppStatusListener, yield call(setupAppStatusListenerChannel))
   yield fork(setupNetStatusListener, yield call(setupNetStatusListenerChannel))

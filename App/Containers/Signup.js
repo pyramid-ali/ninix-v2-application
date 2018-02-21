@@ -64,7 +64,6 @@ class Signup extends Component {
     return (
       <MobileEntrance
         onPress = {() => {
-          console.tron.log('button pressed')
           requestToken(mobile, this.didMobileApproved.bind(this))
         }}
         onChangeValue = {(mobile) => this.setState({mobile})}
