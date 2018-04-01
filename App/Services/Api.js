@@ -3,7 +3,7 @@ import apisauce from 'apisauce'
 import Form from './Form'
 
 // TODO: user Config.API_URL
-const create = (baseURL = 'https://1926a1f7.ngrok.io/') => {
+const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
 
   /***
    * create new api
@@ -107,7 +107,7 @@ const create = (baseURL = 'https://1926a1f7.ngrok.io/') => {
    * @param data
    * @param token
    */
-  const sendData = (data: Object[], token: string) => api.post('api/data', date, authorizationHeader(token))
+  const sendData = (data: Object[], token: string) => api.post('api/data', data, authorizationHeader(token))
 
   const getLatestFirmwareVersion = (token: string) => api.get('api/firmware/version', {}, authorizationHeader(token))
 

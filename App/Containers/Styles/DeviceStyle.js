@@ -9,116 +9,83 @@ export default StyleSheet.create({
     flex: 1,
     marginTop: Metrics.navBarHeight,
     backgroundColor: Colors.white
-   },
+  },
   navBar: {
     backgroundColor: Colors.primary
   },
   rightBarButton: {
-    color: Colors.white
+    color: Colors.white,
+    borderBottomColor: Colors.white,
+    borderBottomWidth: 1,
+    paddingHorizontal: 15,
+    paddingBottom: 5
   },
-  deviceContainer: {
-    width: Metrics.screenWidth,
-    height: Metrics.screenHeight * 0.3,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  deviceShapeWrapper: {
+
+  batteryContainer: {
     flex: 1,
+    backgroundColor: Colors.primary
   },
-  deviceShapeContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  deviceShape: {
-    width: Metrics.screenWidth * 0.6,
-    height: Metrics.screenHeight * 0.15,
-    borderWidth: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: Colors.primary,
-    borderRadius: 5
-  },
-  redBorder: {
-    borderColor: Colors.alert,
-  },
-  deviceShapeHead: {
-    width: 30,
-    height: 30,
-    borderColor: Colors.primary,
-    borderRadius: 3,
-    borderWidth: 5,
-    marginLeft: -5
-  },
-  batteryCharge: {
-    fontSize: 40,
+
+
+  statusText: {
     textAlign: 'center'
   },
-  batteryChargeFooter: {
-    fontSize: 12,
-    textAlign: 'center'
-  },
-  logContainer: {
-    marginTop: 15,
-  },
-  firmwareDetails: {
 
-  },
-  firmwareText: {
-    textAlign: 'center',
-    color: Colors.gray
-  },
-  firmwareButton: {
-    textAlign: 'center',
-    color: Colors.primary
-  },
-
-  logHeader: {
-    textAlign: 'center',
-    fontSize: 20,
-    marginTop: 10,
-    paddingVertical: 10,
-    backgroundColor: Colors.dark,
-    color: Colors.white
-  },
-
-  logActivityIndicator: {
-    marginTop: 10
-  },
-
-  logHeaderContainer: {
+  statusContainer: {
     flex: 1,
     justifyContent: 'center'
   },
 
-  /*
-   * divider
-   */
+  connect: {
+    fontSize: 20,
+    color: Colors.white,
+    paddingBottom: 10,
+    borderBottomColor: Colors.white,
+    borderBottomWidth: 2
+  },
 
-  dividerContainer: {
+  firmwareText: {
+    textAlign: 'center',
+    color: Colors.white
+  },
+  firmwareButton: {
+    textAlign: 'center',
+    color: Colors.dark,
+    paddingVertical: 5
+  },
+
+  successText: {
+    color: Colors.secondary
+  },
+
+  animationWrapper: {
     flex: 1,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 3
+    paddingVertical: 20,
   },
-  dividerLine: {
-    width: 100,
-    height: 1,
-    backgroundColor: Colors.black
+  animationLottie: {
+    width: Metrics.screenWidth,
+    height: 50,
+    marginVertical: 20,
   },
-  dividerCenter: {
-    width: 10,
-    height: 10,
-    backgroundColor: Colors.transparent,
-    borderWidth: 1,
-    borderColor: Colors.black,
-    marginHorizontal: 1,
-    transform: [
-      {
-        rotate: '45deg'
-      }
-    ]
+  deviceName: {
+    textAlign: 'center',
+    fontSize: 30,
+    color: Colors.white
+  },
+  deviceInformation: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.primary
+  },
+  hardwareRevision: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: Colors.white
+  },
+  disconnectButton: {
+    width: Metrics.screenWidth * 0.5,
   }
 })

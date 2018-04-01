@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects'
+import { call, put, select } from 'redux-saga/effects'
 import { removeToken, setToken, jsonTokenToObject } from '../Services/TokenManager'
 import AuthAction from '../Redux/AuthRedux'
 
@@ -22,5 +22,9 @@ export function *revokeToken (action) {
     // TODO: error occurred for removing token
     console.tron.log(error, 'revokeToken error')
   }
+}
+
+export function *checkTokenWithServer (api, action) {
+
 }
 

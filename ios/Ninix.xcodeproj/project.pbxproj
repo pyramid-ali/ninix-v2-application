@@ -64,6 +64,10 @@
 		8DC9325ECD24464C9037A595 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C3D3615CAA0408EBF542C87 /* Octicons.ttf */; };
 		A60CC3DFD9F444D59C9F3709 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41062AD578F34488940A114C /* SimpleLineIcons.ttf */; };
 		F5F70002486846948C9FF177 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F552C1B2B3C7406C958D1CDF /* Zocial.ttf */; };
+		29A2B1C0EA6D4DADA09A9B43 /* libRNNordicDfu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E82CB4C3A5A4193AE933434 /* libRNNordicDfu.a */; };
+		4765125C68AC4AD78567E885 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C54461E79474CCEA25F1BFB /* libRNFetchBlob.a */; };
+		88AE5C07B41744CE8F20DC0C /* libRNNotifications.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D60D9C9B33B94635887A84A1 /* libRNNotifications.a */; };
+		BD258C124F3944E896EE3209 /* libLottieReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 782A9F6B0A83470E9C12DC23 /* libLottieReactNative.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -320,6 +324,14 @@
 		4C3D3615CAA0408EBF542C87 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		41062AD578F34488940A114C /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F552C1B2B3C7406C958D1CDF /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		220AE3A3348C4A6DB8D0B178 /* RNNordicDfu.xcodeproj */ = {isa = PBXFileReference; name = "RNNordicDfu.xcodeproj"; path = "../node_modules/react-native-nordic-dfu/ios/RNNordicDfu.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		9E82CB4C3A5A4193AE933434 /* libRNNordicDfu.a */ = {isa = PBXFileReference; name = "libRNNordicDfu.a"; path = "libRNNordicDfu.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		2912C94B6D684400B4692DF9 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		4C54461E79474CCEA25F1BFB /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		2D01880E628A49B6A848CBFB /* RNNotifications.xcodeproj */ = {isa = PBXFileReference; name = "RNNotifications.xcodeproj"; path = "../node_modules/react-native-notifications/RNNotifications/RNNotifications.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		D60D9C9B33B94635887A84A1 /* libRNNotifications.a */ = {isa = PBXFileReference; name = "libRNNotifications.a"; path = "libRNNotifications.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		2CD61988018B48959692811A /* LottieReactNative.xcodeproj */ = {isa = PBXFileReference; name = "LottieReactNative.xcodeproj"; path = "../node_modules/lottie-react-native/lib/ios/LottieReactNative.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		782A9F6B0A83470E9C12DC23 /* libLottieReactNative.a */ = {isa = PBXFileReference; name = "libLottieReactNative.a"; path = "libLottieReactNative.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -356,6 +368,10 @@
 				D0E7EBB279384DE2A31AC6F5 /* libRNSentry.a in Frameworks */,
 				7A4E9750CDD44E468BD02393 /* libRNDeviceInfo.a in Frameworks */,
 				E54A80BC29904A00BE40B0ED /* libRNVectorIcons.a in Frameworks */,
+				29A2B1C0EA6D4DADA09A9B43 /* libRNNordicDfu.a in Frameworks */,
+				4765125C68AC4AD78567E885 /* libRNFetchBlob.a in Frameworks */,
+				88AE5C07B41744CE8F20DC0C /* libRNNotifications.a in Frameworks */,
+				BD258C124F3944E896EE3209 /* libLottieReactNative.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +546,10 @@
 				D05FB032B16D4D7EA24D83C8 /* RNSentry.xcodeproj */,
 				FEB4E5584FB4409180AB2E50 /* RNDeviceInfo.xcodeproj */,
 				F3575187953A490A97D62AB4 /* RNVectorIcons.xcodeproj */,
+				220AE3A3348C4A6DB8D0B178 /* RNNordicDfu.xcodeproj */,
+				2912C94B6D684400B4692DF9 /* RNFetchBlob.xcodeproj */,
+				2D01880E628A49B6A848CBFB /* RNNotifications.xcodeproj */,
+				2CD61988018B48959692811A /* LottieReactNative.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -620,6 +640,22 @@
 			name = Resources;
 			sourceTree = "<group>";
 			path = "";
+		};
+		23C717B9730446F0BC830FFA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			path = Application;
+			sourceTree = "<group>";
+		};
+		C7D3164BA4334708BC1EF84B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			path = Application;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -1154,6 +1190,10 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1165,6 +1205,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1193,6 +1237,10 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1204,6 +1252,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
@@ -1233,6 +1285,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1261,6 +1317,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
@@ -1298,6 +1358,10 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1309,6 +1373,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1346,6 +1414,10 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1357,6 +1429,10 @@
 					"$(SRCROOT)\..\node_modules\react-native-sentry\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-device-info\RNDeviceInfo",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
+					"$(SRCROOT)\..\node_modules\react-native-nordic-dfu\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-notifications\RNNotifications",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
@@ -1389,6 +1465,10 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1413,6 +1493,10 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

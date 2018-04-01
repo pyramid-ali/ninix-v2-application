@@ -1,10 +1,7 @@
 import { put, call, select } from 'redux-saga/effects'
 import SignupAction from '../Redux/SignupRedux'
-import LoginModel from '../Models/loginModel'
 import Response from '../Services/Response'
-import AppAction from '../Redux/AppRedux'
-import AuthAction from '../Redux/AuthRedux'
-import { setToken } from '../Services/TokenManager'
+
 
 
 /***
@@ -37,27 +34,6 @@ export function *requestToken (api, action) {
  * @param action
  */
 export function *checkToken(api, action) {
-
-  const { signup } = yield select()
-  const { token, callback } = action
-  const { mobile } = signup
-  const activationCodeResponse = yield call(api.checkActivationCode, {mobile, token})
-
-  try {
-    const data = yield call(Response.resolve, activationCodeResponse)
-    const { result } = data
-    const { password } = result
-
-    // TODO: check login
-    const response = yield call(api.login, (new LoginModel(mobile, password)).fields())
-    const token = yield call(Response.resolve, response)
-    yield put(AuthAction.saveToken(token))
-    callback(password)
-
-  }
-  catch (error) {
-    yield put(SignupAction.failure(error.message))
-  }
 
 }
 

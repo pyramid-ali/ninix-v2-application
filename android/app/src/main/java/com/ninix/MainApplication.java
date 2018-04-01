@@ -3,6 +3,10 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.pilloxa.dfu.RNNordicDfuPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import io.sentry.RNSentryPackage;
@@ -32,6 +36,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LottiePackage(),
+            new RNFetchBlobPackage(),
+            new RNNordicDfuPackage(),
             new VectorIconsPackage(),
             new RNDeviceInfo(),
             new RNSentryPackage(MainApplication.this),
@@ -40,7 +47,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RealmReactPackage(),
             new BlePackage(),
             new LinearGradientPackage(),
-            new ReactNativeConfigPackage()
+            new ReactNativeConfigPackage(),
+            new RNNotificationsPackage(MainApplication.this)
       );
     }
   };

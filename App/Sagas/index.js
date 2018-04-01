@@ -63,8 +63,8 @@ const root = function * root () {
     takeLatest(BabyTypes.GET_INFORMATION, BabySagas.getBabyInformation, api),
 
     // Device Sagas
-    takeLatest(DeviceTypes.PULL_DEVICE_LOGS, DeviceSagas.pullDeviceLogs, api),
-    takeLatest(DeviceTypes.PUSH_DEVICE_LOGS, DeviceSagas.pushDeviceLogs, api),
+    // takeLatest(DeviceTypes.PULL_DEVICE_LOGS, DeviceSagas.pullDeviceLogs, api),
+    // takeLatest(DeviceTypes.PUSH_DEVICE_LOGS, DeviceSagas.pushDeviceLogs, api),
     // takeLatest(DeviceTypes.GET_LATEST_FIRMWARE_VERSION, DeviceSagas.getLatestFirmwareVersion, api),
 
     // Bluetooth Sagas
@@ -75,7 +75,13 @@ const root = function * root () {
     takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
     takeLatest(BluetoothTypes.START_SYNC, BluetoothSagas.startSync),
 
-    takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData)
+
+    // Data Sagas
+    takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),
+    takeLatest(DataTypes.SYNC_WITH_SERVER, DataSagas.syncWithServer, api),
+
+    // setup Network listener
+    takeLatest(AppTypes.DID_CONNECTIVITY_CHANGE, DataSagas.syncWithServer, api)
   ])
 }
 

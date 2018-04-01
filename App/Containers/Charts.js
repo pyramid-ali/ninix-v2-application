@@ -8,6 +8,9 @@ import moment from 'moment'
 
 // Styles
 import styles from './Styles/ChartsStyle'
+import SegmentedControl from '../Components/SegmentedControl';
+import NavigationBar from '../Components/NavigationBar';
+import CurvedChart from '../Components/CurvedChart';
 const COLOR_PURPLE = processColor('#697dfb')
 
 
@@ -26,210 +29,74 @@ class Charts extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      data: {}
-    }
-
-    this.xAxis = {
-      gridColor: processColor('red'),
-      gridLineWidth: 1,
-      axisLineColor: processColor('darkgray'),
-      axisLineWidth: 1.5,
-      gridDashedLine: {
-        lineLength: 10,
-        spaceLength: 10
-      },
-      avoidFirstLastClipping: true,
-      position: 'BOTTOM',
-
-      labelCount: 5,
-      enabled: true,
-      drawLabels: true,
-      drawAxisLine: false,
-      drawGridLines: false,
-
-      // style
-      textColor: processColor('blue'),
-      textSize: 10,
-    }
-    this.yAxis = {
-      left: {
-        enabled: true,
-        drawGridLines: false
-      },
-      right: {
-        enabled: false
-      }
-    }
-
-    this.chartProps = {
-
-      // background color for chart wrapper
-      drawGridBackground: false,
-      gridBackgroundColor: processColor('green'),
-
-      // border for chart wrapper
-      drawBorders: false,
-      borderColor: processColor('orange'),
-      borderWidth: 10,
-
-      minOffset: 10,
-      maxVisibleValueCount: 50,
-      autoScaleMinMaxEnabled: true,
-      keepPositionOnRotation: true,
-      noDataText: 'No Data Available'
+      chart: 'temperature'
     }
   }
 
   componentDidMount () {}
 
   render() {
-
-    // const { vitalSigns } = this.props
-    //
-    // let resp, temp
-    //
-    // if (vitalSigns.length > 0) {
-    //   resp = {
-    //     dataSets: [{
-    //       values: vitalSigns.map((vitalSign) => ({y: vitalSign.respiratory})),
-    //       label: '',
-    //       config: {
-    //         lineWidth: 1.5,
-    //         drawCubic: true,
-    //         drawHighlightIndicators: false,
-    //         color: COLOR_PURPLE,
-    //         drawFilled: true,
-    //         fillColor: COLOR_PURPLE,
-    //         fillAlpha: 90,
-    //
-    //         // circle config
-    //         circleRadius: 10,
-    //         drawCircles: false,
-    //         drawCubicIntensity: 5,
-    //         circleColor: processColor('green'),
-    //         circleColors: [processColor('black'), processColor('red'), processColor('orange')],
-    //         circleHoleColor: processColor('black'),
-    //         drawCircleHole: true,
-    //
-    //         drawVerticalHighlightIndicator: false,
-    //         drawHorizontalHighlightIndicator: false,
-    //         highlightLineWidth: 20,
-    //
-    //         // common
-    //         highlightEnabled: true,
-    //         drawValues: false,
-    //         valueTextSize: 5,
-    //         valueTextColor: processColor('green'),
-    //         visible: true,
-    //         valueFormatter: "###.0 bpm",
-    //
-    //       }
-    //     }],
-    //   }
-    //
-    //   temp = {
-    //     dataSets: [{
-    //       values: vitalSigns.map((vitalSign) => ({y: vitalSign.temperature})),
-    //       label: '',
-    //       config: {
-    //         lineWidth: 1.5,
-    //         drawCubic: true,
-    //         drawHighlightIndicators: false,
-    //         color: COLOR_PURPLE,
-    //         drawFilled: true,
-    //         fillColor: COLOR_PURPLE,
-    //         fillAlpha: 90,
-    //
-    //         // circle config
-    //         circleRadius: 10,
-    //         drawCircles: false,
-    //         drawCubicIntensity: 5,
-    //         circleColor: processColor('green'),
-    //         circleColors: [processColor('black'), processColor('red'), processColor('orange')],
-    //         circleHoleColor: processColor('black'),
-    //         drawCircleHole: true,
-    //
-    //         drawVerticalHighlightIndicator: false,
-    //         drawHorizontalHighlightIndicator: false,
-    //         highlightLineWidth: 20,
-    //
-    //         // common
-    //         highlightEnabled: true,
-    //         drawValues: false,
-    //         valueTextSize: 5,
-    //         valueTextColor: processColor('green'),
-    //         visible: true,
-    //         valueFormatter: "###.0 C",
-    //
-    //       }
-    //     }],
-    //   }
-    // }
-    //
-    // const xAxis = {
-    //   gridColor: processColor('red'),
-    //   gridLineWidth: 1,
-    //   axisLineColor: processColor('darkgray'),
-    //   avoidFirstLastClipping: true,
-    //   position: 'BOTTOM',
-    //
-    //   labelCount: 2,
-    //   labelCountForce: true,
-    //   enabled: true,
-    //   drawLabels: true,
-    //   drawAxisLine: false,
-    //   drawGridLines: false,
-    //
-    //   // style
-    //   textColor: processColor('blue'),
-    //   textSize: 10,
-    //   valueFormatter: this.props.vitalSigns.map(vitalSign => moment(vitalSign.registerAt).fromNow())
-    // }
-    //
-    // return (
-    //
-    //   <View style={styles.wrapper}>
-    //
-    //     <View style={styles.container}>
-    //       <Text style={styles.chartHeader}>Temperature (°C) - Real Time</Text>
-    //       <LineChart
-    //         {...this.chartProps}
-    //         style={styles.chart}
-    //         data={temp}
-    //         chartDescription={{text: 'Temperature'}}
-    //         xAxis={xAxis}
-    //         yAxis={this.yAxis}
-    //         legend={{enabled: false}}
-    //       />
-    //     </View>
-    //
-    //     <View style={styles.container}>
-    //       <Text style={styles.chartHeader}>Respiratory (BPS) - Real Time</Text>
-    //       <LineChart
-    //         {...this.chartProps}
-    //         style={styles.chart}
-    //         data={resp}
-    //         chartDescription={{text: 'Respiratory'}}
-    //         xAxis={xAxis}
-    //         yAxis={this.yAxis}
-    //         legend={{enabled: false}}
-    //       />
-    //     </View>
-    //
-    //   </View>
-    // );
+    const { stream } = this.props
 
     return (
-      <View></View>
+      <View style={{flex: 1}}>
+        <NavigationBar
+          style={styles.navBar}
+          textStyle={styles.title}
+        >
+          Analysis
+        </NavigationBar>
+        <View style={styles.container}>
+          {/*<SegmentedControl*/}
+            {/*active={3}*/}
+            {/*style={styles.segment}*/}
+            {/*items={['month', 'week', 'day', 'now']}*/}
+            {/*onChange={this.onChangeTime}*/}
+          {/*/>*/}
+          <View style={styles.chartWrapper}>
+            <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
+            <CurvedChart data={collapse(stream.map((item) => item[this.state.chart]))}/>
+          </View>
+          <SegmentedControl
+            style={styles.segment}
+            items={['temperature', 'respiratory']}
+            onChange={this.onChangeChart.bind(this)}
+          />
+        </View>
+      </View>
     )
   }
 
+  onChangeTime (item, index) {
+
+  }
+
+  onChangeChart (item, index) {
+    console.tron.log({log: 'change chart', item})
+    this.setState({
+      chart: item
+    })
+  }
+
+}
+
+function collapse (data) {
+  const result = []
+  const length = data.length
+  let period = length / 10 || 1
+  for (let i = 0; i < length; i += period) {
+    const sub = data.slice(i, i + period)
+    const average = sub.reduce((acc, current) => acc + current, 0) / sub.length
+    result.push(average)
+  }
+
+  return result
 }
 
 const mapStateToProps = (state) => {
   const { data } = state
   return {
-    vitalSigns: data.vitalSigns
+    stream: data.stream
   }
 }
 

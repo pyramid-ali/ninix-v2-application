@@ -1,17 +1,16 @@
-class VitalSign {
+class TempVitalSign {
 
 }
 
-VitalSign.schema = {
-  name: 'VitalSign',
+TempVitalSign.schema = {
+  name: 'TempVitalSign',
   properties: {
     temperature: 'float',
     respiratory: 'int',
     orientation: 'int',
     humidity   : 'int',
-    repeat     : {type: 'int' , default: 0},
     registerAt : 'int'
   }
 }
 
-export default VitalSign
+export default TempVitalSign

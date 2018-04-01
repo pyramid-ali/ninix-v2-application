@@ -7,7 +7,8 @@ function stream (data) {
   const orientation = getOrientation(data[1])
   const battery = getBattery(data[2], data[3], data[11])
   const respiratory = getRespiratory(data.slice(4, 8))
-  const stored = unreadData(data[8], data[9])
+  const flashStore = haveFlashStore(data[8])
+  const ramStore = haveFlashStore(data[9])
   const fullCharged = isFullCharge(data[10])
   const charging = isCharging(data[11])
   const lowBattery = isOnLowBattery(data[12])
@@ -19,7 +20,8 @@ function stream (data) {
     orientation,
     battery,
     respiratory,
-    stored,
+    flashStore,
+    ramStore,
     fullCharged,
     charging,
     lowBattery,
@@ -28,10 +30,11 @@ function stream (data) {
 
 }
 
-function sync (data) {
+function sync (data, diffTime) {
+  // TODO: we should hold size and period in different place for global access
   const size = 4
   const period = 5
-  const unix = toSignInteger(data.slice(16, 20))
+  const unix = toSignInteger(data.slice(16, 20)) + diffTime
   let result = []
   for (let i = 0; i < size; i++) {
     const respiratory = data[i]
@@ -50,10 +53,11 @@ function sync (data) {
   }
 
   // we used reverse to sort array in ascending order of registerAt
-  return mapSyncToStream(result.reverse())
-
+  // return mapSyncToStream(result.reverse())
+  return result
 }
 
+// TODO: convert 5 second data to 1 second interval maybe perform at server
 function mapSyncToStream (data) {
 
   const result = []
@@ -69,11 +73,11 @@ function mapSyncToStream (data) {
 
     for (let j = 0; j < 5; j++) {
       result.push({
-        temperature: round(current.temperature + (tempDiff * i)),
-        respiratory: round(current.respiratory + (respDiff * i)),
-        orientation: round(current.orientation + (orientationDiff * i)),
-        humidity: round(current.humidity + (humidityDiff * i)),
-        registerAt: current.registerAt + i
+        temperature: round(current.temperature + (tempDiff * j)),
+        respiratory: round(current.respiratory + (respDiff * j)),
+        orientation: round(current.orientation + (orientationDiff * j)),
+        humidity: round(current.humidity + (humidityDiff * j)),
+        registerAt: current.registerAt + j
       })
     }
 
@@ -166,7 +170,15 @@ function getRespiratory (respiratoryBytes) {
 }
 
 function unreadData (lowByte, highByte) {
-  return highByte * 256 + lowByte
+  return (highByte * 256) + lowByte
+}
+
+function haveFlashStore(decimal) {
+  return castToBoolean(decimal)
+}
+
+function haveRamStore(decimal) {
+  return castToBoolean(decimal)
 }
 
 function isFullCharge (decimal) {

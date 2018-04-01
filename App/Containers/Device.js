@@ -1,17 +1,19 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text, View, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import {Text, View} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import LottieView from 'lottie-react-native'
 
 // Dependencies
-import DeviceAction from '../Redux/DeviceRedux'
-import DeviceLogItem from '../Components/DeviceLogItem'
 import NavigationBar from '../Components/NavigationBar'
-import Realm from '../Realm/Storage'
+import BluetoothAction from '../Redux/BluetoothRedux'
 
 // Styles
 import styles from './Styles/DeviceStyle'
+import Button from '../Components/Button';
+import Colors from '../Themes/Colors';
+import Battery from '../Components/Battery';
 
 class Device extends Component {
   static navigationOptions = {
@@ -25,22 +27,19 @@ class Device extends Component {
     ),
   }
 
-  _keyExtractor = (item, index) => index;
-
   constructor (props) {
     super(props)
-    this.state = {}
   }
 
-  componentDidMount () {
-    this.props.pullDeviceLogs()
-    Realm.get()
+  componentDidUpdate () {
+    if (this.props.bluetooth.isConnected && !this.play) {
+      this.lottie.play()
+      this.play = true
+    }
   }
 
   render () {
-    const { bluetooth, data, device } = this.props
-    const { logs, localFirmwareVersion, fetching } = device
-    const { isConnected } = bluetooth
+    const { data } = this.props
     const { stream } = data
     const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
@@ -50,54 +49,42 @@ class Device extends Component {
           rightButton={this.renderRightBarButton()}
           onPressRightButton={this.pressRightBarButton.bind(this)}
           style={styles.navBar}>
-          Device
-        </NavigationBar>
-        <ScrollView style={styles.container}>
-          <View style={styles.deviceContainer}>
-            <TouchableOpacity style={styles.deviceShapeWrapper} onPress={() => this.props.navigation.navigate('ShowNinixData')}>
-              <View style={styles.deviceShapeContainer}>
-                <View style={[styles.deviceShape, lowBattery ? styles.redBorder : null]}>
-                  <Text style={styles.batteryCharge}> { battery ? battery + '%' : 'Unknown'}</Text>
-                  <Text style={styles.batteryChargeFooter}>{ isConnected ? 'Battery Charge' : 'No Device Connected'}</Text>
-                </View>
-                <View style={[styles.deviceShapeHead, lowBattery ? styles.redBorder : null]}/>
-              </View>
-            </TouchableOpacity>
 
-            <View style={styles.firmwareDetails}>
-              <Text style={styles.firmwareText}>Firmware Version <Text>{ localFirmwareVersion || 'N/A' }</Text></Text>
-              <Text style={styles.firmwareButton}>Check for updates</Text>
-            </View>
-          </View>
-          <View style={styles.logHeaderContainer}>
-            <Text style={styles.logHeader}>Connection History</Text>
-            <ActivityIndicator style={styles.logActivityIndicator} size="small" color="#000" animating={fetching} />
-          </View>
-          <View style={styles.logContainer}>
-            <FlatList
-              data={logs}
-              keyExtractor={this._keyExtractor}
-              renderItem={(row) => this.renderItem(row)}
-              ItemSeparatorComponent={this.renderDivider}
+        </NavigationBar>
+        <View style={styles.container}>
+
+          <View style={styles.batteryContainer}>
+            <Battery
+              battery={battery}
+              fullCharge={fullCharge}
+              charging={charging}
+              lowBattery={lowBattery}
+              onPress={() => {
+                this.props.navigation.navigate('ShowNinixData')
+              }}
             />
           </View>
-        </ScrollView>
+
+
+
+          <View style={styles.statusContainer}>
+            { this.renderOnlineStatus() }
+          </View>
+
+          <View style={styles.deviceInformation}>
+            { this.renderDeviceInformationBox() }
+          </View>
+
+        </View>
       </View>
 
-    )
-  }
-
-  renderItem (row) {
-    const { item } = row
-    return (
-      <DeviceLogItem status={item.status} date={item.created_at} />
     )
   }
 
   renderRightBarButton () {
     return (
       <Text style={styles.rightBarButton}>
-        ADD <Icon name="plus" size={14} color="white"/>
+        <Icon name="search" size={14} color="white"/> Search
       </Text>
     )
   }
@@ -107,15 +94,80 @@ class Device extends Component {
     navigation.navigate('AddDevice')
   }
 
-  renderDivider () {
+  renderDeviceInformationBox () {
+
+    const { device, bluetooth, navigation } = this.props
+
+    if (bluetooth.isConnected) {
+      return (
+        <View>
+          <Text style={styles.deviceName}>{ device.name || 'getting name' }</Text>
+          <Text style={styles.hardwareRevision}>Rev { device.revision }</Text>
+          <Text style={styles.firmwareText}>Firmware Version <Text>{ device.firmware || 'N/A' }</Text></Text>
+          <Text style={styles.firmwareButton}>UP TO DATE</Text>
+        </View>
+      )
+    }
+
+    if (device.device) {
+      return (
+        <View>
+          <Text >You're last connected to { device.device.name } </Text>
+          <Button
+            color={Colors.primary}
+            containerStyle={styles.disconnectButton}
+            onPress={() => this.props.connect(device.device)}
+          >
+            <Text><Icon name="superpowers" size={20} color={Colors.primary} /> Connect</Text>
+          </Button>
+        </View>
+
+      )
+    }
+
     return (
-      <View style={styles.dividerContainer}>
-        <View style={styles.dividerLine} />
-        <View style={styles.dividerCenter} />
-        <View style={styles.dividerLine} />
+      <Button
+        color={Colors.primary}
+        containerStyle={styles.disconnectButton}
+        onPress={() => {
+          navigation.navigate('AddDevice')
+        }}
+      >
+        <Text><Icon name="plus" size={20} color={Colors.primary} /> add a Device</Text>
+      </Button>
+    )
+  }
+
+  renderOnlineStatus() {
+    if (this.props.bluetooth.isConnected) {
+      return (
+        <View style={styles.animationWrapper}>
+          <Text style={styles.successText}>Online - Connected</Text>
+          <LottieView
+            style={styles.animationLottie}
+            loop
+            source={require('../../assets/lotties/scanning_animation.json')}
+            ref={lottie => this.lottie = lottie}
+          />
+          <Button
+            containerStyle={styles.disconnectButton}
+            color={Colors.white}
+            backgroundColor={Colors.alert}
+            onPress={() => this.props.disconnect()}
+          >
+            Disconnect
+          </Button>
+        </View>
+      )
+    }
+
+    return (
+      <View>
+        <Text style={styles.statusText}>No Device Connected</Text>
       </View>
     )
   }
+
 }
 
 const mapStateToProps = (state) => {
@@ -127,7 +179,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    pullDeviceLogs: () => dispatch(DeviceAction.pullDeviceLogs())
+    disconnect: () => dispatch(BluetoothAction.disconnect()),
+    connect: (device) => dispatch(BluetoothAction.connect(device))
   }
 }
 

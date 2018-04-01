@@ -1,6 +1,7 @@
-import { NetInfo, AppState } from 'react-native'
+import { NetInfo, AppState, BackHandler } from 'react-native'
 import { put, call, select, take, fork } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
+import { NavigationActions } from 'react-navigation'
 
 import { getToken, isTokenValid } from '../Services/TokenManager'
 import AppAction from '../Redux/AppRedux'
@@ -8,9 +9,9 @@ import AuthAction from '../Redux/AuthRedux'
 import ParentAction from '../Redux/ParentRedux'
 import BabyAction from '../Redux/BabyRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
+import DataAction from '../Redux/DataRedux'
 import Router from '../Navigation/Router'
 import CentralManager from '../Bluetooth/CentralManager'
-import RealmStorage from '../Realm/Storage'
 
 export function *init (action) {
 
@@ -21,6 +22,7 @@ export function *init (action) {
   yield fork(setupAppStatusListener, yield call(setupAppStatusListenerChannel))
   yield fork(setupNetStatusListener, yield call(setupNetStatusListenerChannel))
   yield fork(setupBluetoothStatusListener, yield call(setupBluetoothStatusListenerChannel))
+  // yield fork(setupBackHandlerListener, yield call(setupBackHandlerListenerChannel))
 
   try {
 
@@ -103,9 +105,12 @@ export function setupAppStatusListenerChannel () {
 export function *setupNetStatusListener (channel) {
   try {
     while (true) {
+      const { auth } = yield select()
       const isConnected = yield take(channel)
-
       yield put(AppAction.didConnectivityChange(isConnected))
+      if (isConnected && auth.accessToken) {
+        yield sync()
+      }
     }
   }
   finally {}
@@ -145,12 +150,42 @@ export function setupBluetoothStatusListenerChannel () {
   })
 }
 
-export function *sync (action) {
+export function *setupBackHandlerListener (channel) {
+  try {
+    while (true) {
+      const { nav } = yield select()
+      const activeRoute = nav.routes[nav.index]
+      if (activeRoute.index === 0) {
+        return false
+      }
+      yield put(NavigationActions.back())
+      return true
+    }
+  }
+  finally {}
+}
+
+export function setupBackHandlerListenerChannel () {
+  return eventChannel(emit => {
+    const listener = () => {
+      const r = emit()
+      console.tron.log({r})
+      return true
+    }
+    BackHandler.addEventListener('hardwareBackPress', listener)
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', listener)
+    }
+  })
+}
+
+export function *sync () {
   // 1. get user information
   // 2. get mother and father user information
   yield put(ParentAction.getFatherInformation())
   yield put(ParentAction.getMotherInformation())
   yield put(BabyAction.getInformation())
+  yield put(DataAction.syncWithServer())
   // 3. check for parent picture sync
   // 4. check data received from device is sync or not
 

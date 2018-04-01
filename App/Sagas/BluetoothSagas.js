@@ -1,18 +1,40 @@
-import { eventChannel } from 'redux-saga'
-import { put, call, take, fork } from 'redux-saga/effects'
+// Libraries
+import { put, call, fork, select } from 'redux-saga/effects'
+
+// Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
 import CentralManager from '../Bluetooth/CentralManager'
-import DataAction from '../Redux/DataRedux'
+import DeviceAction from '../Redux/DeviceRedux'
+
+// Listeners
+import {
+  setupScanListener,
+  setupScanListenerChannel,
+  setupNinixStreamListener,
+  setupNinixStreamListenerChannel,
+  setupNinixSyncListener,
+  setupNinixSyncListenerChannel,
+  setupBluetoothConnectionListener,
+  setupBluetoothConnectionListenerChannel
+} from './Channels/BluetoothChannel'
 
 export function *connect(action) {
   // TODO: we should save logs in backend server
   const { device } = action
   try {
-
+    // connect to device
     const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
-    yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel))
+
     yield put(BluetoothAction.didConnect(connectedDevice))
+    yield put(DeviceAction.setDevice(connectedDevice))
+
+    // setup connection listener
+    yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
+
     yield call(CentralManager.start.bind(CentralManager))
+
+    yield getDeviceInformation()
+
     yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
 
   }
@@ -24,7 +46,7 @@ export function *connect(action) {
 
 }
 
-export function *cancelConnection () {
+export function *cancelConnection() {
   yield CentralManager.disconnect()
   yield put(BluetoothAction.didDisconnect())
   // TODO: Cancel Bluetooth Connection
@@ -51,103 +73,36 @@ export function *stopScan() {
   CentralManager.stopScan()
 }
 
-export function *startSync () {
-  const ninix = CentralManager.ninix
+export function *startSync() {
   console.tron.log({log: 'start sync'})
-  const characteristic = yield call(ninix.sendSyncCommand.bind(ninix))
-  console.tron.log({log: 'start sync char', characteristic})
+  let characteristic
+  const { data } = yield select()
+  const last = data.stream[data.stream.length - 1]
+  const ninix = CentralManager.ninix
+
+  if (last.flashStore) {
+    characteristic = yield call(ninix.flashSyncCommand.bind(ninix))
+    console.tron.log({log: 'flashStore sync', characteristic})
+  }
+  else if (last.ramStore) {
+    characteristic = yield call(ninix.ramSyncCommand.bind(ninix))
+    console.tron.log({log: 'ramStore sync', characteristic})
+  }
+  else {
+    return
+  }
+
   if (characteristic) {
     yield put(BluetoothAction.didSyncBegin())
   }
+
   yield fork(setupNinixSyncListener, yield call(setupNinixSyncListenerChannel, ninix))
 }
 
-export function *setupScanListener (channel) {
-  try {
-    while (true) {
-      const device = yield take(channel)
-      yield put(BluetoothAction.didDiscover(CentralManager.scannedDevices))
-    }
-  }
-  finally {}
-}
+export function *getDeviceInformation() {
 
-export function setupScanListenerChannel () {
-  return eventChannel(emit => {
-    const listener = state => {
-      emit(state)
-    }
-    CentralManager.scanForDevices(listener)
-    return () => {
-      CentralManager.stopScan()
-    }
-  })
-}
+  yield put(DeviceAction.setName(yield call(CentralManager.ninix.getName.bind(CentralManager.ninix))))
+  yield put(DeviceAction.setFirmware(yield call(CentralManager.ninix.getFirmware.bind(CentralManager.ninix))))
+  yield put(DeviceAction.setRevision(yield call(CentralManager.ninix.getHardwareRevision.bind(CentralManager.ninix))))
 
-export function *setupNinixStreamListener (channel) {
-  try {
-    while (true) {
-      const result = yield take(channel)
-      yield put(DataAction.didReceiveData(result))
-
-    }
-  }
-  finally {}
-}
-
-export function setupNinixStreamListenerChannel (ninix) {
-  return eventChannel(emit => {
-    const listener = result => {
-      emit(result)
-    }
-    const subscription = ninix.stream(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
-export function *setupNinixSyncListener (channel) {
-  try {
-    while (true) {
-      const result = yield take(channel)
-      yield put(DataAction.didReceiveSync(result))
-    }
-  }
-  finally {}
-}
-
-export function setupNinixSyncListenerChannel (ninix) {
-  return eventChannel(emit => {
-    const listener = result => {
-      emit(result)
-    }
-    const subscription = ninix.sync(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
-export function *setupBluetoothConnectionListener (channel) {
-  try {
-    while (true) {
-      const { error, device } = yield take(channel)
-      yield put(BluetoothAction.didFail(error ? error.message : null))
-      yield put(BluetoothAction.didDisconnect())
-    }
-  }
-  finally {}
-}
-
-export function setupBluetoothConnectionListenerChannel () {
-  return eventChannel(emit => {
-    const listener = (error, device) => {
-      emit({error, device})
-    }
-    const subscription = CentralManager.onDisconnected(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
 }

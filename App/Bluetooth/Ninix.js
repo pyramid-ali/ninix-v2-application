@@ -2,6 +2,11 @@ import UUID from './UUID'
 import DataHandler from './DataHandler'
 import { Base64 } from 'js-base64'
 import Commands from './Commands'
+import CentralManager from './CentralManager'
+import moment from 'moment'
+import _ from 'lodash'
+
+let syncData = []
 
 export default class Ninix {
 
@@ -10,14 +15,14 @@ export default class Ninix {
   }
 
   async discover () {
-    try {
-      this.device = await this.device.discoverAllServicesAndCharacteristics()
-      await this.getServices()
-      await this.getCharacteristics()
-    }
-    catch (error) {
-      throw new Error(error.message)
-    }
+    this.device = await this.device.discoverAllServicesAndCharacteristics()
+    this.services = await this.getServices()
+    await this.getCharacteristics()
+  }
+
+  async getTimestamp () {
+    const result = await this.sendTimestamp()
+    this.differenceTime = this.getDifferenceTimestamp(result)
   }
 
   async disconnect () {
@@ -26,7 +31,7 @@ export default class Ninix {
 
   async getServices () {
     const services = await this.device.services()
-    this.services = services.reduce((services, service) => {
+    return services.reduce((services, service) => {
       return {...services, [service.id]: {service}}
     })
   }
@@ -47,19 +52,47 @@ export default class Ninix {
       switch (characteristic.uuid) {
         case UUID.services.main.chars.stream:
           this.streamCharacteristic = characteristic
-          break;
+          break
         case UUID.services.main.chars.command:
           this.commandCharacteristic = characteristic
-            break;
+          break
         case UUID.services.main.chars.synchronize:
           this.syncCharacteristic = characteristic
-          break;
+          break
+        case UUID.services.deviceInformation.chars.name:
+          this.deviceNameCharacteristic = characteristic
+          break
+        case UUID.services.deviceInformation.chars.serial:
+          this.deviceSerialCharacteristic = characteristic
+          break
+        case UUID.services.deviceInformation.chars.revision:
+          this.deviceHardwareRevisionCharacteristic = characteristic
+          break
+        case UUID.services.deviceInformation.chars.firmware:
+          this.deviceFirmawareCharacteristic = characteristic
+          break
       }
     })
   }
 
   async bond () {
     return await this.commandCharacteristic.read()
+  }
+
+  async getName () {
+    return await this.deviceNameCharacteristic.read().then(parseCharValue)
+  }
+
+  async getSerial () {
+    return await this.deviceSerialCharacteristic.read().then(parseCharValue)
+  }
+
+  async getHardwareRevision () {
+    return await this.deviceHardwareRevisionCharacteristic.read().then(parseCharValue)
+  }
+
+  async getFirmware () {
+    return await this.deviceFirmawareCharacteristic.read().then(parseCharValue)
   }
 
   stream (listener) {
@@ -73,37 +106,82 @@ export default class Ninix {
   }
 
   sync (listener) {
+    // TODO: set timeout for error handling
+    const endChar = Array.apply(null, {length: 20}).map(Function.call, Number)
     return this.syncCharacteristic.monitor((error, char) => {
       if (char) {
         const bytes = this.getCharacteristicBytes(char)
-        const result = DataHandler.sync(bytes)
-        listener(result)
+        if (_.isEqual(bytes, endChar)) {
+          console.tron.log({log: 'sync end', bytes, length: syncData.length})
+          listener(syncData)
+          syncData = []
+          CentralManager.cancelTransaction('sync')
+          return
+        }
+
+        const result = DataHandler.sync(bytes, this.differenceTime)
+        syncData = [...syncData, ...result]
       }
-    })
+    }, 'sync')
   }
 
   getCharacteristicBytes (char) {
-    let str = Base64.decode(char.value)
-    let bytes = []
-    for (let i = 0; i < str.length; ++i) {
-      const code = str.charCodeAt(i)
-      bytes = bytes.concat([code])
+
+    let arr = []
+    const buf = Buffer.from(char.value, 'base64')
+    for (let i = 0; i < buf.length; i++) {
+      arr.push(buf[i])
     }
-    return bytes
+    return arr
   }
 
-  async sendSyncCommand () {
-    await this.sendCommand(Commands.startSync)
+  async flashSyncCommand () {
+    return await this.sendCommand(Commands.flashSync)
+  }
+
+  async ramSyncCommand () {
+    return await this.sendCommand(Commands.ramSync)
   }
 
   async sendAlarmCommand () {
-    await this.sendCommand(Commands.alarm)
+    return await this.sendCommand(Commands.alarm)
+  }
+
+  async sendUpdateFirmwareCommand () {
+    return await this.sendCommand(Commands.updateFirmware)
   }
 
   async sendCommand (command) {
     const value = String.fromCharCode(command)
     const data = Base64.encode(value)
     return await this.commandCharacteristic.writeWithResponse(data)
+  }
+
+  async sendTimestamp () {
+
+    const timestamp = moment().unix()
+    const buffer = Buffer.alloc(5, 0)
+    buffer.writeUInt32LE(timestamp, 1)
+    const data = buffer.toString('Base64')
+
+    return await this.commandCharacteristic.writeWithResponse(data)
+  }
+
+  getDifferenceTimestamp (characteristic) {
+    let arr = []
+    const buf = Buffer.from(characteristic.value, 'base64')
+    for (let i = 1; i < buf.length; i++) {
+      arr.push(buf[i])
+    }
+
+    arr = arr.reverse()
+    let value = 0
+    for (let i = 0; i < 4; i++) {
+      const shift = (3 - i) * 8
+      value += arr[i] << shift
+    }
+
+    return value
   }
 
 }
@@ -114,3 +192,6 @@ async function asyncForEach(array, callback) {
   }
 }
 
+function parseCharValue (char) {
+  return Base64.decode(char.value)
+}

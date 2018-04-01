@@ -1,6 +1,7 @@
 import ErrorMessage from '../Transform/ErrorMessage'
 
 const resolve = (response) => {
+  console.tron.log({log: 'response from api', response})
   return new Promise((resolve, reject) => {
     if (response.ok) {
       resolve(response.data)

@@ -3,11 +3,14 @@ import UUID from './UUID'
 import moment from 'moment'
 import Ninix from './Ninix'
 import _ from 'lodash'
+import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu"
 
 class CentralManager {
 
   device = null
-  scannedDevices = []
+  scannedDevices = {}
+  readyForUpdate = false
+  dfuStart = false
 
   constructor () {
     this.manager = new BleManager()
@@ -18,8 +21,10 @@ class CentralManager {
      return setInterval(
       () => {
         Object.keys(this.scannedDevices).forEach((item) => {
+          console.tron.log({log: 'timer', diff: moment().diff(this.scannedDevices[item].time, 's')})
           if (moment().diff(this.scannedDevices[item].time, 's') > this.period) {
-            delete this.scannedDevices[item]
+            this.scannedDevices = _.omit(this.scannedDevices, item)
+            // TODO: we should notify user if a device lost
           }
         })
       }, this.period * 1000
@@ -48,22 +53,21 @@ class CentralManager {
 
   stopScan () {
     this.manager.stopDeviceScan()
-    this.scannedDevices = []
+    this.scannedDevices = {}
     clearInterval(this.timerSubscription)
   }
 
   async connect (device) {
-    this.device = device
     this.device = await device.connect({ autoConnect: true })
     this.stopScan()
     return this.device
-
   }
 
   async start () {
     this.ninix = new Ninix(this.device)
     await this.ninix.discover()
     await this.ninix.bond()
+    await this.ninix.getTimestamp()
     return this.ninix
   }
 
@@ -74,12 +78,67 @@ class CentralManager {
 
   onDisconnected (listener) {
     return this.device.onDisconnected((error, device) => {
+      if (this.readyForUpdate) {
+        this.updateFirmware()
+      }
       listener(error, device)
     })
   }
 
   addStateListener (listener, emitCurrentState = true) {
     return this.manager.onStateChange(listener, emitCurrentState)
+  }
+
+  startUpdate (path) {
+    this.readyForUpdate = true
+    this.path = path
+
+    console.tron.log({log: 'set ready for update', readyForUpdate: this.readyForUpdate})
+    this.ninix.sendUpdateFirmwareCommand().then(
+      (char) => console.tron.log({log: 'command send', char})
+    )
+  }
+
+  updateFirmware () {
+    console.tron.log({log: 'start update firmware', device: this.device})
+
+    DFUEmitter.addListener("DFUProgress", ({ percent }) => {
+      console.tron.log({log: "DFU progress:", percent})
+    })
+    DFUEmitter.addListener("DFUStateChanged", ({ state }) => {
+      console.tron.log({log: "DFU state:", state})
+    })
+
+    console.tron.log({log: 'scan for new devices'})
+
+    this.manager.startDeviceScan(
+      null,
+      { allowDuplicates: true },
+      (error, device) => {
+        console.tron.log({log: 'device found', device})
+        if (device.id === 'D8:9E:69:13:2A:04' && !this.dfuStart) {
+          this.dfuStart = true
+          console.tron.log({log: 'finally we find true device', device})
+
+          this.manager.stopDeviceScan()
+          console.tron.log({log: 'scan stopped', device})
+          NordicDFU.startDFU({
+            deviceAddress: 'D8:9E:69:13:2A:04',
+            filePath: this.path
+          })
+            .then(res => console.tron.log({log: "Transfer done:", res}))
+            .catch(error => console.tron.log({log: 'transfer fail', error, message: error.message}))
+            .finally(() => {
+              this.readyForUpdate = false
+            })
+        }
+      }
+    )
+
+  }
+
+  cancelTransaction (id) {
+    this.manager.cancelTransaction(id)
   }
 
 }

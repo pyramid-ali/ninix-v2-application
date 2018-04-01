@@ -12,10 +12,10 @@ const { Types, Creators } = createActions({
   receiveData: ['data', 'time'],
   removeData: null
 }, {
-  prefix: 'DATA_'
+  prefix: 'notification/'
 })
 
-export const DataTypes = Types
+export const NotificationTypes = Types
 
 export const receiveData = (state = INITIAL_STATE, action) => {
   const { data, time } = action
