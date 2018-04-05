@@ -6,12 +6,12 @@ import CentralManager from './CentralManager'
 import moment from 'moment'
 import _ from 'lodash'
 
-let syncData = []
-
 export default class Ninix {
 
   constructor (device) {
+    // TODO: we can save device in async storage for later uses, but should we do this in ble package?
     this.device = device
+    this.syncData = []
   }
 
   async discover () {
@@ -107,20 +107,20 @@ export default class Ninix {
 
   sync (listener) {
     // TODO: set timeout for error handling
+    // TODO: maybe we can split received data into 5 section for simulating one data per second
     const endChar = Array.apply(null, {length: 20}).map(Function.call, Number)
     return this.syncCharacteristic.monitor((error, char) => {
       if (char) {
         const bytes = this.getCharacteristicBytes(char)
         if (_.isEqual(bytes, endChar)) {
-          console.tron.log({log: 'sync end', bytes, length: syncData.length})
-          listener(syncData)
-          syncData = []
+          listener(this.syncData)
           CentralManager.cancelTransaction('sync')
+          this.syncData = []
           return
         }
 
         const result = DataHandler.sync(bytes, this.differenceTime)
-        syncData = [...syncData, ...result]
+        this.syncData = [...this.syncData, ...result]
       }
     }, 'sync')
   }
@@ -168,13 +168,7 @@ export default class Ninix {
   }
 
   getDifferenceTimestamp (characteristic) {
-    let arr = []
-    const buf = Buffer.from(characteristic.value, 'base64')
-    for (let i = 1; i < buf.length; i++) {
-      arr.push(buf[i])
-    }
-
-    arr = arr.reverse()
+    let arr = this.getCharacteristicBytes(characteristic).reverse()
     let value = 0
     for (let i = 0; i < 4; i++) {
       const shift = (3 - i) * 8
@@ -195,3 +189,5 @@ async function asyncForEach(array, callback) {
 function parseCharValue (char) {
   return Base64.decode(char.value)
 }
+
+// TODO: we can create a class for working with bytes, like convert base64 string to bytes or inverse

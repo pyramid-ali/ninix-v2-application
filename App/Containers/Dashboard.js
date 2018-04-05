@@ -32,7 +32,7 @@ class Dashboard extends Component {
   render () {
     const { data } = this.props
     const last = data.stream[data.stream.length - 1]
-    // we must show here the condition of device, if device is not connected we show last time connected
+    // TODO: we must show here the condition of device, if device is not connected we show last time connected
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -46,7 +46,7 @@ class Dashboard extends Component {
           </View>
         </View>
         <View style={styles.bottom}>
-          <NotificationNavigation />
+          <NotificationNavigation style={styles.notificationContainer} />
         </View>
       </View>
     )

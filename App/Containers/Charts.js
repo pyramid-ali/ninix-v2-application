@@ -47,12 +47,6 @@ class Charts extends Component {
           Analysis
         </NavigationBar>
         <View style={styles.container}>
-          {/*<SegmentedControl*/}
-            {/*active={3}*/}
-            {/*style={styles.segment}*/}
-            {/*items={['month', 'week', 'day', 'now']}*/}
-            {/*onChange={this.onChangeTime}*/}
-          {/*/>*/}
           <View style={styles.chartWrapper}>
             <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
             <CurvedChart data={collapse(stream.map((item) => item[this.state.chart]))}/>
@@ -67,10 +61,6 @@ class Charts extends Component {
     )
   }
 
-  onChangeTime (item, index) {
-
-  }
-
   onChangeChart (item, index) {
     console.tron.log({log: 'change chart', item})
     this.setState({
@@ -80,6 +70,7 @@ class Charts extends Component {
 
 }
 
+// TODO: we must change algorithm of showing chart data, and move logic to another file
 function collapse (data) {
   const result = []
   const length = data.length

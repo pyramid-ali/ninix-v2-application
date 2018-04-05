@@ -39,6 +39,6 @@ export default StyleSheet.create({
     zIndex: 10,
     alignSelf: 'center',
 
-  },
+  }
 
 })

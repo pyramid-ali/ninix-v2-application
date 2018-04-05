@@ -1,5 +1,6 @@
 // import Libraries
 import { StackNavigator } from 'react-navigation'
+import EssentialInformationSlider from '../Containers/EssentialInformationSlider'
 import ShowNinixData from '../Containers/ShowNinixData'
 
 // import Dependencies
@@ -19,6 +20,7 @@ import Login from '../Containers/Login'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  EssentialInformationSlider: { screen: EssentialInformationSlider },
   ShowNinixData: { screen: ShowNinixData },
 
   Landing: {

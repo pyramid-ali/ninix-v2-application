@@ -13,7 +13,7 @@ import SignupAction from '../Redux/SignupRedux'
 import PasswordEntrance from '../Components/PasswordEntrance'
 import Router from '../Navigation/Router'
 
-
+// TODO: correct signup
 class Signup extends Component {
   constructor (props) {
     super(props)

@@ -22,6 +22,7 @@
     "git-hook": "npm test -s"
   },
   "dependencies": {
+    "antd-mobile": "^2.1.8",
     "apisauce": "^0.14.0",
     "format-json": "^1.0.3",
     "immutability-helper": "^2.6.2",

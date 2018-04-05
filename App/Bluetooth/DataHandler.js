@@ -6,7 +6,7 @@ function stream (data) {
   const humidity = getHumidity(data[1])
   const orientation = getOrientation(data[1])
   const battery = getBattery(data[2], data[3], data[11])
-  const respiratory = getRespiratory(data.slice(4, 8))
+  const respiratory = data[4]
   const flashStore = haveFlashStore(data[8])
   const ramStore = haveFlashStore(data[9])
   const fullCharged = isFullCharge(data[10])
@@ -37,54 +37,20 @@ function sync (data, diffTime) {
   const unix = toSignInteger(data.slice(16, 20)) + diffTime
   let result = []
   for (let i = 0; i < size; i++) {
-    const respiratory = data[i]
-    const temperature = getTemperature(data[i + 4])
-    const humidity = getHumidity(data[i + 8])
-    const orientation = getOrientation(data[i + 8])
-    const registerAt = unix - ((size - i) * period)
-
     result.push({
-      respiratory,
-      temperature,
-      humidity,
-      orientation,
-      registerAt
+      respiratory: data[i],
+      temperature: getTemperature(data[i + 4]),
+      humidity: getHumidity(data[i + 8]),
+      orientation: getOrientation(data[i + 8]),
+      registerAt: unix - ((size - i) * period)
     })
   }
 
+
   // we used reverse to sort array in ascending order of registerAt
-  // return mapSyncToStream(result.reverse())
-  return result
+  return result.reverse()
 }
 
-// TODO: convert 5 second data to 1 second interval maybe perform at server
-function mapSyncToStream (data) {
-
-  const result = []
-
-  for (let i = 0; i < data.length - 1; i++) {
-    const current = data[i]
-    const next = data[i + 1]
-
-    const tempDiff = (next.temperature - current.temperature) / 5
-    const respDiff = (next.respiratory - current.respiratory) / 5
-    const orientationDiff = (next.orientation - current.orientation) / 5
-    const humidityDiff = (next.humidity - current.humidity) / 5
-
-    for (let j = 0; j < 5; j++) {
-      result.push({
-        temperature: round(current.temperature + (tempDiff * j)),
-        respiratory: round(current.respiratory + (respDiff * j)),
-        orientation: round(current.orientation + (orientationDiff * j)),
-        humidity: round(current.humidity + (humidityDiff * j)),
-        registerAt: current.registerAt + j
-      })
-    }
-
-    return result
-  }
-
-}
 
 function round (number, degree = 0) {
   return Math.round(number * Math.pow(10, degree)) / Math.pow(10, degree)

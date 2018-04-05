@@ -8,7 +8,7 @@ const config = {
   tabBarPosition: 'top',
   swipeEnabled: true,
   animationEnabled: true,
-  lazy: true,
+  lazy: false,
   tabBarOptions: {
     activeTintColor: Colors.white,
     inactiveTintColor: Colors.gray,

@@ -2,8 +2,6 @@ import { put, call, select } from 'redux-saga/effects'
 import SignupAction from '../Redux/SignupRedux'
 import Response from '../Services/Response'
 
-
-
 /***
  * request token send mobile code and if response is ok then call callback
  * if response were failed then dispatch failure action of Signup redux

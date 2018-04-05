@@ -11,7 +11,7 @@ const config = {
   tabBarComponent: TabBarBottom,
   tabBarPosition: 'bottom',
   swipeEnabled: false,
-  animationEnabled: true,
+  animationEnabled: false,
   lazy: true,
   tabBarOptions: {
     activeTintColor: Colors.dark,
