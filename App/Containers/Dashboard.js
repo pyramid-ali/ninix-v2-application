@@ -13,21 +13,6 @@ import VitalSignsBox from '../Components/VitalSignsBox'
 import styles from './Styles/DashboardStyle'
 
 class Dashboard extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'Dashboard',
-    tabBarIcon: ({ tintColor }) => (
-      <Icon
-        size={20}
-        name="bullseye"
-        color={tintColor}
-      />
-    ),
-  }
-
-  constructor (props) {
-    super(props)
-    this.state = {}
-  }
 
   render () {
     const { data } = this.props
@@ -51,6 +36,17 @@ class Dashboard extends Component {
       </View>
     )
   }
+}
+
+Dashboard.navigationOptions = {
+  tabBarLabel: 'Dashboard',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon
+      size={20}
+      name="bullseye"
+      color={tintColor}
+    />
+  ),
 }
 
 const mapStateToProps = (state) => {
