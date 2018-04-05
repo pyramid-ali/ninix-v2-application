@@ -48,7 +48,3 @@ Battery.propTypes = {
   lowBattery: PropTypes.bool,
   onPress: PropTypes.func
 }
-
-Battery.defaultProps = {
-  battery: 30
-}
