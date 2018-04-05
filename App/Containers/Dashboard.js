@@ -46,7 +46,7 @@ class Dashboard extends Component {
           </View>
         </View>
         <View style={styles.bottom}>
-          <NotificationNavigation style={styles.notificationContainer} />
+          <NotificationNavigation />
         </View>
       </View>
     )
