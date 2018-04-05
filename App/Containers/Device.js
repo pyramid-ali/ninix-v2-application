@@ -16,20 +16,6 @@ import Colors from '../Themes/Colors';
 import Battery from '../Components/Battery';
 
 class Device extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'Device',
-    tabBarIcon: ({ tintColor }) => (
-      <Icon
-        size={20}
-        name="podcast"
-        color={tintColor}
-      />
-    ),
-  }
-
-  constructor (props) {
-    super(props)
-  }
 
   componentDidUpdate () {
     if (this.props.bluetooth.isConnected && !this.play) {
@@ -168,6 +154,17 @@ class Device extends Component {
     )
   }
 
+}
+
+Device.navigationOptions = {
+  tabBarLabel: 'Device',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon
+      size={20}
+      name="podcast"
+      color={tintColor}
+    />
+  ),
 }
 
 const mapStateToProps = (state) => {
