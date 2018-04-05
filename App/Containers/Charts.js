@@ -15,16 +15,6 @@ const COLOR_PURPLE = processColor('#697dfb')
 
 
 class Charts extends Component {
-  static navigationOptions = {
-    tabBarLabel: 'Charts',
-    tabBarIcon: ({ tintColor }) => (
-      <Icon
-        size={20}
-        name="area-chart"
-        color={tintColor}
-      />
-    ),
-  }
 
   constructor (props) {
     super(props)
@@ -68,6 +58,17 @@ class Charts extends Component {
     })
   }
 
+}
+
+Charts.navigationOptions = {
+  tabBarLabel: 'Charts',
+  tabBarIcon: ({ tintColor }) => (
+    <Icon
+      size={20}
+      name="area-chart"
+      color={tintColor}
+    />
+  ),
 }
 
 // TODO: we must change algorithm of showing chart data, and move logic to another file
