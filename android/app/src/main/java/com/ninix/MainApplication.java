@@ -3,19 +3,19 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.airbnb.android.react.lottie.LottiePackage;
-import com.wix.reactnativenotifications.RNNotificationsPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.pilloxa.dfu.RNNordicDfuPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import io.sentry.RNSentryPackage;
-import com.github.wuxudong.rncharts.MPAndroidChartPackage;
-import com.imagepicker.ImagePickerPackage;
 import io.realm.react.RealmReactPackage;
-import com.polidea.reactnativeble.BlePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import io.sentry.RNSentryPackage;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
+import com.pilloxa.dfu.RNNordicDfuPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.github.wuxudong.rncharts.MPAndroidChartPackage;
+import com.polidea.reactnativeble.BlePackage;
+import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -36,20 +36,25 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new LottiePackage(),
-            new RNFetchBlobPackage(),
-            new RNNordicDfuPackage(),
-            new VectorIconsPackage(),
-            new RNDeviceInfo(),
-            new RNSentryPackage(MainApplication.this),
-            new MPAndroidChartPackage(),
-            new ImagePickerPackage(),
             new RealmReactPackage(),
-            new BlePackage(),
+            new VectorIconsPackage(),
+            new RNSentryPackage(MainApplication.this),
+            new RNNotificationsPackage(MainApplication.this),
+            new RNNordicDfuPackage(),
             new LinearGradientPackage(),
+            new ImagePickerPackage(),
+            new RNFetchBlobPackage(),
+            new RNDeviceInfo(),
             new ReactNativeConfigPackage(),
-            new RNNotificationsPackage(MainApplication.this)
+            new MPAndroidChartPackage(),
+            new BlePackage(),
+            new LottiePackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 

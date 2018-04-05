@@ -1,22 +1,32 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text, View, Image } from 'react-native'
+import { ScrollView, Text, View, Image, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 // Dependencies
-import NavigationBar from '../Components/NavigationBar'
 import EditableImage from '../Components/EditableImage'
 import ParentAction from '../Redux/ParentRedux'
 import BabyAction from '../Redux/BabyRedux'
 
 // Styles
 import styles from './Styles/ProfileStyle'
+import {Header} from 'react-native-elements'
+import Colors from '../Themes/Colors'
 
 class Profile extends Component {
 
-  render () {
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBackgroundColor(Colors.dark)
+    })
+  }
 
+  componentWillUnmount() {
+    this._navListener.remove()
+  }
+
+  render () {
     const { mother, father, baby } = this.props
     const babyImage   = baby.image   ? {uri: baby.image.uri}   : require('../Images/Profile/3-3.jpg')
     const fatherImage = father.image ? {uri: father.image.uri} : require('../Images/Profile/3-1.jpg')
@@ -24,12 +34,13 @@ class Profile extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <NavigationBar
-          style={styles.navBar}
-          rightButton={this.renderRightBarButton()}
-          onPressRightButton={this.onPressRightBarButton.bind(this)}>
-          Profile
-        </NavigationBar>
+
+        <Header
+          statusBarProps={{backgroundColor: Colors.dark}}
+          backgroundColor={Colors.dark}
+          centerComponent={{ text: 'PROFILE', style: { color: '#fff' } }}
+          rightComponent={{ icon: 'edit', color: '#fff' }}
+        />
 
         <ScrollView
           style={styles.container}>

@@ -1,18 +1,17 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, processColor } from 'react-native'
-import {LineChart} from 'react-native-charts-wrapper'
+import { View, Text, processColor, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import moment from 'moment'
+import {Header} from 'react-native-elements'
 
 // Styles
 import styles from './Styles/ChartsStyle'
-import SegmentedControl from '../Components/SegmentedControl';
-import NavigationBar from '../Components/NavigationBar';
-import CurvedChart from '../Components/CurvedChart';
-const COLOR_PURPLE = processColor('#697dfb')
+import SegmentedControl from '../Components/SegmentedControl'
+import CurvedChart from '../Components/CurvedChart'
+import Colors from '../Themes/Colors';
 
+const COLOR_PURPLE = processColor('#697dfb')
 
 class Charts extends Component {
 
@@ -23,30 +22,36 @@ class Charts extends Component {
     }
   }
 
-  componentDidMount () {}
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBackgroundColor(Colors.secondary, true)
+    })
+
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove()
+  }
 
   render() {
     const { stream } = this.props
 
     return (
       <View style={{flex: 1}}>
-        <NavigationBar
-          style={styles.navBar}
-          textStyle={styles.title}
-        >
-          Analysis
-        </NavigationBar>
-        <View style={styles.container}>
-          <View style={styles.chartWrapper}>
-            <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
-            <CurvedChart data={collapse(stream.map((item) => item[this.state.chart]))}/>
-          </View>
-          <SegmentedControl
-            style={styles.segment}
-            items={['temperature', 'respiratory']}
-            onChange={this.onChangeChart.bind(this)}
-          />
+        <Header
+          statusBarProps={{backgroundColor: Colors.secondary}}
+          backgroundColor={Colors.secondary}
+          centerComponent={{ text: 'ANALYSIS', style: { color: '#fff' } }}
+        />
+        <View style={styles.chartWrapper}>
+          <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
+          <CurvedChart data={collapse(stream.map((item) => item[this.state.chart]))}/>
         </View>
+        <SegmentedControl
+          style={styles.segment}
+          items={['temperature', 'respiratory']}
+          onChange={this.onChangeChart.bind(this)}
+        />
       </View>
     )
   }

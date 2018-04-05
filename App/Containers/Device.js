@@ -1,21 +1,34 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Text, View} from 'react-native'
+import {Text, View, StatusBar} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import LottieView from 'lottie-react-native'
+import { Header } from 'react-native-elements'
 
 // Dependencies
-import NavigationBar from '../Components/NavigationBar'
+import Battery from '../Components/Battery'
+import Button from '../Components/Button'
 import BluetoothAction from '../Redux/BluetoothRedux'
 
 // Styles
 import styles from './Styles/DeviceStyle'
-import Button from '../Components/Button';
-import Colors from '../Themes/Colors';
-import Battery from '../Components/Battery';
+import Colors from '../Themes/Colors'
+
+
 
 class Device extends Component {
+
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBackgroundColor(Colors.primary, true)
+    })
+
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove()
+  }
 
   componentDidUpdate () {
     if (this.props.bluetooth.isConnected && !this.play) {
@@ -30,38 +43,35 @@ class Device extends Component {
     const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
     return (
-      <View style={styles.wrapper}>
-        <NavigationBar
-          rightButton={this.renderRightBarButton()}
-          onPressRightButton={this.pressRightBarButton.bind(this)}
-          style={styles.navBar}>
+      <View style={styles.container}>
 
-        </NavigationBar>
-        <View style={styles.container}>
+        <Header
+          statusBarProps={{backgroundColor: Colors.primary}}
+          backgroundColor={Colors.primary}
+          centerComponent={{ text: 'DEVICE', style: { color: '#fff' } }}
+          rightComponent={{ icon: 'search', color: '#fff' }}
+        />
 
-          <View style={styles.batteryContainer}>
-            <Battery
-              battery={battery}
-              fullCharge={fullCharge}
-              charging={charging}
-              lowBattery={lowBattery}
-              onPress={() => {
-                this.props.navigation.navigate('ShowNinixData')
-              }}
-            />
-          </View>
-
-
-
-          <View style={styles.statusContainer}>
-            { this.renderOnlineStatus() }
-          </View>
-
-          <View style={styles.deviceInformation}>
-            { this.renderDeviceInformationBox() }
-          </View>
-
+        <View style={styles.batteryContainer}>
+          <Battery
+            battery={battery}
+            fullCharge={fullCharge}
+            charging={charging}
+            lowBattery={lowBattery}
+            onPress={() => {
+              this.props.navigation.navigate('ShowNinixData')
+            }}
+          />
         </View>
+
+        <View style={styles.statusContainer}>
+          { this.renderOnlineStatus() }
+        </View>
+
+        <View style={styles.deviceInformation}>
+          { this.renderDeviceInformationBox() }
+        </View>
+
       </View>
 
     )
@@ -177,7 +187,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     disconnect: () => dispatch(BluetoothAction.disconnect()),
-    connect: (device) => dispatch(BluetoothAction.connect(device))
+    connect: (device) => dispatch(BluetoothAction.connect(device)),
   }
 }
 

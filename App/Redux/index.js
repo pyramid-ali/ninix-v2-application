@@ -17,6 +17,7 @@ export default () => {
     nav:           require('./NavigationRedux').reducer,
     ninix:         require('./NinixRedux').reducer,
     signup:        require('./SignupRedux').reducer,
+    style:         require('./StyleRedux').reducer,
     user:          require('./UserRedux').reducer,
   })
 

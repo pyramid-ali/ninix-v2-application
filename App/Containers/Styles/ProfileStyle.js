@@ -3,8 +3,7 @@ import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: Metrics.navBarHeight
+    flex: 1
   },
   navBar: {
     backgroundColor: `rgba(${Colors.blackRGB}, 0.8)`

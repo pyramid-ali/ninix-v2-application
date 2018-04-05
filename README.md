@@ -1,2 +1,2 @@
 #TODO
-1. change react chart wrappers propTypes import
+1. we must change node_modules\react-native-nordic-dfu\android\src\main\java\com\pilloxa\dfu\RNNordicDfuPackage

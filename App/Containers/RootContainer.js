@@ -8,6 +8,7 @@ import ReduxNavigation from '../Navigation/ReduxNavigation'
 
 // Styles
 import styles from './Styles/RootContainerStyles'
+import Colors from '../Themes/Colors'
 
 class RootContainer extends Component {
 
@@ -16,8 +17,8 @@ class RootContainer extends Component {
       <View style={styles.applicationView}>
         <StatusBar
           barStyle='dark-content'
-          translucent={true}
-          backgroundColor='transparent'
+          translucent={false}
+          backgroundColor={Colors.gray}
         />
         <ReduxNavigation />
       </View>
