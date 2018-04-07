@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {Header} from 'react-native-elements'
-import { ListItem } from 'react-native-elements'
+import { Header, ListItem } from 'react-native-elements'
 
 // Dependencies
 import AppAction from '../Redux/AppRedux'
@@ -35,6 +34,21 @@ class Settings extends Component {
       }
     ]
 
+    const profileSettings = [
+      {
+        title: 'Father',
+        icon: 'av-timer'
+      },
+      {
+        title: 'Mother',
+        icon: 'av-timer'
+      },
+      {
+        title: 'baby',
+        icon: 'av-timer'
+      },
+    ]
+
     return (
       <ScrollView style={styles.container}>
         <Header
@@ -44,7 +58,7 @@ class Settings extends Component {
         />
         <View style={styles.list}>
           <Text style={styles.listTitle}>
-            General Settings
+            General
           </Text>
           {
             list.map((item, i) => (
@@ -52,7 +66,7 @@ class Settings extends Component {
                 key={i}
                 title={item.title}
                 leftIcon={{name: item.icon}}
-                rightIcon={{name: 'navigate-next'}}
+                chevron
               />
             ))
           }
@@ -60,7 +74,7 @@ class Settings extends Component {
 
         <View style={styles.list}>
           <Text style={styles.listTitle}>
-            App Settings
+            App
           </Text>
           {
             list.map((item, i) => (
@@ -68,7 +82,7 @@ class Settings extends Component {
                 key={i}
                 title={item.title}
                 leftIcon={{name: item.icon}}
-                rightIcon={{name: 'navigate-next'}}
+                chevron
               />
             ))
           }
@@ -76,15 +90,15 @@ class Settings extends Component {
 
         <View style={styles.list}>
           <Text style={styles.listTitle}>
-            NINIX Settings
+            Information
           </Text>
           {
-            list.map((item, i) => (
+            profileSettings.map((item, i) => (
               <ListItem
                 key={i}
                 title={item.title}
                 leftIcon={{name: item.icon}}
-                rightIcon={{name: 'navigate-next'}}
+                chevron
               />
             ))
           }

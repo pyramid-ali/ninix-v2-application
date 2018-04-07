@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Text, View, Image, StatusBar } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+
 
 // Dependencies
 import EditableImage from '../Components/EditableImage'
@@ -11,14 +11,14 @@ import BabyAction from '../Redux/BabyRedux'
 
 // Styles
 import styles from './Styles/ProfileStyle'
-import {Header} from 'react-native-elements'
+import { Icon, ListItem} from 'react-native-elements'
 import Colors from '../Themes/Colors'
 
 class Profile extends Component {
 
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
-      StatusBar.setBackgroundColor(Colors.dark)
+      StatusBar.setBackgroundColor(Colors.primary)
     })
   }
 
@@ -32,87 +32,133 @@ class Profile extends Component {
     const fatherImage = father.image ? {uri: father.image.uri} : require('../Images/Profile/3-1.jpg')
     const motherImage = mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg')
 
-    return (
-      <View style={{flex: 1}}>
 
-        <Header
-          statusBarProps={{backgroundColor: Colors.dark}}
-          backgroundColor={Colors.dark}
-          centerComponent={{ text: 'PROFILE', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'edit', color: '#fff', onPress: () => this.props.navigation.navigate('EditProfile') }}
+    const data = [
+      {
+        title: 'Height',
+        icon: 'show-chart',
+        value: '45 cm'
+      },
+      {
+        title: 'Weight',
+        icon: 'fitness-center',
+        value: '3700 gr'
+      },
+      {
+        title: 'Head Circumference',
+        icon: 'child-care',
+        value: '20 cm'
+      },
+    ]
+
+    const parents =[
+      {
+        title: 'Father',
+        avatar: require('../Images/Profile/3-1.jpg'),
+        subtitle: 'Habib Shabani',
+        type: 'father'
+      },
+      {
+        title: 'Mother',
+        avatar: mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg'),
+        subtitle: 'Masume Shiri',
+        type: 'mother'
+      }
+    ]
+
+    return (
+      <ScrollView
+        style={styles.container}>
+
+        <StatusBar
+          backgroundColor={Colors.secondary}
         />
 
-        <ScrollView
-          style={styles.container}>
+        <View style={styles.topContainer}>
           <Image
             style={styles.backgroundImage}
-            source={require('../Images/profile-background.jpg')} />
+            source={require('../Images/profile-background.png')} />
 
-          <View
-            style={styles.topContainer}>
+          <View style={styles.topWrapper}>
+
+            <View style={styles.settingIcon}>
+              <Icon
+                name='settings'
+                color='#fff'
+              />
+            </View>
+
 
             <View
-              style={styles.imagesContainer}>
-
-              {/* mother view */}
-              <View
-                style={styles.parentContainer}>
-                <EditableImage
-                  progress={mother.progress}
-                  size={80}
-                  style={styles.parentImage}
-                  source={motherImage}
-                  onPress={this.setMotherImage.bind(this)} />
-                <Text
-                  style={styles.parentText}>
-                  {mother.name ? mother.name : 'Mother'}
-                </Text>
-              </View>
-
-              {/* baby view */}
-              <View
-                style={styles.babyContainer}>
-                <Text
-                  style={styles.babyText}>
-                  {baby.name ? baby.name : 'Baby'}
-                </Text>
-                <EditableImage
-                  progress={baby.progress}
-                  style={styles.babyImage}
-                  size={120}
-                  source={babyImage}
-                  onPress={this.setBabyImage.bind(this)}
-                />
-              </View>
-
-              {/* father view */}
-              <View
-                style={styles.parentContainer}>
-                <EditableImage
-                  progress={father.progress}
-                  size={80}
-                  style={styles.parentImage}
-                  source={fatherImage}
-                  onPress={this.setFatherImage.bind(this)}
-                />
-                <Text
-                  style={styles.parentText}>
-                  {father.name ? father.name : 'Father'}
-                </Text>
-              </View>
+              style={styles.babyContainer}>
+              <EditableImage
+                progress={baby.progress}
+                style={styles.babyImage}
+                size={120}
+                source={babyImage}
+                onPress={this.setBabyImage.bind(this)}
+              />
+              <Text
+                style={styles.title}>
+                {baby.name ? baby.name : 'Baby'}
+              </Text>
+              <Text style={styles.description}>
+                Your baby health is normal
+              </Text>
             </View>
-            <Text
-              style={styles.bottomText}>
-              A child's love could simply be one of the most beautiful sounds in the world.
+          </View>
+        </View>
+
+        <View style={styles.bottomContainer}>
+
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>
+              Daily Information
             </Text>
+            {
+              data.map((item, i) => (
+                <ListItem
+                  key={i}
+                  title={item.title}
+                  leftIcon={{name: item.icon}}
+                  rightTitle={item.value}
+                  rightTitleStyle={styles.rightTitle}
+                  chevron
+                />
+              ))
+            }
           </View>
 
-          <View style={styles.bottomContainer}>
-            { /* bottom container of profile */ }
+        </View>
+
+        <View style={styles.bottomContainer}>
+
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>
+              Parent Information
+            </Text>
+            {
+              parents.map((item, i) => (
+                <ListItem
+                  scaleProps={{
+                    friction: 90,
+                    tension: 100,
+                    activeScale: 0.95,
+                  }}
+                  key={i}
+                  title={item.title}
+                  onPress={() => this.props.navigation.navigate('ParentSettings', {type: item.type})}
+                  leftAvatar={{source: item.avatar}}
+                  subtitle={item.subtitle}
+                  chevron
+                />
+              ))
+            }
           </View>
 
-        </ScrollView>
-      </View>
+        </View>
+
+      </ScrollView>
     )
   }
 
@@ -134,19 +180,6 @@ class Profile extends Component {
     }
   }
 
-  renderRightBarButton () {
-    return (
-      <Text style={styles.rightBarButtonText}>
-        Edit <Icon name="edit" size={16} color="white"/>
-      </Text>
-    )
-  }
-
-  onPressRightBarButton () {
-    const { navigation } = this.props
-    navigation.navigate('EditProfile')
-  }
-
   failure (error) {
     alert('something went wrong to upload image, please try again' + '\nReason: ' + error.message)
   }
@@ -157,7 +190,7 @@ Profile.navigationOptions = {
   tabBarIcon: ({ tintColor }) => (
     <Icon
       size={20}
-      name="user-circle"
+      name="account-circle"
       color={tintColor}
     />
   )

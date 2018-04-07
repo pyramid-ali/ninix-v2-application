@@ -4,11 +4,10 @@ import { connect } from 'react-redux'
 import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-// Dependencies
-import NavigationBar from '../Components/NavigationBar'
-
 // Styles
 import styles from './Styles/EditProfileStyle'
+import {Header} from 'react-native-elements'
+import Colors from '../Themes/Colors'
 
 class EditProfile extends Component {
 
@@ -40,13 +39,13 @@ class EditProfile extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <NavigationBar
-          style={styles.navBar}
-          leftButton={this.renderLeftBarButton()}
-          onPressLeftButton={this.onPressLeftBarButton.bind(this)}
-        >
-          Edit Profile
-        </NavigationBar>
+
+        <Header
+          statusBarProps={{backgroundColor: Colors.dark}}
+          backgroundColor={Colors.dark}
+          centerComponent={{ text: 'EDIT PROFILE', style: { color: '#fff' } }}
+        />
+
         <View style={styles.container}>
           <FlatList
             ItemSeparatorComponent={() => <View style={styles.separator} />}
