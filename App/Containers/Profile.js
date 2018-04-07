@@ -39,7 +39,7 @@ class Profile extends Component {
           statusBarProps={{backgroundColor: Colors.dark}}
           backgroundColor={Colors.dark}
           centerComponent={{ text: 'PROFILE', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'edit', color: '#fff' }}
+          rightComponent={{ icon: 'edit', color: '#fff', onPress: () => this.props.navigation.navigate('EditProfile') }}
         />
 
         <ScrollView
