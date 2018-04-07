@@ -150,35 +150,6 @@ export function setupBluetoothStatusListenerChannel () {
   })
 }
 
-export function *setupBackHandlerListener (channel) {
-  try {
-    while (true) {
-      const { nav } = yield select()
-      const activeRoute = nav.routes[nav.index]
-      if (activeRoute.index === 0) {
-        return false
-      }
-      yield put(NavigationActions.back())
-      return true
-    }
-  }
-  finally {}
-}
-
-export function setupBackHandlerListenerChannel () {
-  return eventChannel(emit => {
-    const listener = () => {
-      const r = emit()
-      console.tron.log({r})
-      return true
-    }
-    BackHandler.addEventListener('hardwareBackPress', listener)
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', listener)
-    }
-  })
-}
-
 export function *sync () {
   // 1. get user information
   // 2. get mother and father user information
@@ -188,5 +159,13 @@ export function *sync () {
   yield put(DataAction.syncWithServer())
   // 3. check for parent picture sync
   // 4. check data received from device is sync or not
+
+}
+
+export function *logout (action) {
+
+  yield put(BluetoothAction.disconnect())
+  yield put(AuthAction.revokeToken())
+  yield put(Router.navigateToLogin)
 
 }

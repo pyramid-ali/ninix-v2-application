@@ -1,6 +1,6 @@
 // Libraries
 import React, { Component } from 'react'
-import { Text, View, Image, KeyboardAvoidingView, Keyboard, ActivityIndicator } from 'react-native'
+import { Text, View, Image, KeyboardAvoidingView, Keyboard, ActivityIndicator, StatusBar } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { connect } from 'react-redux'
 
@@ -64,6 +64,10 @@ class Login extends Component {
         behavior='padding'
         style={styles.container}
       >
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+        />
         <Image
           style={styles.backgroundImage}
           source={require('../Images/login-background.jpg')}

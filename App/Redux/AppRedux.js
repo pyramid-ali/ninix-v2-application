@@ -12,7 +12,8 @@ const { Types, Creators } = createActions({
   sync: null,
   didConnectivityChange: ['payload'],
   didStateChange: ['payload'],
-  didAppIntroduce: null
+  didAppIntroduce: null,
+  logout: null
 }, {
   prefix: 'app/'
 })

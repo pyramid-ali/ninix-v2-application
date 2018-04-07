@@ -40,6 +40,7 @@ const root = function * root () {
     // App Sagas
     takeLatest(AppTypes.INIT, AppSagas.init),
     takeLatest(AppTypes.SYNC, AppSagas.sync),
+    takeLatest(AppTypes.LOGOUT, AppSagas.logout),
 
     // Auth Sagas
     takeLatest(AuthTypes.REVOKE_TOKEN, AuthSagas.revokeToken),

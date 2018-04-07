@@ -7,7 +7,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.background
   },
   list: {
-    marginTop: 10
+    marginTop: 20
   },
   listTitle: {
     padding: 5

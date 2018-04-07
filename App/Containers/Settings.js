@@ -6,6 +6,9 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import {Header} from 'react-native-elements'
 import { ListItem } from 'react-native-elements'
 
+// Dependencies
+import AppAction from '../Redux/AppRedux'
+
 // Styles
 import styles from './Styles/SettingsStyle'
 import Colors from '../Themes/Colors'
@@ -87,6 +90,23 @@ class Settings extends Component {
           }
         </View>
 
+        <View>
+
+          <ListItem
+            title='Logout'
+            scaleProps={{
+              friction: 90,
+              tension: 100,
+              activeScale: 0.95,
+            }}
+            containerStyle={{backgroundColor: 'red'}}
+            leftIcon={{name: 'cancel', color: 'white'}}
+            titleStyle={{color: 'white'}}
+            onPress={() => this.props.logout()}
+          />
+
+        </View>
+
       </ScrollView>
     )
   }
@@ -112,6 +132,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+
+    logout: () => dispatch(AppAction.logout())
   }
 }
 
