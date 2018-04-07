@@ -1,54 +1,92 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, Text } from 'react-native'
+import { ScrollView, View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import {Header} from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 
 // Styles
 import styles from './Styles/SettingsStyle'
-import Button from '../Components/Button';
-import Storage from '../Realm/Storage';
-import CentralManager from '../Bluetooth/CentralManager';
+import Colors from '../Themes/Colors'
+
 
 // TODO: we must have following options here
 // 1. Logout functionality should be placed here
 class Settings extends Component {
 
   render () {
+
+    const list = [
+      {
+        title: 'Appointments',
+        icon: 'av-timer'
+      },
+      {
+        title: 'Trips',
+        icon: 'flight-takeoff'
+      },
+      {
+        title: 'Trips',
+        icon: 'search'
+      }
+    ]
+
     return (
       <ScrollView style={styles.container}>
-        <Text>Settings</Text>
-        <Button onPress={() => {
-          Storage.getTemp()
-        }}>
-          get Temp
-        </Button>
-        <Button onPress={() => {
-          Storage.get()
-        }}>
-          get all data
-        </Button>
-        <Button onPress={() => {
-          CentralManager.ninix.getName().then((char) => console.tron.log(char))
-        }}>
-          get name
-        </Button>
-        <Button onPress={() => {
-          CentralManager.ninix.getHardwareRevision().then((char) => console.tron.log(char))
-        }}>
-          get revision
-        </Button>
-        <Button onPress={() => {
-          const timestamp = Date.now() / 1000
-          const buffer = Buffer.alloc(5, 0x06)
-          console.tron.log({log: 'before time', buffer})
-          buffer.writeUInt32LE(timestamp, 1)
-          console.tron.log({log: 'after time', buffer})
-          const data = buffer.toString('Base64')
-          console.tron.log({log: 'before time', data})
-        }}>
-          buffer
-        </Button>
+        <Header
+          statusBarProps={{backgroundColor: Colors.primary}}
+          backgroundColor={Colors.primary}
+          centerComponent={{ text: 'SETTINGS', style: { color: '#fff' } }}
+        />
+        <View style={styles.list}>
+          <Text style={styles.listTitle}>
+            General Settings
+          </Text>
+          {
+            list.map((item, i) => (
+              <ListItem
+                key={i}
+                title={item.title}
+                leftIcon={{name: item.icon}}
+                rightIcon={{name: 'navigate-next'}}
+              />
+            ))
+          }
+        </View>
+
+        <View style={styles.list}>
+          <Text style={styles.listTitle}>
+            App Settings
+          </Text>
+          {
+            list.map((item, i) => (
+              <ListItem
+                key={i}
+                title={item.title}
+                leftIcon={{name: item.icon}}
+                rightIcon={{name: 'navigate-next'}}
+              />
+            ))
+          }
+        </View>
+
+        <View style={styles.list}>
+          <Text style={styles.listTitle}>
+            NINIX Settings
+          </Text>
+          {
+            list.map((item, i) => (
+              <ListItem
+                key={i}
+                title={item.title}
+                leftIcon={{name: item.icon}}
+                rightIcon={{name: 'navigate-next'}}
+              />
+            ))
+          }
+        </View>
+
       </ScrollView>
     )
   }
