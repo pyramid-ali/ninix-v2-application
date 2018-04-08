@@ -25,13 +25,14 @@ export function *connect(action) {
     // connect to device
     const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
 
-    yield put(BluetoothAction.didConnect(connectedDevice))
     yield put(DeviceAction.setDevice(connectedDevice))
+    yield put(BluetoothAction.didConnect(connectedDevice))
 
     // setup connection listener
     yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
 
     yield call(CentralManager.start.bind(CentralManager))
+    yield call(BluetoothAction.didSetup())
 
     yield getDeviceInformation()
 
@@ -39,9 +40,9 @@ export function *connect(action) {
 
   }
   catch (error) {
-    yield CentralManager.disconnect()
+    // yield CentralManager.disconnect()
     yield put(BluetoothAction.didFail(error.message))
-    console.tron.error({log: 'connect', error, 'message': error.message})
+    console.tron.error({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
   }
 
 }

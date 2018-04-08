@@ -37,7 +37,7 @@
     "react": "^16.3.1",
     "react-native": "^0.54.4",
     "react-native-animatable": "^1.2.4",
-    "react-native-ble-plx": "^0.8.0",
+    "react-native-ble-plx": "^0.9.0",
     "react-native-charts-wrapper": "^0.4.3",
     "react-native-config": "^0.11.5",
     "react-native-device-info": "^0.21.4",

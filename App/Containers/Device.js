@@ -130,7 +130,7 @@ class Device extends Component {
 
     const { data, device } = this.props
     const { stream } = data
-    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1]
+    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
     return (
       <View style={styles.connectedContainer}>

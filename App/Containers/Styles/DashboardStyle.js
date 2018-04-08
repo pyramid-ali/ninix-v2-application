@@ -9,7 +9,7 @@ export default StyleSheet.create({
   top: {
     flex: 5,
     alignItems: 'center',
-    backgroundColor: Colors.alert
+    backgroundColor: Colors.primary
   },
   informationContainer: {
     flex: 1,

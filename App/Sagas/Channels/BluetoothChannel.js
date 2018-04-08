@@ -12,8 +12,8 @@ let isSyncing = false
 export function *setupScanListener (channel) {
   try {
     while (true) {
-      const device = yield take(channel)
-      yield put(BluetoothAction.didDiscover(CentralManager.scannedDevices))
+      const devices = yield take(channel)
+      yield put(BluetoothAction.didDiscover(devices))
     }
   }
   finally {}

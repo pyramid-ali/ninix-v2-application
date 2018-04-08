@@ -5680,9 +5680,9 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-ble-plx@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-0.8.0.tgz#e3fcf8868cd4fa3677c5f3385933527744dfefce"
+react-native-ble-plx@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-0.9.0.tgz#1ffa18e73133193d96c3edd7100b87f86d4cb403"
 
 react-native-camera-roll-picker@^1.2.1:
   version "1.2.3"

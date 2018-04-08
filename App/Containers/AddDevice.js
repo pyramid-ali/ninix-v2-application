@@ -141,10 +141,13 @@ class AddDevice extends Component {
 
   renderModal () {
     const { bluetooth } = this.props
+    const visible = bluetooth.isConnecting || bluetooth.isInitiating
+    const title = bluetooth.isConnecting ? 'Connecting...' : 'Setup...'
+    const description = bluetooth.isConnecting ? "we're trying to connect to device, please wait" : "we're working on initial setup, after this you can receive data, please wait"
     return (
       <ModalDeviceConnect
-        title='Connecting... '
-        visible={bluetooth.isConnecting}
+        title={title}
+        visible={visible}
         buttons={[
           {
             text: 'cancel',
@@ -154,7 +157,7 @@ class AddDevice extends Component {
           }
         ]}
       >
-        <Text>We're connecting to NINIX</Text>
+        <Text>{ description }</Text>
       </ModalDeviceConnect>
     )
   }

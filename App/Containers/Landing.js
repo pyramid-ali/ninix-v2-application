@@ -18,6 +18,7 @@ import styles from './Styles/LandingStyle'
 class Landing extends Component {
 
   // TODO: give animation when transient to another page
+  // TODO: transitioning between page not work correctly, we can use react native swiper
   render () {
 
     return (

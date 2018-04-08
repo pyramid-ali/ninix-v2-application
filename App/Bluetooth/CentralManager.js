@@ -14,17 +14,21 @@ class CentralManager {
 
   constructor () {
     this.manager = new BleManager()
-    this.period = 15
+    this.period = 5
   }
 
-  timer () {
+  /***
+   * start timer for checking out of range devices after period interval
+   * @param listener
+   * @returns {Object}
+   */
+  timer (listener) {
      return setInterval(
       () => {
         Object.keys(this.scannedDevices).forEach((item) => {
-          console.tron.log({log: 'timer', diff: moment().diff(this.scannedDevices[item].time, 's')})
           if (moment().diff(this.scannedDevices[item].time, 's') > this.period) {
             this.scannedDevices = _.omit(this.scannedDevices, item)
-            // TODO: we should notify user if a device lost
+            listener(this.scannedDevices)
           }
         })
       }, this.period * 1000
@@ -33,7 +37,7 @@ class CentralManager {
 
   scanForDevices (listener) {
 
-    this.timerSubscription = this.timer()
+    this.timerSubscription = this.timer(listener)
     this.manager.startDeviceScan(
       [UUID.services.main.uuid],
       { allowDuplicates: true },
@@ -45,7 +49,7 @@ class CentralManager {
         }
         // only if a new device scanned notify listener
         if (!_.isEqual(Object.keys(oldScannedDevices), Object.keys(this.scannedDevices))) {
-          listener(device)
+          listener(this.scannedDevices)
         }
       }
     )
@@ -57,11 +61,13 @@ class CentralManager {
     clearInterval(this.timerSubscription)
   }
 
+  // TODO: decide between first stop scan then connect or reverse
   async connect (device) {
     this.device = await device.connect({ autoConnect: true })
     this.stopScan()
     return this.device
   }
+
 
   async start () {
     this.ninix = new Ninix(this.device)
@@ -72,7 +78,10 @@ class CentralManager {
   }
 
   async disconnect () {
-    this.device = await this.manager.cancelDeviceConnection(this.device.id)
+    const isConnected = await this.device.isConnected()
+    if (isConnected) {
+      this.device = await this.manager.cancelDeviceConnection(this.device.id)
+    }
     this.ninix = null
   }
 

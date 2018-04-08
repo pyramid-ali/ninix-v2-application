@@ -11,6 +11,7 @@ import AppAction from '../Redux/AppRedux'
 // Styles
 import styles from './Styles/SettingsStyle'
 import Colors from '../Themes/Colors'
+import CentralManager from '../Bluetooth/CentralManager';
 
 
 // TODO: we must have following options here
