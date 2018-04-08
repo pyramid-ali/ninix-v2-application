@@ -3,25 +3,19 @@ import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
   container: {
-    flex: 1
-  },
-  navBar: {
-    backgroundColor: Colors.primary
-  },
-  rightBarButton: {
-    color: Colors.white,
-    borderBottomColor: Colors.white,
-    borderBottomWidth: 1,
-    paddingHorizontal: 15,
-    paddingBottom: 5
+    flex: 1,
+    backgroundColor: Colors.white
   },
 
   batteryContainer: {
     flex: 1,
-    backgroundColor: Colors.primary
+    // backgroundColor: Colors.primary
   },
 
-
+  connectedContainer: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
   statusText: {
     textAlign: 'center'
   },
@@ -41,7 +35,7 @@ export default StyleSheet.create({
 
   firmwareText: {
     textAlign: 'center',
-    color: Colors.white
+    color: Colors.dark
   },
   firmwareButton: {
     textAlign: 'center',
@@ -64,10 +58,14 @@ export default StyleSheet.create({
     height: 50,
     marginVertical: 20,
   },
+  connectedTitle: {
+    textAlign: 'center',
+    fontSize: 25
+  },
   deviceName: {
     textAlign: 'center',
-    fontSize: 30,
-    color: Colors.white
+    color: Colors.gray,
+    fontSize: 15,
   },
   deviceInformation: {
     flex: 1,
@@ -78,9 +76,44 @@ export default StyleSheet.create({
   hardwareRevision: {
     textAlign: 'center',
     fontSize: 12,
-    color: Colors.white
   },
+
+  notConnectedContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  notConnectedTitle: {
+    fontSize: 22,
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+
+  notConnectedDescription: {
+    fontSize: 14,
+    color: Colors.gray,
+    textAlign: 'center',
+    padding: 20
+  },
+
+  connectButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 15,
+    paddingVertical: 5
+  },
+
   disconnectButton: {
-    width: Metrics.screenWidth * 0.5,
+    backgroundColor: Colors.alert,
+    paddingHorizontal: 15,
+    paddingVertical: 5
+  },
+  connectedListSubtitle: {
+    color: Colors.gray
+  },
+  connectedRightTitle: {
+    color: Colors.dark,
+    fontSize: 12
   }
+
 })

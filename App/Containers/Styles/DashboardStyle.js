@@ -9,21 +9,20 @@ export default StyleSheet.create({
   top: {
     flex: 5,
     alignItems: 'center',
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.alert
   },
   informationContainer: {
-    marginTop: 50,
     flex: 1,
     width: Metrics.screenWidth * 8 / 10,
     justifyContent: 'center'
   },
   statusContainer: {
     flex: -1,
+    paddingBottom: 10
   },
   status: {
     color: Colors.white,
     fontSize: 20,
-    marginTop: 15,
     textAlign: 'center'
   },
   statusSecond: {

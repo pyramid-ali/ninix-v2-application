@@ -26,8 +26,8 @@ class Dashboard extends Component {
             <VitalSignsBox vitalSigns={last} />
           </View>
           <View style={styles.statusContainer}>
-            <Text style={styles.status}>Normal Condition</Text>
-            <Text style={[styles.status, styles.statusSecond]}>Be relax</Text>
+            <Text style={styles.status}>No Device Connected</Text>
+            <Text style={[styles.status, styles.statusSecond]}>tap to connect</Text>
           </View>
         </View>
         <View style={styles.bottom}>

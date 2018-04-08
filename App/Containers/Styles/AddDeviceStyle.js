@@ -4,14 +4,9 @@ import { Colors, Metrics } from '../../Themes/'
 export default StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Metrics.navBarHeight,
-    backgroundColor: Colors.secondary
+    backgroundColor: Colors.primary
   },
-  navBar: {
-    backgroundColor: Colors.secondary,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.white
-  },
+
   title: {
     fontSize: 18,
     color: Colors.white,
@@ -31,19 +26,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     color: Colors.white
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  backButtonIcon: {
-
-  },
-  backButtonText: {
-    color: Colors.white,
-    fontSize: 14,
-    paddingLeft: 5,
-    fontWeight: '100'
   },
   error: {
     backgroundColor: Colors.alert,

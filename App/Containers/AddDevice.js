@@ -16,8 +16,9 @@ import _ from 'lodash'
 // Styles
 import styles from './Styles/AddDeviceStyle'
 import Colors from '../Themes/Colors'
+import {Header} from 'react-native-elements';
 
-
+// TODO: change list Item
 class AddDevice extends Component {
 
   render () {
@@ -26,18 +27,15 @@ class AddDevice extends Component {
     const {logo, blink, color} = this.getNinixStatus(bluetooth)
 
     return (
-      <View style={{flex: 1}}>
-        <NavigationBar
-          style={styles.navBar}
-          textStyle={styles.title}
-          leftButton={this.renderLeftBarButton()}
-          onPressLeftButton={() => {
-            this.props.navigation.goBack(null)
-          }}
-        >
-          Add Device
-        </NavigationBar>
         <View style={styles.container}>
+
+          <Header
+            statusBarProps={{backgroundColor: Colors.primary}}
+            backgroundColor={Colors.primary}
+            centerComponent={{ text: 'ADD Device', style: { color: '#fff' } }}
+            leftComponent={{ icon: 'arrow-back', color: '#fff' }}
+          />
+
           <View style={{flex: 1}}>
             <NinixDevice
               onPress={this.search.bind(this)}
@@ -54,9 +52,8 @@ class AddDevice extends Component {
             data={data}
             renderItem={({item}) => this.renderItem(item)}
           />
+          { this.renderModal() }
         </View>
-        { this.renderModal() }
-      </View>
     )
   }
 
@@ -91,15 +88,6 @@ class AddDevice extends Component {
           color: Colors.alert
         }
     }
-  }
-
-  renderLeftBarButton() {
-    return (
-      <View style={styles.backButton}>
-        <Icon style={styles.backButtonIcon} name="angle-left" size={22} color="white" />
-        <Text style={styles.backButtonText}>Back</Text>
-      </View>
-    )
   }
 
   renderItem (device) {

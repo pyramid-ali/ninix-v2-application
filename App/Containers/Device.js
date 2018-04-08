@@ -3,19 +3,15 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {Text, View, StatusBar} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import LottieView from 'lottie-react-native'
-import { Header } from 'react-native-elements'
+import {Header, Button, Badge, ListItem} from 'react-native-elements'
 
 // Dependencies
 import Battery from '../Components/Battery'
-import Button from '../Components/Button'
 import BluetoothAction from '../Redux/BluetoothRedux'
 
 // Styles
 import styles from './Styles/DeviceStyle'
 import Colors from '../Themes/Colors'
-
-
 
 class Device extends Component {
 
@@ -30,17 +26,7 @@ class Device extends Component {
     this._navListener.remove()
   }
 
-  componentDidUpdate () {
-    if (this.props.bluetooth.isConnected && !this.play) {
-      this.lottie.play()
-      this.play = true
-    }
-  }
-
   render () {
-    const { data } = this.props
-    const { stream } = data
-    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
     return (
       <View style={styles.container}>
@@ -52,6 +38,102 @@ class Device extends Component {
           rightComponent={{ icon: 'search', color: '#fff' }}
         />
 
+        { this.renderContent() }
+
+      </View>
+
+    )
+  }
+
+  renderContent () {
+
+    const { device, bluetooth } = this.props
+
+    if (bluetooth.isConnected) {
+      return this.renderConnected()
+    }
+
+    if (device.device) {
+      return this.renderReconnect()
+    }
+
+    return this.renderNotConnected()
+  }
+
+  renderNotConnected () {
+    return (
+      <View style={styles.notConnectedContainer}>
+        <Text style={styles.notConnectedTitle}>
+          First Time Connect
+        </Text>
+
+        <Text style={styles.notConnectedDescription}>
+          with using below button search and connect to a ninix device
+        </Text>
+
+        <Button
+          buttonStyle={styles.connectButton}
+          onPress={() => this.props.navigation.navigate('AddDevice')}
+          icon={
+            <Icon
+              name='search'
+              size={15}
+              color='white'
+            />
+          }
+          title='Search and Connect'
+        />
+
+      </View>
+    )
+  }
+
+  renderReconnect () {
+
+    const { device } = this.props
+
+    return (
+      <View style={styles.notConnectedContainer}>
+
+        <Text style={styles.notConnectedTitle}>
+          { device.device.name || 'unknown' }
+        </Text>
+        <Badge
+          value={'Disconnected'}
+          textStyle={{ color: 'white' }}
+          containerStyle={{ backgroundColor: 'red'}}
+        />
+
+        <Text style={styles.notConnectedDescription}>
+          if you want to connect to a new device press search button at top right bar
+        </Text>
+
+        <Button
+          buttonStyle={styles.connectButton}
+          // loading
+          // loadingStyle={{width: 100, padding: 5}}
+          icon={
+            <Icon
+              name='refresh'
+              size={15}
+              color='white'
+            />
+          }
+          title='Reconnect'
+        />
+
+      </View>
+    )
+  }
+
+  renderConnected () {
+
+    const { data, device } = this.props
+    const { stream } = data
+    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1]
+
+    return (
+      <View style={styles.connectedContainer}>
         <View style={styles.batteryContainer}>
           <Battery
             battery={battery}
@@ -62,106 +144,53 @@ class Device extends Component {
               this.props.navigation.navigate('ShowNinixData')
             }}
           />
+
         </View>
 
-        <View style={styles.statusContainer}>
-          { this.renderOnlineStatus() }
-        </View>
+        <View style={{flex: 1}}>
 
-        <View style={styles.deviceInformation}>
-          { this.renderDeviceInformationBox() }
-        </View>
-
-      </View>
-
-    )
-  }
-
-  renderRightBarButton () {
-    return (
-      <Text style={styles.rightBarButton}>
-        <Icon name="search" size={14} color="white"/> Search
-      </Text>
-    )
-  }
-
-  pressRightBarButton () {
-    const { navigation } = this.props
-    navigation.navigate('AddDevice')
-  }
-
-  renderDeviceInformationBox () {
-
-    const { device, bluetooth, navigation } = this.props
-
-    if (bluetooth.isConnected) {
-      return (
-        <View>
-          <Text style={styles.deviceName}>{ device.name || 'getting name' }</Text>
-          <Text style={styles.hardwareRevision}>Rev { device.revision }</Text>
-          <Text style={styles.firmwareText}>Firmware Version <Text>{ device.firmware || 'N/A' }</Text></Text>
-          <Text style={styles.firmwareButton}>UP TO DATE</Text>
-        </View>
-      )
-    }
-
-    if (device.device) {
-      return (
-        <View>
-          <Text >You're last connected to { device.device.name } </Text>
-          <Button
-            color={Colors.primary}
-            containerStyle={styles.disconnectButton}
-            onPress={() => this.props.connect(device.device)}
-          >
-            <Text><Icon name="superpowers" size={20} color={Colors.primary} /> Connect</Text>
-          </Button>
-        </View>
-
-      )
-    }
-
-    return (
-      <Button
-        color={Colors.primary}
-        containerStyle={styles.disconnectButton}
-        onPress={() => {
-          navigation.navigate('AddDevice')
-        }}
-      >
-        <Text><Icon name="plus" size={20} color={Colors.primary} /> add a Device</Text>
-      </Button>
-    )
-  }
-
-  renderOnlineStatus() {
-    if (this.props.bluetooth.isConnected) {
-      return (
-        <View style={styles.animationWrapper}>
-          <Text style={styles.successText}>Online - Connected</Text>
-          <LottieView
-            style={styles.animationLottie}
-            loop
-            source={require('../../assets/lotties/scanning_animation.json')}
-            ref={lottie => this.lottie = lottie}
+          <ListItem
+            title='Status'
+            leftIcon={{name: "check"}}
+            rightTitle="Connected"
+            rightTitleStyle={styles.connectedRightTitle}
           />
-          <Button
-            containerStyle={styles.disconnectButton}
-            color={Colors.white}
-            backgroundColor={Colors.alert}
-            onPress={() => this.props.disconnect()}
-          >
-            Disconnect
-          </Button>
-        </View>
-      )
-    }
 
-    return (
-      <View>
-        <Text style={styles.statusText}>No Device Connected</Text>
+          <ListItem
+            title='Device'
+            subtitle={'Revision V' + device.revision}
+            subtitleStyle={styles.connectedListSubtitle}
+            leftIcon={{name: "details"}}
+            rightTitle={device.device.name}
+            rightTitleStyle={styles.connectedRightTitle}
+          />
+
+          <ListItem
+            title='Firmware Version'
+            subtitle={'Latest Version'}
+            subtitleStyle={styles.connectedListSubtitle}
+            leftIcon={{name: "donut-large"}}
+            rightTitle={'V' + device.firmware}
+            rightTitleStyle={styles.connectedRightTitle}
+          />
+
+        </View>
+
+        <Button
+          buttonStyle={styles.disconnectButton}
+          icon={
+            <Icon
+              name='unlink'
+              size={15}
+              color='white'
+            />
+          }
+          title='Disconnect'
+        />
+
       </View>
     )
+
   }
 
 }

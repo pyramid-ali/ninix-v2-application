@@ -16,7 +16,7 @@ export default StyleSheet.create({
   batteryBody: {
     width: Metrics.screenWidth * 0.6,
     height: Metrics.screenHeight * 0.15,
-    borderWidth: 5,
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Colors.dark,
@@ -30,8 +30,8 @@ export default StyleSheet.create({
     height: 30,
     borderColor: Colors.dark,
     borderRadius: 3,
-    borderWidth: 5,
-    marginLeft: -5
+    borderWidth: 2,
+    marginLeft: -2
   },
   batteryCharge: {
     fontSize: 40,
@@ -46,13 +46,25 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   bar: {
-    flex: 1,
     backgroundColor: Colors.dark,
     marginHorizontal: 1,
     marginVertical: 1
   },
   lowBattery: {
     backgroundColor: Colors.alert
+  },
+  fullCharge: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.primary
+  },
+  fullChargeTitle: {
+    fontSize: 16,
+    color: Colors.white
+  },
+  fullChargeDescription: {
+    fontSize: 12
   },
   noBar: {
     flex: 1

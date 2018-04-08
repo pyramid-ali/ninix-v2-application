@@ -1,36 +1,68 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Animated } from 'react-native'
 import styles from './Styles/BatteryStyle'
+import {Icon} from 'react-native-elements'
+import Colors from '../Themes/Colors'
 
 export default class Battery extends Component {
 
+  // TODO: add animation to battery states
 
   render () {
 
-    const { lowBattery, onPress } = this.props
+    const { onPress } = this.props
 
     return (
       <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={styles.batteryWrapper}>
-          <View style={[styles.batteryBody, lowBattery ? styles.redBorder : null]}>
+          <View style={[styles.batteryBody]}>
             { this.renderBatteryBars() }
           </View>
-          <View style={[styles.batteryHead, lowBattery ? styles.redBorder : null]}/>
+          <View style={[styles.batteryHead]}/>
         </View>
       </TouchableOpacity>
     )
   }
 
   renderBatteryBars () {
-    const { battery } = this.props
+    const { battery, lowBattery, fullCharge, charging } = this.props
 
-    if (battery) {
-      const state = Math.round(battery / 25)
-      const bars = Array.apply(null, {length: 4}).map(Function.call, Number)
+    if (fullCharge) {
       return (
         <View style={styles.barContainer}>
-          { bars.map(item => <View key={item} style={item <= state ? (state === 0 ? [styles.bar, styles.lowBattery] : styles.bar) : styles.noBar} />)}
+          <View style={[styles.bar, styles.fullCharge]} >
+            <Text style={styles.fullChargeTitle}>Full Charge</Text>
+            <Text style={styles.fullChargeDescription}>Unplug Device From Charger</Text>
+          </View>
+        </View>
+      )
+    }
+
+    if (charging) {
+      return (
+
+        <View style={styles.barContainer}>
+          <Icon size={40} name='flash-on' color={Colors.primary} />
+        </View>
+      )
+    }
+
+    if (lowBattery) {
+      return (
+
+        <View style={styles.barContainer}>
+          <View style={[{flex: battery}, styles.bar, styles.lowBattery]} />
+          <View style={{flex: 100 - battery}} />
+        </View>
+      )
+    }
+
+    if (battery) {
+      return (
+        <View style={styles.barContainer}>
+          <View style={[{flex: battery}, styles.bar]} />
+          <View style={{flex: 100 - battery}} />
         </View>
       )
     }
