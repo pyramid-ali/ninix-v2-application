@@ -20,27 +20,29 @@ import {
 
 export function *connect(action) {
   // TODO: we should save logs in backend server
-  const { device } = action
+  const { device, callback } = action
   try {
     // connect to device
     const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
 
     yield put(DeviceAction.setDevice(connectedDevice))
     yield put(BluetoothAction.didConnect(connectedDevice))
-
+    console.tron.log({step: 1})
     // setup connection listener
     yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
-
+    console.tron.log({step: 2})
     yield call(CentralManager.start.bind(CentralManager))
-    yield call(BluetoothAction.didSetup())
-
+    console.tron.log({step: 3})
+    yield put(BluetoothAction.didSetup())
+    console.tron.log({step: 4})
+    callback()
     yield getDeviceInformation()
+    console.tron.log({step: 5})
 
     yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
-
+    console.tron.log({step: 6})
   }
   catch (error) {
-    // yield CentralManager.disconnect()
     yield put(BluetoothAction.didFail(error.message))
     console.tron.error({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
   }

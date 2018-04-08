@@ -33,7 +33,7 @@ class AddDevice extends Component {
             statusBarProps={{backgroundColor: Colors.primary}}
             backgroundColor={Colors.primary}
             centerComponent={{ text: 'ADD Device', style: { color: '#fff' } }}
-            leftComponent={{ icon: 'arrow-back', color: '#fff' }}
+            leftComponent={{ icon: 'arrow-back', color: '#fff', onPress: () => this.props.navigation.goBack() }}
           />
 
           <View style={{flex: 1}}>
@@ -92,7 +92,7 @@ class AddDevice extends Component {
 
   renderItem (device) {
     return (
-      <FoundedDeviceItem onPress={() => this.props.connect(device)} text={device.name} key={device.id} />
+      <FoundedDeviceItem onPress={() => this.props.connect(device, () => this.props.navigation.goBack())} text={device.name} key={device.id} />
     )
   }
 
@@ -175,7 +175,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     startScan: () => dispatch(BluetoothAction.startScan()),
     stopScan: () => dispatch(BluetoothAction.stopScan()),
-    connect: (device) => dispatch(BluetoothAction.connect(device)),
+    connect: (device, callback) => dispatch(BluetoothAction.connect(device, callback)),
     disconnect: () => dispatch(BluetoothAction.disconnect()),
     cancelConnection: () => dispatch(BluetoothAction.cancelConnection())
   }

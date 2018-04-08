@@ -35,13 +35,12 @@ class Device extends Component {
           statusBarProps={{backgroundColor: Colors.primary}}
           backgroundColor={Colors.primary}
           centerComponent={{ text: 'DEVICE', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'search', color: '#fff' }}
+          rightComponent={{ icon: 'search', color: '#fff', onPress: () => this.props.navigation.navigate('AddDevice') }}
         />
 
         { this.renderContent() }
 
       </View>
-
     )
   }
 
@@ -90,7 +89,7 @@ class Device extends Component {
 
   renderReconnect () {
 
-    const { device } = this.props
+    const { device, bluetooth } = this.props
 
     return (
       <View style={styles.notConnectedContainer}>
@@ -110,8 +109,8 @@ class Device extends Component {
 
         <Button
           buttonStyle={styles.connectButton}
-          // loading
-          // loadingStyle={{width: 100, padding: 5}}
+          loading={bluetooth.isConnecting}
+          loadingStyle={{width: 100, padding: 5}}
           icon={
             <Icon
               name='refresh'
