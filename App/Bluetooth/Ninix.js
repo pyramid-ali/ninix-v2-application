@@ -6,12 +6,15 @@ import CentralManager from './CentralManager'
 import moment from 'moment'
 import _ from 'lodash'
 
+
+// TODO: split codes to each own class
 export default class Ninix {
 
   constructor (device) {
     // TODO: we can save device in async storage for later uses, but should we do this in ble package?
     this.device = device
     this.syncData = []
+    this.syncTimeout = 10
   }
 
   async discover () {
@@ -106,16 +109,17 @@ export default class Ninix {
   }
 
   sync (listener) {
-    // TODO: set timeout for error handling
+
     // TODO: maybe we can split received data into 5 section for simulating one data per second
+
     const endChar = Array.apply(null, {length: 20}).map(Function.call, Number)
+    this.startSyncTimer(listener)
     return this.syncCharacteristic.monitor((error, char) => {
+      this.lastSyncPacketTime = moment()
       if (char) {
         const bytes = this.getCharacteristicBytes(char)
         if (_.isEqual(bytes, endChar)) {
-          listener(this.syncData)
-          CentralManager.cancelTransaction('sync')
-          this.syncData = []
+          this.didSyncFinish(listener)
           return
         }
 
@@ -123,6 +127,30 @@ export default class Ninix {
         this.syncData = [...this.syncData, ...result]
       }
     }, 'sync')
+  }
+
+  didSyncFinish (listener) {
+    listener(this.syncData)
+    CentralManager.cancelTransaction('sync')
+    this.syncData = []
+    clearInterval(this.syncTimer)
+  }
+
+  didSyncFail (listener) {
+    this.syncData = []
+    listener(this.syncData)
+    CentralManager.cancelTransaction('sync')
+    clearInterval(this.syncTimer)
+  }
+
+  startSyncTimer (listener) {
+
+    this.syncTimer = setInterval(() => {
+      if(moment().diff(this.lastSyncPacketTime, 's') > this.syncTimeout) {
+        this.didSyncFail(listener)
+      }
+    })
+
   }
 
   getCharacteristicBytes (char) {

@@ -34,7 +34,6 @@ export function setupScanListenerChannel () {
 export function *setupNinixStreamListener (channel) {
   try {
     while (true) {
-      const { bluetooth } = yield select()
       const result = yield take(channel)
       yield put(DataAction.didReceiveData(result))
       if ((result.flashStore || result.ramStore) && !isSyncing) {

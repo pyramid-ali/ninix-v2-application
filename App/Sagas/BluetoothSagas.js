@@ -27,20 +27,14 @@ export function *connect(action) {
 
     yield put(DeviceAction.setDevice(connectedDevice))
     yield put(BluetoothAction.didConnect(connectedDevice))
-    console.tron.log({step: 1})
+
     // setup connection listener
     yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
-    console.tron.log({step: 2})
     yield call(CentralManager.start.bind(CentralManager))
-    console.tron.log({step: 3})
     yield put(BluetoothAction.didSetup())
-    console.tron.log({step: 4})
     callback()
     yield getDeviceInformation()
-    console.tron.log({step: 5})
-
     yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
-    console.tron.log({step: 6})
   }
   catch (error) {
     yield put(BluetoothAction.didFail(error.message))
@@ -52,7 +46,6 @@ export function *connect(action) {
 export function *cancelConnection() {
   yield CentralManager.disconnect()
   yield put(BluetoothAction.didDisconnect())
-  // TODO: Cancel Bluetooth Connection
 }
 
 export function *disconnect() {
@@ -77,7 +70,7 @@ export function *stopScan() {
 }
 
 export function *startSync() {
-  console.tron.log({log: 'start sync'})
+
   let characteristic
   const { data } = yield select()
   const last = data.stream[data.stream.length - 1]
@@ -85,11 +78,9 @@ export function *startSync() {
 
   if (last.flashStore) {
     characteristic = yield call(ninix.flashSyncCommand.bind(ninix))
-    console.tron.log({log: 'flashStore sync', characteristic})
   }
   else if (last.ramStore) {
     characteristic = yield call(ninix.ramSyncCommand.bind(ninix))
-    console.tron.log({log: 'ramStore sync', characteristic})
   }
   else {
     return
