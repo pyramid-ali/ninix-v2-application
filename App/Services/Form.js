@@ -10,7 +10,16 @@ const login = (username, password) => ({
   password
 })
 
+const refreshToken = (refreshToken) => ({
+  refresh_token: refreshToken,
+  grant_type: Config.GRANT_TYPE,
+  client_secret: 'fgc2adUmxjpGqeO5JGg2KwOIVYf7GeBWQvS3CeDR',
+  client_id: Config.CLIENT_ID,
+  scope: '*',
+})
+
 
 export default {
-  login
+  login,
+  refreshToken
 }
