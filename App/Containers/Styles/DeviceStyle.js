@@ -6,12 +6,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white
   },
-
   batteryContainer: {
     flex: 1,
-    // backgroundColor: Colors.primary
   },
-
   connectedContainer: {
     flex: 1,
     justifyContent: 'space-between'
@@ -19,12 +16,10 @@ export default StyleSheet.create({
   statusText: {
     textAlign: 'center'
   },
-
   statusContainer: {
     flex: 1,
     justifyContent: 'center'
   },
-
   connect: {
     fontSize: 20,
     color: Colors.white,
@@ -32,7 +27,6 @@ export default StyleSheet.create({
     borderBottomColor: Colors.white,
     borderBottomWidth: 2
   },
-
   firmwareText: {
     textAlign: 'center',
     color: Colors.dark
@@ -42,11 +36,9 @@ export default StyleSheet.create({
     color: Colors.dark,
     paddingVertical: 5
   },
-
   successText: {
     color: Colors.secondary
   },
-
   animationWrapper: {
     flex: 1,
     justifyContent: 'center',
@@ -83,30 +75,42 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-
   notConnectedTitle: {
     fontSize: 22,
     marginBottom: 10,
     textAlign: 'center'
   },
-
   notConnectedDescription: {
     fontSize: 14,
     color: Colors.gray,
     textAlign: 'center',
     padding: 20
   },
-
+  disconnectReason: {
+    fontSize: 12,
+    color: Colors.alert,
+    textAlign: 'center',
+    padding: 20,
+    marginTop: 20
+  },
   connectButton: {
     backgroundColor: Colors.primary,
     paddingHorizontal: 15,
     paddingVertical: 5
   },
-
   disconnectButton: {
     backgroundColor: Colors.alert,
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical: 5,
+    marginHorizontal: 15,
+    marginVertical: 5
+  },
+  turnOffButton: {
+    backgroundColor: Colors.dark,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginHorizontal: 15,
+    marginVertical: 5
   },
   connectedListSubtitle: {
     color: Colors.gray

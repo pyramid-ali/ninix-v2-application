@@ -43,6 +43,12 @@ export function *connect(action) {
 
 }
 
+export function *reconnect() {
+  console.tron.log('reconnect')
+  const { device } = yield select()
+  yield put(BluetoothAction.connect(device.device))
+}
+
 export function *cancelConnection() {
   yield CentralManager.disconnect()
   yield put(BluetoothAction.didDisconnect())
@@ -99,4 +105,8 @@ export function *getDeviceInformation() {
   yield put(DeviceAction.setFirmware(yield call(CentralManager.ninix.getFirmware.bind(CentralManager.ninix))))
   yield put(DeviceAction.setRevision(yield call(CentralManager.ninix.getHardwareRevision.bind(CentralManager.ninix))))
 
+}
+
+export function *turnOffDevice() {
+  yield CentralManager.ninix.sendTurnOffDevice()
 }

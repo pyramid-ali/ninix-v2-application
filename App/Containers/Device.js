@@ -2,8 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {Text, View, StatusBar} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import {Header, Button, Badge, ListItem} from 'react-native-elements'
+import {Header, Button, Badge, ListItem, Icon} from 'react-native-elements'
 
 // Dependencies
 import Battery from '../Components/Battery'
@@ -111,6 +110,8 @@ class Device extends Component {
           buttonStyle={styles.connectButton}
           loading={bluetooth.isConnecting}
           loadingStyle={{width: 100, padding: 5}}
+          disabled={bluetooth.isConnecting}
+          onPress={this.reconnect.bind(this)}
           icon={
             <Icon
               name='refresh'
@@ -120,6 +121,10 @@ class Device extends Component {
           }
           title='Reconnect'
         />
+
+        <Text style={styles.disconnectReason}>
+          { bluetooth.error }
+        </Text>
 
       </View>
     )
@@ -176,10 +181,24 @@ class Device extends Component {
         </View>
 
         <Button
-          buttonStyle={styles.disconnectButton}
+          buttonStyle={styles.turnOffButton}
+          onPress={this.turnOffDevice.bind(this)}
           icon={
             <Icon
-              name='unlink'
+              name='portable-wifi-off'
+              size={15}
+              color='white'
+            />
+          }
+          title='Turn Off Device'
+        />
+
+        <Button
+          buttonStyle={styles.disconnectButton}
+          onPress={this.disconnect.bind(this)}
+          icon={
+            <Icon
+              name='bluetooth-disabled'
               size={15}
               color='white'
             />
@@ -192,6 +211,19 @@ class Device extends Component {
 
   }
 
+  turnOffDevice () {
+    this.props.turnOffDevice()
+  }
+
+  disconnect () {
+    this.props.disconnect()
+  }
+
+  reconnect () {
+    console.tron.log('device reconnect')
+    this.props.reconnect()
+  }
+
 }
 
 Device.navigationOptions = {
@@ -199,7 +231,7 @@ Device.navigationOptions = {
   tabBarIcon: ({ tintColor }) => (
     <Icon
       size={20}
-      name="podcast"
+      name="bluetooth"
       color={tintColor}
     />
   ),
@@ -216,6 +248,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     disconnect: () => dispatch(BluetoothAction.disconnect()),
     connect: (device) => dispatch(BluetoothAction.connect(device)),
+    reconnect: () => dispatch(BluetoothAction.reconnect()),
+    turnOffDevice: () => dispatch(BluetoothAction.turnOffDevice())
   }
 }
 

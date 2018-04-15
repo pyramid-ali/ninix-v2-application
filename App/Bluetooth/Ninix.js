@@ -171,8 +171,8 @@ export default class Ninix {
     return await this.sendCommand(Commands.ramSync)
   }
 
-  async sendAlarmCommand () {
-    return await this.sendCommand(Commands.alarm)
+  async sendTurnOffDevice () {
+    return await this.sendCommand(Commands.turnOff)
   }
 
   async sendUpdateFirmwareCommand () {

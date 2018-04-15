@@ -15,6 +15,7 @@ class CentralManager {
   constructor () {
     this.manager = new BleManager()
     this.period = 5
+    this.connectionTimeout = 30
   }
 
   /***
@@ -63,7 +64,8 @@ class CentralManager {
 
   // TODO: decide between first stop scan then connect or reverse
   async connect (device) {
-    this.device = await device.connect({ autoConnect: true })
+    // timeout is in milli seconds
+    this.device = await device.connect({ autoConnect: true, timeout: this.connectionTimeout * 1000 })
     this.stopScan()
     return this.device
   }

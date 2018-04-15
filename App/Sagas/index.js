@@ -72,10 +72,11 @@ const root = function * root () {
     takeLatest(BluetoothTypes.START_SCAN, BluetoothSagas.startScan),
     takeLatest(BluetoothTypes.STOP_SCAN, BluetoothSagas.stopScan),
     takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
+    takeLatest(BluetoothTypes.RECONNECT, BluetoothSagas.reconnect),
     takeLatest(BluetoothTypes.DISCONNECT, BluetoothSagas.disconnect),
     takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
     takeLatest(BluetoothTypes.START_SYNC, BluetoothSagas.startSync),
-
+    takeLatest(BluetoothTypes.TURN_OFF_DEVICE, BluetoothSagas.turnOffDevice),
 
     // Data Sagas
     takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),

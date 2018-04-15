@@ -28,7 +28,9 @@ const { Types, Creators } = createActions({
   startSync: null,
   didSyncBegin: null,
   didSyncEnd: null,
-  didSetup: null
+  didSetup: null,
+  turnOffDevice: null,
+  reconnect: null
 }, {
   prefix: 'bluetooth/'
 })
