@@ -64,7 +64,7 @@ export function *init (api, action) {
 
       const response = yield call(api.refreshToken, Form.refreshToken(refreshToken))
       const token = yield call(Response.resolve, response)
-      yield put(AuthAction.issueToken(token))
+      yield put(AuthAction.saveToken(token))
 
     } else {
       yield put(AuthAction.issueToken(token))
