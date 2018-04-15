@@ -1,7 +1,5 @@
-import { NetInfo, AppState, BackHandler } from 'react-native'
-import { put, call, select, take, fork } from 'redux-saga/effects'
-import { eventChannel } from 'redux-saga'
-import { NavigationActions } from 'react-navigation'
+import { NetInfo } from 'react-native'
+import { put, call, select, fork } from 'redux-saga/effects'
 
 import { getToken, isTokenValid } from '../Services/TokenManager'
 import AppAction from '../Redux/AppRedux'
@@ -11,18 +9,28 @@ import BabyAction from '../Redux/BabyRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import DataAction from '../Redux/DataRedux'
 import Router from '../Navigation/Router'
-import CentralManager from '../Bluetooth/CentralManager'
+import Form from '../Services/Form'
+import Response from '../Services/Response'
 
-export function *init (action) {
+// channels
+import {
+  setupAppStatusListener,
+  setupAppStatusListenerChannel,
+  setupNetStatusListener,
+  setupNetStatusListenerChannel,
+  setupBluetoothStatusListener,
+  setupBluetoothStatusListenerChannel
+} from './Channels/AppChannel'
+
+
+export function *init (api, action) {
 
   const { app } = yield select()
 
-  // RealmStorage.get()
   // setup listeners for app state change and network connectivity
   yield fork(setupAppStatusListener, yield call(setupAppStatusListenerChannel))
   yield fork(setupNetStatusListener, yield call(setupNetStatusListenerChannel))
   yield fork(setupBluetoothStatusListener, yield call(setupBluetoothStatusListenerChannel))
-  // yield fork(setupBackHandlerListener, yield call(setupBackHandlerListenerChannel))
 
   try {
 
@@ -54,10 +62,14 @@ export function *init (action) {
         return
       }
 
-      // TODO: refresh token
+      const response = yield call(api.refreshToken, Form.refreshToken(refreshToken))
+      const token = yield call(Response.resolve, response)
+      yield put(AuthAction.issueToken(token))
+
+    } else {
+      yield put(AuthAction.issueToken(token))
     }
 
-    yield put(AuthAction.issueToken(token))
     yield put(AppAction.sync())
     yield put(Router.navigateToMain)
 
@@ -80,77 +92,9 @@ export function *init (action) {
 
 }
 
-export function *setupAppStatusListener (channel) {
-  try {
-    while (true) {
-      const appState = yield take(channel)
-      yield put(AppAction.didStateChange(appState))
-    }
-  }
-  finally {}
-}
-
-export function setupAppStatusListenerChannel () {
-  return eventChannel(emit => {
-    const listener = nextAppState => {
-      emit(nextAppState)
-    }
-    AppState.addEventListener('change', listener)
-    return () => {
-      AppState.removeEventListener('change', listener)
-    }
-  })
-}
-
-export function *setupNetStatusListener (channel) {
-  try {
-    while (true) {
-      const { auth } = yield select()
-      const isConnected = yield take(channel)
-      yield put(AppAction.didConnectivityChange(isConnected))
-      if (isConnected && auth.accessToken) {
-        yield sync()
-      }
-    }
-  }
-  finally {}
-}
-
-export function setupNetStatusListenerChannel () {
-  return eventChannel(emit => {
-    const listener = isConnected => {
-      emit(isConnected)
-    }
-    NetInfo.isConnected.addEventListener('connectionChange', listener)
-    return () => {
-      AppState.isConnected.removeEventListener('connectionChange', listener)
-    }
-  })
-}
-
-export function *setupBluetoothStatusListener (channel) {
-  try {
-    while (true) {
-      const state = yield take(channel)
-      yield put(BluetoothAction.didStateChange(state))
-    }
-  }
-  finally {}
-}
-
-export function setupBluetoothStatusListenerChannel () {
-  return eventChannel(emit => {
-    const listener = state => {
-      emit(state)
-    }
-    const subscription = CentralManager.addStateListener(listener, true)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
+// TODO: synchronization with server handle in the latest stage
 export function *sync () {
+
   // 1. get user information
   // 2. get mother and father user information
   yield put(ParentAction.getFatherInformation())

@@ -38,7 +38,7 @@ const root = function * root () {
 
   yield all([
     // App Sagas
-    takeLatest(AppTypes.INIT, AppSagas.init),
+    takeLatest(AppTypes.INIT, AppSagas.init, api),
     takeLatest(AppTypes.SYNC, AppSagas.sync),
     takeLatest(AppTypes.LOGOUT, AppSagas.logout),
 
