@@ -42,9 +42,9 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
 
   /***
    * refresh token
-   * @param refreshFields
+   * @param refreshToken
    */
-  const refreshToken = (credentials) => api.post('oauth/token', credentials)
+  const refreshToken = (refreshToken) => api.post('oauth/token', Form.refreshToken(refreshToken))
 
   /***
    * get user information route
