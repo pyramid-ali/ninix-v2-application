@@ -71,6 +71,7 @@
     "babel-preset-react-native": "^4.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.3",
     "flow-bin": "^0.69.0",
     "husky": "^0.14.3",
     "ignite-ir-boilerplate": "^2.0.2",
@@ -97,6 +98,9 @@
     ],
     "setupFiles": [
       "<rootDir>/__tests__/jest.setup"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ],
     "preset": "react-native"
   },

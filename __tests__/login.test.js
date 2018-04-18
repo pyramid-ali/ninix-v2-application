@@ -1,21 +1,21 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import Login from '../App/Containers/Login';
-import configureStore from 'redux-mock-store';
 
-
-const initialState = { login: { isFetching: false, error: null } };
-const mockStore = configureStore();
-let store, shallowContainer, loginContainer, navigation;
+const initialState = { login: { isFetching: false, error: null} };
+let wrapper, loginContainer, navigation, store;
 
 describe('Test Login', () => {
 
   beforeEach(() => {
-    store = mockStore(initialState)
     console.error = jest.fn() //hide console.error warnings
+    store = mockStore(initialState)
     navigation = { navigate: jest.fn() } //navigation property
-    shallowContainer = shallow(<Login navigation={navigation}/>, { context: { store } }) //contains constructor & render()
-    loginContainer = shallowContainer.dive() //remove wrapper of login
+    wrapper = shallow(<Login navigation={navigation}/>, { context: { store } }) 
+    loginContainer = wrapper.dive() // get one level deep in wrapper
+  });
+
+  test('check snapshot', () => {
+    expect(loginContainer).toMatchSnapshot()
   });
 
   test('container rendered correctly', () => {
@@ -26,6 +26,10 @@ describe('Test Login', () => {
     expect(loginContainer.find('TextInputWithIcon').length).toEqual(2)
     expect(loginContainer.find('ActivityIndicator').length).toEqual(0)
     expect(loginContainer.find('Button').length).toEqual(1)
+  });
+
+  test('container props matches with initialState', () => {
+    expect(wrapper.prop('login')).toEqual(initialState.login)
   });
 
   test('container state updated correctly', () => {
