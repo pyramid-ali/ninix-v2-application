@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Profile check snapshot 1`] = `
+<ScrollView
+  style={
+    Object {
+      "backgroundColor": "rgba(255, 255, 255, 1)",
+      "flex": 1,
+    }
+  }
+>
+  <StatusBar
+    animated={false}
+    backgroundColor="#1BA39C"
+    showHideTransition="fade"
+  />
+  <View
+    style={
+      Object {
+        "flex": 1,
+        "height": 667,
+        "width": 750,
+      }
+    }
+  >
+    <Image
+      source="test-file-stub"
+      style={
+        Object {
+          "height": 635,
+          "position": "absolute",
+          "resizeMode": "cover",
+          "width": 750,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "flex": 1,
+          "paddingBottom": 50,
+          "paddingTop": 20,
+          "position": "relative",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "position": "absolute",
+            "right": 20,
+            "top": 20,
+          }
+        }
+      >
+        <Icon
+          color="#fff"
+          name="settings"
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={24}
+          underlayColor="white"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <EditableImage
+          icon="pencil"
+          onPress={[Function]}
+          progress={null}
+          size={120}
+          source="test-file-stub"
+          style={
+            Object {
+              "borderColor": "#ECECEC",
+              "borderWidth": 2,
+            }
+          }
+        />
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "borderBottomColor": "rgba(255, 255, 255, 1)",
+              "borderBottomWidth": 1,
+              "color": "rgba(255, 255, 255, 1)",
+              "fontSize": 20,
+              "fontWeight": "bold",
+              "marginBottom": 10,
+              "padding": 10,
+            }
+          }
+        >
+          Baby
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "rgba(255, 255, 255, 1)",
+            }
+          }
+        >
+          Your baby health is normal
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "marginTop": 20,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ccc",
+            "paddingLeft": 15,
+          }
+        }
+      >
+        Daily Information
+      </Text>
+      <ListItem
+        checkmarkColor="#2089dc"
+        chevron={true}
+        chevronColor="#D1D1D6"
+        key="0"
+        leftIcon={
+          Object {
+            "name": "show-chart",
+          }
+        }
+        rightTitle="45 cm"
+        rightTitleStyle={
+          Object {
+            "color": "#444E59",
+            "fontSize": 12,
+          }
+        }
+        title="Height"
+      />
+      <ListItem
+        checkmarkColor="#2089dc"
+        chevron={true}
+        chevronColor="#D1D1D6"
+        key="1"
+        leftIcon={
+          Object {
+            "name": "fitness-center",
+          }
+        }
+        rightTitle="3700 gr"
+        rightTitleStyle={
+          Object {
+            "color": "#444E59",
+            "fontSize": 12,
+          }
+        }
+        title="Weight"
+      />
+      <ListItem
+        checkmarkColor="#2089dc"
+        chevron={true}
+        chevronColor="#D1D1D6"
+        key="2"
+        leftIcon={
+          Object {
+            "name": "child-care",
+          }
+        }
+        rightTitle="20 cm"
+        rightTitleStyle={
+          Object {
+            "color": "#444E59",
+            "fontSize": 12,
+          }
+        }
+        title="Head Circumference"
+      />
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "marginTop": 20,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "#ccc",
+            "paddingLeft": 15,
+          }
+        }
+      >
+        Parent Information
+      </Text>
+      <ListItem
+        checkmarkColor="#2089dc"
+        chevron={true}
+        chevronColor="#D1D1D6"
+        key="0"
+        leftAvatar={
+          Object {
+            "source": "test-file-stub",
+          }
+        }
+        onPress={[Function]}
+        scaleProps={
+          Object {
+            "activeScale": 0.95,
+            "friction": 90,
+            "tension": 100,
+          }
+        }
+        subtitle="Habib Shabani"
+        title="Father"
+      />
+      <ListItem
+        checkmarkColor="#2089dc"
+        chevron={true}
+        chevronColor="#D1D1D6"
+        key="1"
+        leftAvatar={
+          Object {
+            "source": "test-file-stub",
+          }
+        }
+        onPress={[Function]}
+        scaleProps={
+          Object {
+            "activeScale": 0.95,
+            "friction": 90,
+            "tension": 100,
+          }
+        }
+        subtitle="Masume Shiri"
+        title="Mother"
+      />
+    </View>
+  </View>
+</ScrollView>
+`;
