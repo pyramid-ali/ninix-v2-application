@@ -38,4 +38,11 @@ describe('Test Login', () => {
     expect(loginContainer.state('password')).toEqual('value changed')
   });
 
+  test('container actions dispatched correctly', () => {
+    loginContainer.find('TextInputWithIcon').at(0).simulate('changeText', '09307473598')
+    loginContainer.find('TextInputWithIcon').at(1).simulate('changeText', '123456')
+    loginContainer.find('Button').at(0).simulate('press')
+    expect(store.getActions()).toEqual([{type: 'login/REQUEST', mobile: '09307473598', password: '123456'}])
+  });
+
 });
