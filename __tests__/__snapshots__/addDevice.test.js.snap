@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test addDevice check snapshot 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#4ECDC4",
+      "flex": 1,
+    }
+  }
+>
+  <Header
+    backgroundColor="#4ECDC4"
+    centerComponent={
+      Object {
+        "style": Object {
+          "color": "#fff",
+        },
+        "text": "ADD Device",
+      }
+    }
+    leftComponent={
+      Object {
+        "color": "#fff",
+        "icon": "arrow-back",
+        "onPress": [Function],
+      }
+    }
+    placement="center"
+    statusBarProps={
+      Object {
+        "backgroundColor": "#4ECDC4",
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <NinixDevice
+      blink={false}
+      lightColor="#872B33"
+      logo="Bluetooth is off"
+      onPress={[Function]}
+      size={250}
+    />
+  </View>
+  <FlatList
+    ItemSeparatorComponent={[Function]}
+    ListHeaderComponent={[Function]}
+    data={Array []}
+    disableVirtualization={false}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    numColumns={1}
+    onEndReachedThreshold={2}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    style={
+      Object {
+        "backgroundColor": "rgba(255, 255, 255, 1)",
+        "flex": 1,
+      }
+    }
+    updateCellsBatchingPeriod={50}
+    windowSize={21}
+  />
+  <ModalDeviceConnect
+    buttons={
+      Array [
+        Object {
+          "onPress": [Function],
+          "text": "cancel",
+        },
+      ]
+    }
+    onRequestClose={[Function]}
+    title="Setup..."
+    visible={false}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+    >
+      we're working on initial setup, after this you can receive data, please wait
+    </Text>
+  </ModalDeviceConnect>
+</View>
+`;
