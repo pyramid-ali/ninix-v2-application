@@ -2,8 +2,7 @@ import React from 'react';
 import AddDevice from '../App/Containers/AddDevice';
 
 const initialState = { bluetooth: { state: null, devices: [], isConnected: false, isConnecting: false, isScanning: false, isInitiating: false, error: null, isSyncing: false, successSync: false } };
-
-let wrapper, deviceContainer, navigation, store;
+let wrapper, deviceContainer, store;
 
 describe('Test addDevice', () => {
 

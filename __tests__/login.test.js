@@ -11,7 +11,7 @@ describe('Test Login', () => {
     store = mockStore(initialState)
     navigation = { navigate: jest.fn() } //navigation property
     wrapper = shallow(<Login navigation={navigation}/>, { context: { store } }) 
-    loginContainer = wrapper.dive() // get one level deep in wrapper
+    loginContainer = wrapper.dive() //get one level deep in wrapper
   });
 
   test('check snapshot', () => {
