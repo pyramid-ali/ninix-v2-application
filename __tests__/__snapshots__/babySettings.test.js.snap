@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test addDevice check snapshot 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <NavigationBar
+    leftButton={
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "color": "rgba(255, 255, 255, 1)",
+          }
+        }
+      >
+        <Icon
+          allowFontScaling={false}
+          name="chevron-left"
+          size={12}
+        />
+         Back
+      </Text>
+    }
+    onPressLeftButton={[Function]}
+    onPressRightButton={[Function]}
+    rightButton={
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      />
+    }
+    style={
+      Object {
+        "backgroundColor": "#4ECDC4",
+      }
+    }
+  >
+    Baby Settings
+  </NavigationBar>
+  <View
+    style={
+      Object {
+        "backgroundColor": undefined,
+        "flex": 1,
+        "marginTop": 64,
+      }
+    }
+  >
+    <SettingComponent
+      onChange={[Function]}
+      settings={
+        Array [
+          Object {
+            "icon": "user-circle-o",
+            "key": "name",
+            "title": "Name",
+            "type": "string",
+            "value": null,
+          },
+          Object {
+            "items": Array [
+              Object {
+                "value": "A-",
+              },
+              Object {
+                "value": "A+",
+              },
+              Object {
+                "value": "B-",
+              },
+              Object {
+                "value": "B+",
+              },
+              Object {
+                "value": "AB-",
+              },
+              Object {
+                "value": "AB+",
+              },
+              Object {
+                "value": "O-",
+              },
+              Object {
+                "value": "O+",
+              },
+              Object {
+                "value": "A+",
+              },
+              Object {
+                "value": "A+",
+              },
+            ],
+            "key": "bloodGroup",
+            "title": "Blood Group",
+            "type": "list",
+            "value": null,
+          },
+          Object {
+            "items": Array [
+              Object {
+                "label": "boy",
+                "value": "m",
+              },
+              Object {
+                "label": "girl",
+                "value": "f",
+              },
+            ],
+            "key": "gender",
+            "title": "Gender",
+            "type": "list",
+            "value": null,
+          },
+          Object {
+            "key": "birthDate",
+            "title": "Birth Date",
+            "type": "date",
+            "value": null,
+          },
+        ]
+      }
+    />
+  </View>
+</View>
+`;
