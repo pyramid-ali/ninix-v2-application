@@ -96,6 +96,9 @@
       "<rootDir>/node_modules/",
       "<rootDir>/__tests__/jest.setup.js"
     ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(jest-)?react-native|react-navigation)"
+    ],
     "setupFiles": [
       "<rootDir>/__tests__/jest.setup"
     ],
