@@ -7,7 +7,6 @@ let wrapper, babyContainer, navigation, store;
 describe('Test addDevice', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore(initialState)
     navigation = { goBack: jest.fn() }
     wrapper = shallow(<BabySettings navigation={navigation} />, { context: { store } }) 

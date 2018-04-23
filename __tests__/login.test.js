@@ -7,7 +7,6 @@ let wrapper, loginContainer, navigation, store;
 describe('Test Login', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore(initialState)
     navigation = { navigate: jest.fn() } //navigation property
     wrapper = shallow(<Login navigation={navigation}/>, { context: { store } }) 

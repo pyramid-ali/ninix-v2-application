@@ -7,7 +7,6 @@ let wrapper, signupContainer, navigation, store;
 describe('Test Signup', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore(initialState)
     navigation = { goBack: jest.fn() } //navigation property
     wrapper = shallow(<Signup navigation={navigation}/>, { context: { store } })

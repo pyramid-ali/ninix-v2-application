@@ -8,3 +8,4 @@ configure({ adapter: new Adapter()});
 global.mockStore = configureStore();
 global.shallow = shallow;
 global.configureStore = configureStore;
+global.console.error = jest.fn() //hide console.error warnings

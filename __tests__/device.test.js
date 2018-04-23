@@ -11,7 +11,6 @@ let wrapper, deviceContainer, navigation, store;
 describe('Test addDevice', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore(initialState)
     navigation = { addListener: jest.fn() }
     wrapper = shallow(<Device navigation={navigation} />, { context: { store } }) 

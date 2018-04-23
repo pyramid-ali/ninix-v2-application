@@ -7,7 +7,6 @@ let wrapper, deviceContainer, store;
 describe('Test addDevice', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore(initialState)
     wrapper = shallow(<AddDevice />, { context: { store } }) 
     deviceContainer = wrapper.dive() // get one level deep in wrapper

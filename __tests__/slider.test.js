@@ -6,7 +6,6 @@ let wrapper, sliderContainer, store;
 describe('Test slider', () => {
 
   beforeEach(() => {
-    console.error = jest.fn() //hide console.error warnings
     store = mockStore()
     wrapper = shallow(<EssentialInformationSlider />, { context: { store } }) 
     sliderContainer = wrapper.dive() //get one level deep in wrapper
