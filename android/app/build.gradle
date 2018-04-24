@@ -79,7 +79,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/react-native-sentry/sentry.gradle"
+// apply from: "../../node_modules/react-native-sentry/sentry.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -153,7 +153,7 @@ android {
 dependencies {
     compile project(':realm')
     compile project(':react-native-vector-icons')
-    compile project(':react-native-sentry')
+    // compile project(':react-native-sentry')
     compile project(':react-native-notifications')
     compile project(':react-native-nordic-dfu')
     compile project(':react-native-linear-gradient')

@@ -13,13 +13,14 @@ export function *login (api, action) {
 
   try {
     const token = yield call(Response.resolve, response)
+    yield put(LoginAction.didSuccess())
     yield put(AuthAction.saveToken(token))
     yield put(AppAction.sync())
     yield put(Router.navigateToMain)
 
   }
   catch (error) {
-    yield put(LoginAction.failure(error.message || error.problem))
+    yield put(LoginAction.didFail(error.message || error.problem))
   }
 
 }

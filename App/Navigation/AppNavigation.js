@@ -1,5 +1,12 @@
 // import Libraries
 import { StackNavigator } from 'react-navigation'
+import EditMotherInformation from '../Containers/EditMotherInformation'
+import EditFatherInformation from '../Containers/EditFatherInformation'
+import ListPicker from '../Containers/ListPicker'
+import EditBabyInformation from '../Containers/EditBabyInformation'
+import BabyHead from '../Containers/BabyHead'
+import BabyHeight from '../Containers/BabyHeight'
+import BabyWeight from '../Containers/BabyWeight'
 import EssentialInformationSlider from '../Containers/EssentialInformationSlider'
 import ShowNinixData from '../Containers/ShowNinixData'
 
@@ -20,9 +27,27 @@ import Login from '../Containers/Login'
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
-  EssentialInformationSlider: { screen: EssentialInformationSlider },
-  ShowNinixData: { screen: ShowNinixData },
-
+  EditMotherInformation: { screen: EditMotherInformation },
+  EditFatherInformation: { screen: EditFatherInformation },
+  ListPicker: { screen: ListPicker },
+  EditBabyInformation: {
+    screen: EditBabyInformation
+  },
+  BabyHead: {
+    screen: BabyHead
+  },
+  BabyHeight: {
+    screen: BabyHeight
+  },
+  BabyWeight: {
+    screen: BabyWeight
+  },
+  EssentialInformationSlider: {
+    screen: EssentialInformationSlider
+  },
+  ShowNinixData: {
+    screen: ShowNinixData
+  },
   Landing: {
     screen: Landing
   },

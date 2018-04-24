@@ -392,6 +392,13 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@nart/react-native-swiper@^1.5.13":
+  version "1.5.13"
+  resolved "https://registry.yarnpkg.com/@nart/react-native-swiper/-/react-native-swiper-1.5.13.tgz#293ac58edcb57afb37221a1f69dcfaf1251306de"
+  dependencies:
+    prop-types "^15.5.10"
+    react-native-vertical-view-pager "^0.1.1"
+
 "@sentry/cli@^1.30.1":
   version "1.30.3"
   resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.30.3.tgz#02d0f7781c1ee5e1be5a4312a325fbe8b1b37231"
@@ -5680,7 +5687,7 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-ble-plx@0.9.0:
+react-native-ble-plx@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-0.9.0.tgz#1ffa18e73133193d96c3edd7100b87f86d4cb403"
 
@@ -5832,6 +5839,12 @@ react-native-swipeout@^2.2.2:
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
 
+react-native-swiper@^1.5.13:
+  version "1.5.13"
+  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+  dependencies:
+    prop-types "^15.5.10"
+
 "react-native-tab-view@github:react-navigation/react-native-tab-view":
   version "0.0.74"
   resolved "https://codeload.github.com/react-navigation/react-native-tab-view/tar.gz/36ebd834d78b841fc19778c966465d02fd1213bb"
@@ -5855,6 +5868,10 @@ react-native-vector-icons@^4.6.0:
     lodash "^4.0.0"
     prop-types "^15.5.10"
     yargs "^8.0.2"
+
+react-native-vertical-view-pager@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-vertical-view-pager/-/react-native-vertical-view-pager-0.1.1.tgz#c9ad2f3eb936219ff21cabd6d5842468a5ddbee3"
 
 react-native@^0.54.4:
   version "0.54.4"

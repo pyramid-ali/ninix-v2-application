@@ -22,6 +22,7 @@
     "git-hook": "npm test -s"
   },
   "dependencies": {
+    "@nart/react-native-swiper": "^1.5.13",
     "antd-mobile": "^2.1.8",
     "apisauce": "^0.14.3",
     "format-json": "^1.0.3",
@@ -50,6 +51,7 @@
     "react-native-notifications": "^1.1.19",
     "react-native-pages": "^0.7.0",
     "react-native-sentry": "^0.35.3",
+    "react-native-swiper": "^1.5.13",
     "react-native-textinput-effects": "^0.4.2",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.10",

@@ -29,25 +29,26 @@ class Profile extends Component {
   render () {
     const { mother, father, baby } = this.props
     const babyImage   = baby.image   ? {uri: baby.image.uri}   : require('../Images/Profile/3-3.jpg')
-    const fatherImage = father.image ? {uri: father.image.uri} : require('../Images/Profile/3-1.jpg')
-    const motherImage = mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg')
 
 
     const data = [
       {
         title: 'Height',
         icon: 'show-chart',
-        value: '45 cm'
+        value: '- cm',
+        onPress: () => this.props.navigation.navigate('BabyHeight')
       },
       {
         title: 'Weight',
         icon: 'fitness-center',
-        value: '3700 gr'
+        value: '3700 gr',
+        onPress: () => this.props.navigation.navigate('BabyWeight')
       },
       {
         title: 'Head Circumference',
         icon: 'child-care',
-        value: '20 cm'
+        value: '20 cm',
+        onPress: () => this.props.navigation.navigate('BabyHead')
       },
     ]
 
@@ -56,13 +57,15 @@ class Profile extends Component {
         title: 'Father',
         avatar: require('../Images/Profile/3-1.jpg'),
         subtitle: 'Habib Shabani',
-        type: 'father'
+        type: 'father',
+        onPress: () => this.props.navigation.navigate('EditFatherInformation')
       },
       {
         title: 'Mother',
         avatar: mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg'),
         subtitle: 'Masume Shiri',
-        type: 'mother'
+        type: 'mother',
+        onPress: () => this.props.navigation.navigate('EditMotherInformation')
       }
     ]
 
@@ -85,6 +88,7 @@ class Profile extends Component {
               <Icon
                 name='settings'
                 color='#fff'
+                onPress={() => this.props.navigation.navigate('EditBabyInformation')}
               />
             </View>
 
@@ -120,9 +124,11 @@ class Profile extends Component {
                 <ListItem
                   key={i}
                   title={item.title}
+                  rightSubtitle='6d ago'
                   leftIcon={{name: item.icon}}
                   rightTitle={item.value}
                   rightTitleStyle={styles.rightTitle}
+                  onPress={item.onPress }
                   chevron
                 />
               ))
@@ -147,7 +153,7 @@ class Profile extends Component {
                   }}
                   key={i}
                   title={item.title}
-                  onPress={() => this.props.navigation.navigate('ParentSettings', {type: item.type})}
+                  onPress={item.onPress}
                   leftAvatar={{source: item.avatar}}
                   subtitle={item.subtitle}
                   chevron

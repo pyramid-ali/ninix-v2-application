@@ -10,7 +10,6 @@ export function *didReceiveData (api, action) {
   RealmStorage.save(data)
   yield sendDataToServer(api, data)
 
-
 }
 
 export function *sendDataToServer(api, newData) {
@@ -37,7 +36,7 @@ export function *sendDataToServer(api, newData) {
 }
 
 export function *syncWithServer(api, action) {
-  console.tron.log({log: 'sync with server called'})
+
   const { auth } = yield select()
   if (auth.accessToken) {
     const dataArray = yield call(RealmStorage.getTemp)

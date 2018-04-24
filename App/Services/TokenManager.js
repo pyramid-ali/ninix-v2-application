@@ -24,5 +24,5 @@ export const removeToken = async () => {
 }
 
 export const isTokenValid = token => (
-  moment(token.expiresAt).diff(moment(), 'hours')  < 1
+  moment(token.expiresAt).diff(moment(), 'hours')  > 1
 )

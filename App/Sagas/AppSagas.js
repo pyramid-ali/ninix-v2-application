@@ -34,28 +34,19 @@ export function *init (api, action) {
 
   try {
 
-    // we need to know current connectivity status
-    const isConnected = yield call(NetInfo.isConnected.fetch)
-    yield put(AppAction.didConnectivityChange(isConnected))
-
     // this section is belong to check user authority
     const token = yield call(getToken)
 
     // if token doesn't exist, check for app Introduction to showing landing page
     if (!token) {
-
-      if (app.isIntroduced) {
-        yield put(Router.navigateToLogin)
-      }
-      else {
-        yield put(Router.navigateToLanding)
-      }
-
-      // we don't need go further
+      if (app.isIntroduced) yield put(Router.navigateToLogin)
+      else yield put(Router.navigateToLanding)
       return
     }
 
+
     if (!isTokenValid(token)) {
+
       const refreshToken = token.refreshToken
       if (!refreshToken) {
         yield put(Router.navigateToLogin)
@@ -70,7 +61,7 @@ export function *init (api, action) {
       yield put(AuthAction.issueToken(token))
     }
 
-    yield put(AppAction.sync())
+    // yield put(AppAction.sync())
     yield put(Router.navigateToMain)
 
   }
@@ -78,7 +69,8 @@ export function *init (api, action) {
     console.tron.error({
       file: 'Sagas/AppSagas.js',
       func: 'init',
-      error
+      error,
+      message: error.message
     })
 
     // when an error occurred when initializing app
@@ -94,6 +86,12 @@ export function *init (api, action) {
 
 // TODO: synchronization with server handle in the latest stage
 export function *sync () {
+
+  const { auth } = yield select()
+  if (!auth.accessToken) {
+    yield put(AppAction.didSync())
+    return
+  }
 
   // 1. get user information
   // 2. get mother and father user information

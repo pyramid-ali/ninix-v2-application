@@ -5,7 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import io.realm.react.RealmReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import io.sentry.RNSentryPackage;
+// import io.sentry.RNSentryPackage;
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.pilloxa.dfu.RNNordicDfuPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -38,7 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            new RNSentryPackage(MainApplication.this),
+            // new RNSentryPackage(MainApplication.this),
             new RNNotificationsPackage(MainApplication.this),
             new RNNordicDfuPackage(),
             new LinearGradientPackage(),

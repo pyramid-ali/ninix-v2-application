@@ -78,7 +78,7 @@ export default class CurvedChart extends Component {
         // textColor: processColor('yellow'),
         textSize: 14,
         // fontFamily: 'tahoma',
-        fontStyle: styles.xAxis,
+        // fontStyle: styles.xAxis,
         // gridColor: processColor('orange'),
         // gridLineWidth: 1,
         // axisLineColor: processColor('purple'),

@@ -19,8 +19,8 @@ export const INITIAL_STATE = Immutable({
  */
 const { Types, Creators } = createActions({
   request: ['mobile', 'password'],
-  success: null,
-  failure: ['error']
+  didSuccess: null,
+  didFail: ['error']
 }, {
   prefix: 'login/'
 })
@@ -77,9 +77,9 @@ export const failure = (state = INITIAL_STATE, action) => {
  * create reducer
  */
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.SUCCESS]: success,
+  [Types.DID_SUCCESS]: success,
   [Types.REQUEST]: request,
-  [Types.FAILURE]: failure,
+  [Types.DID_FAIL]: failure,
 })
 
 export default Creators

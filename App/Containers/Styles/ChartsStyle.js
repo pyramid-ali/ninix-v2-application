@@ -18,7 +18,8 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   segment: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    marginBottom: 10
   },
   chartWrapper: {
     flex: 1,

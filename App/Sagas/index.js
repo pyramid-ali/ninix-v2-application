@@ -82,8 +82,6 @@ const root = function * root () {
     takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),
     takeLatest(DataTypes.SYNC_WITH_SERVER, DataSagas.syncWithServer, api),
 
-    // setup Network listener
-    takeLatest(AppTypes.DID_CONNECTIVITY_CHANGE, DataSagas.syncWithServer, api)
   ])
 }
 
