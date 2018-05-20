@@ -20,7 +20,7 @@ const { Types, Creators } = createActions({
   cancelConnection: null,
   didDiscover: ['devices'],
   didStateChange: ['status'],
-  connect: ['device', 'callback'],
+  connect: ['device', 'back'],
   didConnect: null,
   disconnect: null,
   didDisconnect: null,
@@ -82,6 +82,7 @@ export const connect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isConnecting: true,
+    isConnected: false,
     error: null
   }
 }
@@ -102,7 +103,7 @@ export const didDisconnect = (state = INITIAL_STATE, action) => {
     ...state,
     isConnected: false,
     isConnecting: false,
-    isInitiating: false,
+    isInitiating: false
   }
 }
 
@@ -110,6 +111,7 @@ export const didFail = (state = INITIAL_STATE, action) => {
   const { error } = action
   return {
     ...state,
+    isConnected: false,
     isConnecting: false,
     isInitiating: false,
     error,

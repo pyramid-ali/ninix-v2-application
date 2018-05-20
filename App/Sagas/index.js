@@ -52,6 +52,7 @@ const root = function * root () {
     // Signup Sagas
     takeLatest(SignupTypes.REQUEST_TOKEN, SignupSagas.requestToken, api),
     takeLatest(SignupTypes.CHECK_TOKEN, SignupSagas.checkToken, api),
+    takeLatest(SignupTypes.REGISTER, SignupSagas.register, api),
 
     // Parent Sagas
     takeLatest(ParentTypes.SAVE_FATHER_INFORMATION, ParentSagas.saveFatherInformation, api),

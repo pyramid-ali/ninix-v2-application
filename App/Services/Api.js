@@ -31,7 +31,15 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
    * @param mobile string,
    * @param token string, 4 character code
    */
-  const checkActivationCode = ({mobile, token}) => api.post('api/register/activation/sms', {mobile, token})
+  const checkActivationCode = (mobile, token) => api.post('api/register/activation/sms', {mobile, token})
+
+  /***
+   * register new user
+   * @param mobile string,
+   * @param token string, 4 character code
+   * @param password
+   */
+  const register = (mobile, token, password) => api('api/register', {mobile, token, password})
 
   /***
    * login with username (mobile) and password

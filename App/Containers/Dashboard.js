@@ -16,14 +16,14 @@ class Dashboard extends Component {
 
   render () {
     const { data } = this.props
-    const last = data.stream[data.stream.length - 1]
+
     // TODO: we must show here the condition of device, if device is not connected we show last time connected
     return (
       <View style={styles.container}>
         <View style={styles.top}>
           <View style={styles.informationContainer}>
             <ArrowImage containerStyle={styles.imageContainer} source={ require('../Images/login-background.jpg') } />
-            <VitalSignsBox vitalSigns={last} />
+            <VitalSignsBox vitalSigns={data.stream} />
           </View>
           <View style={styles.statusContainer}>
             <Text style={styles.status}>No Device Connected</Text>

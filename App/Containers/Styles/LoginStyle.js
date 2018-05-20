@@ -18,10 +18,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  scrollView: {
-    height: Metrics.screenHeight,
-    maxHeight: Metrics.screenHeight
-  },
   logoContainer: {
     flexGrow: 1,
     justifyContent: 'center',

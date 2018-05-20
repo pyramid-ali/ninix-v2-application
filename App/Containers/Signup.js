@@ -21,8 +21,7 @@ class Signup extends Component {
       stage: 'mobile',
       mobile: '09',
       token: '',
-      password: '',
-      newPassword: ''
+      password: ''
     }
 
     this.images = {
@@ -41,8 +40,7 @@ class Signup extends Component {
       <EntryTemplate
         title="SIGNUP"
         imageSource={this.images[stage]}
-        leftBarButton={this.renderLeftBarButton()}
-        onPressLeftBarButton={() => {
+        onPressCancel={() => {
           this.resetState()
           this.props.navigation.goBack()
         }}
@@ -74,8 +72,9 @@ class Signup extends Component {
     )
   }
 
-  didMobileApproved () {
+  didMobileApproved (mobile) {
     this.setState({
+      mobile,
       stage: 'token'
     })
   }
@@ -88,37 +87,35 @@ class Signup extends Component {
         mobile={this.state.mobile}
         wrongNumber={() => {this.setState({stage: 'mobile'})}}
         fetching={signup.fetching}
-        onFinish={(token) => {verifyToken(token, this.didTokenValidate.bind(this))}}
+        onFinish={(token) => {verifyToken(this.state.mobile, token, this.didTokenValidate.bind(this))}}
       />
     )
   }
 
   renderPasswordEntrance () {
     // TODO: handle when user want to change their password
-    const { password, newPassword } = this.state
+    const { password } = this.state
 
     return (
       <PasswordEntrance
-        password={password}
-        valid={newPassword.length > 6}
-        onChangeValue={(newPassword) => this.setState({newPassword})}
+        valid={password.length >= 6}
+        value={password}
+        onChangeValue={(password) => this.setState({password})}
         onChangePassword={() => {}}
-        onAccept={() => this.props.gotoMain()}
+        onPress={() => this.props.gotoMain()}
         fetching={false}
       />
     )
   }
 
-  didTokenValidate (password) {
-    this.setState({password})
-    this.setState({stage: 'password'})
+  didTokenValidate (mobile, token) {
+    this.setState({
+      mobile,
+      token,
+      stage: 'password'
+    })
   }
 
-  renderLeftBarButton () {
-    return (
-      <Text style={styles.barButton}><Icon name='chevron-left' /> Login</Text>
-    )
-  }
 
   resetState () {
     this.setState({

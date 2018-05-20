@@ -10,6 +10,14 @@ export default class CurvedChart extends Component {
 
   constructor(props) {
     super(props)
+  }
+
+  componentDidMount () {
+
+  }
+
+  render () {
+
     this.chartProps = {
 
       drawGridBackground: false,
@@ -52,7 +60,7 @@ export default class CurvedChart extends Component {
       // },
       // chartBackgroundColor: processColor('green'),
       // logEnabled: true,
-      noDataText: 'No Data Available',
+      noDataText: 'There is no data for last minute to be shown',
       // touchEnabled: true,
       // dragDecelerationEnabled: true,
       // marker: {
@@ -104,7 +112,7 @@ export default class CurvedChart extends Component {
         // labelCount: 5,
         // labelCountForce: true,
         // centerAxisLabels: true,
-        valueFormatter: ['5m', '4m', '3m', '1m', 'now'],
+        // valueFormatter: ['5m', '4m', '3m', '1m', 'now'],
         // labelRotationAngle: 90,
         // avoidFirstLastClipping: true,
         position: 'BOTTOM',
@@ -141,7 +149,7 @@ export default class CurvedChart extends Component {
           // axisMinimum: 1,
           // granularity: 1,
           // granularityEnabled: true,
-          labelCount: 5,
+          // labelCount: 5,
           // labelCountForce: true,
           // centerAxisLabels: true,
           // valueFormatter: 'largeValue',
@@ -207,7 +215,7 @@ export default class CurvedChart extends Component {
         }
       },
       chartDescription: {
-        text: 'Temperature - Real Time',
+        text: this.props.text + ' - Real Time',
         // textColor: processColor('red'),
         // textSize: 18,
         // positionX: 20,
@@ -234,14 +242,6 @@ export default class CurvedChart extends Component {
         // }
       }
     }
-  }
-
-  componentDidMount () {
-
-
-  }
-
-  render () {
 
     let temp = {
       dataSets: [{
@@ -276,13 +276,13 @@ export default class CurvedChart extends Component {
         }
       }],
     }
-
+    console.tron.log({data: this.props.data})
     return (
       <View style={styles.container}>
         <LineChart
           {...this.chartProps}
           style={styles.chart}
-          data={_.isEmpty(this.props.data) ? undefined : temp}
+          data={this.props.data ? temp : undefined}
         />
       </View>
     )

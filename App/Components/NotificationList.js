@@ -1,52 +1,55 @@
 // Libraries
 import React, { Component } from 'react'
 import { View, FlatList } from 'react-native'
+import { connect } from 'react-redux'
+import { ListItem } from 'react-native-elements'
+import moment from 'moment'
 
 // Dependencies
 import NotificationItem from './NotificationItem'
 
+
 // Styles
 import styles from './Styles/NotificationListStyle'
+import Colors from "../Themes/Colors";
 
-export default class NotificationList extends Component {
+class NotificationList extends Component {
 
   render () {
+    console.tron.log({log: 'hello', data: this.props.alarm})
     const { navigation } = this.props
     const { key } = navigation.state
-    const data = [
-      {
-        key: '1',
-        date: new Date(),
-        type: 'danger',
-        text: `Respiratory rate goes under 20 bps, please be aware, check your baby`,
-        problem: 'tangie-nafas'
-      },
-      {
-        key: '2',
-        date: new Date(),
-        type: 'warning',
-        text: `your baby is on prone, please rotate your baby to normal orientation`,
-        problem: 'tangie-nafas'
-      },
-      {
-        key: '3',
-        date: new Date(),
-        type: 'normal',
-        text: `maybe your baby pooped, please  check his diaper`,
-        problem: 'tangie-nafas'
-      }
-    ]
-
-    const filtered = this.filter(data, key)
+    const data = this.props.alarm[key.toLowerCase()]
+    const manipulated = Object.keys(data).map(k => ({key: k, type: key.toLowerCase(), repeat: data[k].repeat, date: moment(k * 1000)}))
 
     return (
-      <FlatList
-        data={filtered}
-        style={styles.container}
-        renderItem={this.renderItem.bind(this)}
-        ItemSeparatorComponent={this.renderSeparator}
-      />
+      <View>
+        { manipulated.map(item => {
+          return (
+            <ListItem
+              key={key}
+              leftIcon={{name: 'error', color: Colors.alert}}
+              title={`your baby ${item.type} is in danger position, please check your baby`}
+              titleStyle={{color: Colors.dark, fontSize: 14}}
+              subtitle={`this last about ${item.repeat} seconds`}
+              subtitleStyle={{fontFamily: 'PoiretOne-Regular'}}
+              rightTitle={item.date.fromNow()}
+              rightTitleStyle={{fontSize: 10, color: Colors.gray}}
+            />
+          )
+        })
+        }
+      </View>
     )
+
+    // return (
+    //   <FlatList
+    //     data={filtered}
+    //     style={styles.container}
+    //     renderItem={this.renderItem.bind(this)}
+    //     ItemSeparatorComponent={this.renderSeparator}
+    //   />
+    // )
   }
 
   renderItem (input) {
@@ -74,3 +77,16 @@ export default class NotificationList extends Component {
     }
   }
 }
+
+const mapStateToProps = (state) => {
+  const { alarm } = state
+  return {
+    alarm
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationList)

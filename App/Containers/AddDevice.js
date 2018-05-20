@@ -16,7 +16,7 @@ import _ from 'lodash'
 // Styles
 import styles from './Styles/AddDeviceStyle'
 import Colors from '../Themes/Colors'
-import {Header} from 'react-native-elements';
+import {Header, ListItem} from 'react-native-elements';
 
 // TODO: change list Item
 class AddDevice extends Component {
@@ -43,16 +43,17 @@ class AddDevice extends Component {
               blink={blink}
               lightColor={color} />
           </View>
-          { this.props.bluetooth.error ? this.renderError() : null}
-          <FlatList
-            keyExtractor={(item, index) => item.id}
-            ItemSeparatorComponent={this.separatorComponent.bind(this)}
-            ListHeaderComponent={this.listHeaderComponent.bind(this)}
-            style={{flex: 1, backgroundColor: Colors.white}}
-            data={data}
-            renderItem={({item}) => this.renderItem(item)}
-          />
+          <View style={{flex: 1, backgroundColor: Colors.white}}>
+            { this.props.bluetooth.error ? this.renderError() : null}
+            <Header
+              backgroundColor={Colors.dark}
+              centerComponent={{ text: 'Available Devices', style: { color: '#fff' } }}
+            />
+            { data.map(this.renderItemList.bind(this) ) }
+          </View>
+
           { this.renderModal() }
+
         </View>
     )
   }
@@ -90,9 +91,23 @@ class AddDevice extends Component {
     }
   }
 
+  renderItemList (device) {
+    return (
+      <ListItem
+        key={device.id}
+        leftAvatar={<NinixDevice containerStyle={{flex: -1}} size={35} />}
+        titleStyle={{color: Colors.primary}}
+        title={device.name}
+        rightTitle='connect'
+        chevron
+        onPress={() => this.props.connect(device)}
+      />
+    )
+  }
+
   renderItem (device) {
     return (
-      <FoundedDeviceItem onPress={() => this.props.connect(device, () => this.props.navigation.goBack())} text={device.name} key={device.id} />
+      <FoundedDeviceItem onPress={() => this.props.connect(device)} text={device.name} key={device.id} />
     )
   }
 
@@ -148,14 +163,6 @@ class AddDevice extends Component {
       <ModalDeviceConnect
         title={title}
         visible={visible}
-        buttons={[
-          {
-            text: 'cancel',
-            onPress: () => {
-              this.props.cancelConnection()
-            }
-          }
-        ]}
       >
         <Text>{ description }</Text>
       </ModalDeviceConnect>
@@ -175,7 +182,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     startScan: () => dispatch(BluetoothAction.startScan()),
     stopScan: () => dispatch(BluetoothAction.stopScan()),
-    connect: (device, callback) => dispatch(BluetoothAction.connect(device, callback)),
+    connect: (device) => dispatch(BluetoothAction.connect(device)),
     disconnect: () => dispatch(BluetoothAction.disconnect()),
     cancelConnection: () => dispatch(BluetoothAction.cancelConnection())
   }

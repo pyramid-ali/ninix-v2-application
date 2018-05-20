@@ -4,20 +4,19 @@ import Immutable from 'seamless-immutable'
 // define initial state when for first time launch
 export const INITIAL_STATE = Immutable({
   fetching: false,
-  error: null,
-  mobile: null
+  error: null
 })
 
 // define types and actions
 const { Types, Creators } = createActions({
   requestToken: ['mobile', 'callback'],
-  successTokenRequest: ['mobile'],
-  checkToken: ['token', 'callback'],
-  success: null,
-  failure: ['error'],
+  checkToken: ['mobile', 'token', 'callback'],
+  register: ['mobile', 'token', 'password'],
+  didRequestSuccess: null,
+  didRequestFail: ['error'],
   cancel: null
 }, {
-  prefix: 'SIGNUP_'
+  prefix: 'signup/'
 })
 
 export const SignupTypes = Types
@@ -30,16 +29,6 @@ const requestToken = (state = INITIAL_STATE, action) => {
   }
 }
 
-const successTokenRequest = (state = INITIAL_STATE, action) => {
-  const { mobile } = action
-  return {
-    ...state,
-    mobile,
-    fetching: false,
-    error: null
-  }
-}
-
 const checkToken = (state = INITIAL_STATE, action) => {
   return {
     ...state,
@@ -48,7 +37,16 @@ const checkToken = (state = INITIAL_STATE, action) => {
   }
 }
 
-const success = (state = INITIAL_STATE, action) => {
+const register = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    fetching: true,
+    error: null
+  }
+}
+
+const didRequestSuccess = (state = INITIAL_STATE, action) => {
+
   return {
     ...state,
     fetching: false,
@@ -56,8 +54,7 @@ const success = (state = INITIAL_STATE, action) => {
   }
 }
 
-
-const failure = (state = INITIAL_STATE, action) => {
+const didRequestFail = (state = INITIAL_STATE, action) => {
   const { error } = action
   return {
     ...state,
@@ -72,12 +69,12 @@ const cancel = (state = INITIAL_STATE, action) => {
 
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.REQUEST_TOKEN]:         requestToken,
-  [Types.SUCCESS_TOKEN_REQUEST]: successTokenRequest,
-  [Types.CHECK_TOKEN]:           checkToken,
-  [Types.SUCCESS]:               success,
-  [Types.FAILURE]:               failure,
-  [Types.CANCEL]:                cancel
+  [Types.REQUEST_TOKEN]: requestToken,
+  [Types.CHECK_TOKEN]: checkToken,
+  [Types.REGISTER]: register,
+  [Types.DID_REQUEST_SUCCESS]: didRequestSuccess,
+  [Types.DID_REQUEST_FAIL]: didRequestFail,
+  [Types.CANCEL]: cancel
 })
 
 export default Creators

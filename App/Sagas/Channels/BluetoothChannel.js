@@ -6,6 +6,9 @@ import { put, take, select } from 'redux-saga/effects'
 import DataAction from '../../Redux/DataRedux'
 import BluetoothAction from '../../Redux/BluetoothRedux'
 import CentralManager from '../../Bluetooth/CentralManager'
+import NotificationService from "../../Services/NotificationService"
+import AlarmAction from '../../Redux/AlarmRedux'
+import AlarmService from "../../Services/AlarmService";
 
 let isSyncing = false
 
@@ -37,7 +40,6 @@ export function *setupNinixStreamListener (channel) {
       const result = yield take(channel)
       yield put(DataAction.didReceiveData(result))
       if ((result.flashStore || result.ramStore) && !isSyncing) {
-        console.tron.log({log: 'sync is ready'})
         isSyncing = true
         yield put(BluetoothAction.startSync())
       }
@@ -60,11 +62,36 @@ export function setupNinixStreamListenerChannel (ninix) {
   })
 }
 
+export function *setupNinixAlarmListener (channel) {
+  try {
+    while (true) {
+      const newAlarm = yield take(channel)
+      const { alarm } = yield select()
+      const output = AlarmService.receive(alarm, newAlarm)
+      yield put(AlarmAction.save(output))
+    }
+  }
+  finally {
+    isSyncing = false
+  }
+}
+
+export function setupNinixAlarmListenerChannel (ninix) {
+  return eventChannel(emit => {
+    const listener = result => {
+      emit(result)
+    }
+    const subscription = ninix.alarmListener(listener)
+    return () => {
+      subscription.remove()
+    }
+  })
+}
+
 export function *setupNinixSyncListener (channel) {
   try {
     while (true) {
       const result = yield take(channel)
-      console.tron.log({log: 'setupNinixSyncListener', result})
       yield put(DataAction.didReceiveSync(result))
       yield put(BluetoothAction.didSyncEnd())
       yield put(DataAction.didSyncEnd())
@@ -89,9 +116,24 @@ export function setupNinixSyncListenerChannel (ninix) {
 export function *setupBluetoothConnectionListener (channel) {
   try {
     while (true) {
+
       const { error, device } = yield take(channel)
-      yield put(BluetoothAction.didFail(error ? error.message : null))
-      yield put(BluetoothAction.didDisconnect())
+      console.tron.log({forceDisconnect: CentralManager.forceDisconnect, tries: CentralManager.tries})
+      if (CentralManager.forceDisconnect) {
+        yield put(BluetoothAction.didDisconnect())
+        CentralManager.forceDisconnect = false
+        CentralManager.tries = 0
+      }
+      else {
+        if (CentralManager.tries <= 3) {
+          yield put(BluetoothAction.connect(device))
+        }
+        else {
+          yield put(BluetoothAction.didFail(error ? error.message : 'Please clear bound information'))
+          CentralManager.tries = 0
+        }
+      }
+
     }
   }
   finally {}
@@ -99,7 +141,7 @@ export function *setupBluetoothConnectionListener (channel) {
 
 export function setupBluetoothConnectionListenerChannel (device) {
   return eventChannel(emit => {
-    const listener = (error, device) => {
+    const listener = (error, device, forceDisconnect) => {
       emit({error, device})
     }
     const subscription = device.onDisconnected(listener)

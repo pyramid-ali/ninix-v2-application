@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { View, Text, Image } from 'react-native'
 import PropTypes from 'prop-types'
 
+import DataDisplay from '../Transform/DataDisplay'
+
 // Styles
 import styles from './Styles/VitalSignsBoxStyle'
 
@@ -20,7 +22,7 @@ export default class VitalSignsBox extends Component {
   render () {
 
     const { containerStyle, vitalSigns } = this.props
-    const { temperature, respiratory, humidity, orientation } = vitalSigns
+
     // TODO: change name of images
     // TODO: change the way of showing vital signs, define for each a function
 
@@ -30,13 +32,13 @@ export default class VitalSignsBox extends Component {
           <View style={[styles.column, styles.leftColumn]}>
             <View style={styles.inlineBox}>
               <Image style={styles.iconImage} source={require('../Images/Dashboard/2-3.png')} />
-              <Text style={styles.statText}>{temperature !== null ? temperature + ' °C' : 'N/A'}</Text>
+              <Text style={styles.statText}>{DataDisplay.temperature(vitalSigns)}</Text>
             </View>
           </View>
           <View style={[styles.column, styles.rightColumn]}>
             <View style={styles.inlineBox}>
               <Image style={styles.iconImage} source={require('../Images/Dashboard/2-2-1.png')} />
-              <Text style={styles.statText}>{humidity !== null ? this.pooped(humidity) : 'N/A'}</Text>
+              <Text style={styles.statText}>{DataDisplay.humidity(vitalSigns)}</Text>
             </View>
           </View>
         </View>
@@ -44,13 +46,13 @@ export default class VitalSignsBox extends Component {
           <View style={[styles.column, styles.leftColumn]}>
             <View style={styles.inlineBox}>
               <Image style={styles.iconImage} source={require('../Images/Dashboard/2-4.png')} />
-              <Text style={styles.statText}>{respiratory !== null ? respiratory + ' BPS'  : 'N/A'} </Text>
+              <Text style={styles.statText}>{DataDisplay.respiratory(vitalSigns)} </Text>
             </View>
           </View>
           <View style={[styles.column, styles.rightColumn]}>
             <View style={styles.inlineBox}>
               <Image style={styles.iconImage} source={require('../Images/Dashboard/2-1-1.png')} />
-              <Text style={styles.statText}>{orientation !== null  ? this.orientation(orientation) : 'N/A'}</Text>
+              <Text style={styles.statText}>{DataDisplay.orientation(vitalSigns)}</Text>
             </View>
           </View>
         </View>
@@ -58,22 +60,12 @@ export default class VitalSignsBox extends Component {
     )
   }
 
-  pooped (number) {
-    if (number > 4) {
-      return 'Pooped'
-    }
-    return 'Normal'
-  }
+}
 
-  orientation (number) {
-    switch (number) {
-      case 0:
-        return 'Prone'
-      case 1:
-        return 'Normal'
-      default:
-        return 'Unknown'
-    }
-  }
-
+VitalSignsBox.propTypes = {
+  containerStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object
+  ]),
+  vitalSigns: PropTypes.array
 }

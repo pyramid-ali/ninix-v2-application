@@ -62,6 +62,9 @@ export default class Ninix {
         case UUID.services.main.chars.synchronize:
           this.syncCharacteristic = characteristic
           break
+        case UUID.services.main.chars.alarm:
+          this.alarmCharacteristic = characteristic
+          break
         case UUID.services.deviceInformation.chars.name:
           this.deviceNameCharacteristic = characteristic
           break
@@ -79,7 +82,12 @@ export default class Ninix {
   }
 
   async bond () {
-    return await this.commandCharacteristic.read()
+    try {
+      return await this.commandCharacteristic.read()
+    }
+    catch (error) {
+      return null
+    }
   }
 
   async getName () {
@@ -96,6 +104,11 @@ export default class Ninix {
 
   async getFirmware () {
     return await this.deviceFirmawareCharacteristic.read().then(parseCharValue)
+  }
+
+  async getErrorLog () {
+    await this.sendCommand(Commands.errorLog)
+    return this.commandCharacteristic.read().then(this.getCharacteristicBytesString)
   }
 
   stream (listener) {
@@ -129,6 +142,16 @@ export default class Ninix {
     }, 'sync')
   }
 
+  alarmListener (listener) {
+    return this.alarmCharacteristic.monitor((error, char) => {
+      if (char) {
+        const bytes = this.getCharacteristicBytes(char)
+        const result = DataHandler.alarm(bytes)
+        listener(result)
+      }
+    })
+  }
+
   didSyncFinish (listener) {
     listener(this.syncData)
     CentralManager.cancelTransaction('sync')
@@ -153,6 +176,13 @@ export default class Ninix {
 
   }
 
+  getCharacteristicBytesString (char) {
+
+    let arr = []
+    const buf = Buffer.from(char.value, 'base64')
+    return buf.toString('hex')
+  }
+
   getCharacteristicBytes (char) {
 
     let arr = []
@@ -172,11 +202,16 @@ export default class Ninix {
   }
 
   async sendTurnOffDevice () {
+    CentralManager.forceDisconnect = true
     return await this.sendCommand(Commands.turnOff)
   }
 
   async sendUpdateFirmwareCommand () {
     return await this.sendCommand(Commands.updateFirmware)
+  }
+
+  async sendResetCommand () {
+    return await this.sendCommand(Commands.reset)
   }
 
   async sendCommand (command) {

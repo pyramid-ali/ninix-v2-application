@@ -3,15 +3,16 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
+import io.sentry.RNSentryPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.pilloxa.dfu.RNNordicDfuPackage;
 import io.realm.react.RealmReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 // import io.sentry.RNSentryPackage;
-import com.wix.reactnativenotifications.RNNotificationsPackage;
-import com.pilloxa.dfu.RNNordicDfuPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.polidea.reactnativeble.BlePackage;
@@ -36,15 +37,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SvgPackage(),
+            new RNSentryPackage(MainApplication.this),
+            new ReactNativePushNotificationPackage(),
+            new RNNordicDfuPackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            // new RNSentryPackage(MainApplication.this),
-            new RNNotificationsPackage(MainApplication.this),
-            new RNNordicDfuPackage(),
             new LinearGradientPackage(),
             new ImagePickerPackage(),
             new RNFetchBlobPackage(),
-            new RNDeviceInfo(),
             new ReactNativeConfigPackage(),
             new MPAndroidChartPackage(),
             new BlePackage(),

@@ -1,17 +1,13 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, processColor, StatusBar } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import {Header} from 'react-native-elements'
+import { View, Text, StatusBar } from 'react-native'
+import { Header, Icon } from 'react-native-elements'
+import { transformTemperature, transformRespiratory } from '../Transform/ArrayDataManipulate'
 
 // Styles
-import styles from './Styles/ChartsStyle'
-import SegmentedControl from '../Components/SegmentedControl'
-import CurvedChart from '../Components/CurvedChart'
-import Colors from '../Themes/Colors';
-
-const COLOR_PURPLE = processColor('#697dfb')
+import Colors from '../Themes/Colors'
+import LineChart from "../Components/LineChart"
 
 class Charts extends Component {
 
@@ -24,6 +20,7 @@ class Charts extends Component {
 
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
+      this.forceUpdate()
       StatusBar.setBackgroundColor(Colors.secondary, true)
     })
 
@@ -33,8 +30,77 @@ class Charts extends Component {
     this._navListener.remove()
   }
 
+  // render() {
+  //   const { stream } = this.props
+  //
+  //   return (
+  //     <View style={{flex: 1}}>
+  //       <Header
+  //         statusBarProps={{backgroundColor: Colors.secondary}}
+  //         backgroundColor={Colors.secondary}
+  //         centerComponent={{ text: 'ANALYSIS', style: { color: '#fff' } }}
+  //       />
+  //       <View style={styles.chartWrapper}>
+  //         <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
+  //         {/*<CurvedChart*/}
+  //           {/*text={this.state.chart.toUpperCase()}*/}
+  //           {/*temperatures={*/}
+  //           {/*this.state.chart === 'temperature' ?*/}
+  //             {/*transformTemperature(stream) :*/}
+  //             {/*transformRespiratory(stream.map((item) => item[this.state.chart]))*/}
+  //           {/*}*/}
+  //         {/*/>*/}
+  //         <LineChart
+  //           temperatures={{
+  //             labels: ['1m', '30s', 'now'],
+  //             temperaturessets: [{
+  //               temperatures: [
+  //                 Math.random() * 100,
+  //                 Math.random() * 100,
+  //                 Math.random() * 100,
+  //                 Math.random() * 100,
+  //                 Math.random() * 100,
+  //                 Math.random() * 100,
+  //                 Math.random() * 100
+  //               ]
+  //             }]
+  //           }}
+  //           width={Metrics.screenWidth} // from react-native
+  //           height={220}
+  //           renderHorizontalLines={{
+  //             count: 0
+  //           }}
+  //           renderVerticalLabels={{
+  //             count: 0
+  //           }}
+  //           chartConfig={{
+  //             backgroundColor: '#e26a00',
+  //             backgroundGradientFrom: '#fb8c00',
+  //             backgroundGradientTo: '#ffa726',
+  //             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  //             style: {
+  //               borderRadius: 16
+  //             }
+  //           }}
+  //           bezier
+  //           style={{
+  //             marginVertical: 8,
+  //             borderRadius: 16
+  //           }}
+  //         />
+  //       </View>
+  //       <SegmentedControl
+  //         style={styles.segment}
+  //         items={['temperature', 'respiratory']}
+  //         onChange={this.onChangeChart.bind(this)}
+  //       />
+  //     </View>
+  //   )
+  // }
+
   render() {
-    const { stream } = this.props
+
+    const { bluetooth } = this.props
 
     return (
       <View style={{flex: 1}}>
@@ -43,24 +109,37 @@ class Charts extends Component {
           backgroundColor={Colors.secondary}
           centerComponent={{ text: 'ANALYSIS', style: { color: '#fff' } }}
         />
-        <View style={styles.chartWrapper}>
-          <Text style={styles.chartTitle}>{ this.state.chart.toUpperCase() }</Text>
-          <CurvedChart data={collapse(stream.map((item) => item[this.state.chart]))}/>
-        </View>
-        <SegmentedControl
-          style={styles.segment}
-          items={['temperature', 'respiratory']}
-          onChange={this.onChangeChart.bind(this)}
-        />
+
+        { bluetooth.isConnected ?
+          this.renderCharts() :
+          this.renderNoConnection()
+        }
+
       </View>
     )
   }
 
-  onChangeChart (item, index) {
-    console.tron.log({log: 'change chart', item})
-    this.setState({
-      chart: item
-    })
+  renderCharts () {
+    const temperatures = transformTemperature(this.props.stream)
+    const resps = transformRespiratory(this.props.stream)
+
+    return (
+      <View style={{flex: 1}}>
+        <LineChart title='Temperature' data={temperatures} />
+        <LineChart title='Respiratory' data={resps} />
+      </View>
+
+    )
+  }
+
+  renderNoConnection () {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{textAlign: 'center', fontSize: 20, marginBottom: 10}}>No Connection</Text>
+        <Icon type='material-community' name='bluetooth-off' size={60} />
+        <Text style={{textAlign: 'center', fontSize: 10, color: 'gray', padding: 30}}>There is no connection between app and device, please go to device tap and connect to ninix device to see real time charts</Text>
+      </View>
+    )
   }
 
 }
@@ -70,30 +149,19 @@ Charts.navigationOptions = {
   tabBarIcon: ({ tintColor }) => (
     <Icon
       size={20}
-      name="area-chart"
+      name="show-chart"
       color={tintColor}
     />
   ),
 }
 
-// TODO: we must change algorithm of showing chart data, and move logic to another file
-function collapse (data) {
-  const result = []
-  const length = data.length
-  let period = length / 10 || 1
-  for (let i = 0; i < length; i += period) {
-    const sub = data.slice(i, i + period)
-    const average = sub.reduce((acc, current) => acc + current, 0) / sub.length
-    result.push(average)
-  }
-
-  return result
-}
+// TODO: we must change algorithm of showing chart temperatures, and move logic to another file
 
 const mapStateToProps = (state) => {
-  const { data } = state
+  const { data, bluetooth } = state
   return {
-    stream: data.stream
+    stream: data.stream,
+    bluetooth
   }
 }
 

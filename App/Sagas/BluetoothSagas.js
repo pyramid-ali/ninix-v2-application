@@ -5,6 +5,7 @@ import { put, call, fork, select } from 'redux-saga/effects'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import CentralManager from '../Bluetooth/CentralManager'
 import DeviceAction from '../Redux/DeviceRedux'
+import Router from '../Navigation/Router'
 
 // Listeners
 import {
@@ -12,6 +13,8 @@ import {
   setupScanListenerChannel,
   setupNinixStreamListener,
   setupNinixStreamListenerChannel,
+  setupNinixAlarmListener,
+  setupNinixAlarmListenerChannel,
   setupNinixSyncListener,
   setupNinixSyncListenerChannel,
   setupBluetoothConnectionListener,
@@ -20,45 +23,59 @@ import {
 
 export function *connect(action) {
   // TODO: we should save logs in backend server
-  const { device, callback } = action
+  const { device } = action
   try {
     // connect to device
-    const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
 
+    const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
     yield put(DeviceAction.setDevice(connectedDevice))
     yield put(BluetoothAction.didConnect(connectedDevice))
-
-    // setup connection listener
-    yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
-    yield call(CentralManager.start.bind(CentralManager))
+    yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, connectedDevice))
+    yield CentralManager.start()
     yield put(BluetoothAction.didSetup())
-    callback()
     yield getDeviceInformation()
     yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
+    yield fork(setupNinixAlarmListener, yield call(setupNinixAlarmListenerChannel, CentralManager.ninix))
+
+    yield getErrorLog(CentralManager.ninix)
+
+    const { nav } = yield select()
+    if (nav.index === 1) {
+      if (nav.routes[1].routeName === 'AddDevice') {
+        yield put(Router.backFromAddDevice)
+      }
+    }
+
   }
   catch (error) {
+    // yield put(BluetoothAction.disconnect())
     yield put(BluetoothAction.didFail(error.message))
-    console.tron.error({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
+    console.tron.log({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
   }
 
 }
 
+export function *getErrorLog(ninix) {
+  const log = yield ninix.getErrorLog()
+  // TODO: this log should be save and send to server
+}
+
 export function *reconnect() {
-  console.tron.log('reconnect')
   const { device } = yield select()
   yield put(BluetoothAction.connect(device.device))
 }
 
 export function *cancelConnection() {
-  yield CentralManager.disconnect()
-  yield put(BluetoothAction.didDisconnect())
+  const device = yield call(CentralManager.cancelConnection.bind(CentralManager))
+  if (device) {
+    yield put(BluetoothAction.didDisconnect())
+  }
 }
 
 export function *disconnect() {
-  // TODO: we should save logs in backend server
+
   try {
     yield CentralManager.disconnect()
-    yield put(BluetoothAction.didDisconnect())
   }
   catch (error) {
     yield put(BluetoothAction.didFail(error.message))
@@ -102,6 +119,7 @@ export function *startSync() {
 export function *getDeviceInformation() {
 
   yield put(DeviceAction.setName(yield call(CentralManager.ninix.getName.bind(CentralManager.ninix))))
+  yield put(DeviceAction.setSerial(yield call(CentralManager.ninix.getSerial.bind(CentralManager.ninix))))
   yield put(DeviceAction.setFirmware(yield call(CentralManager.ninix.getFirmware.bind(CentralManager.ninix))))
   yield put(DeviceAction.setRevision(yield call(CentralManager.ninix.getHardwareRevision.bind(CentralManager.ninix))))
 

@@ -1,0 +1,48 @@
+import { createActions, createReducer } from 'reduxsauce'
+import Immutable from 'seamless-immutable'
+import _ from 'lodash'
+import {respiratory} from "../Transform/DataDisplay"
+
+export const INITIAL_STATE = Immutable({
+  respiratory: {
+    1526305115: {repeat: 10}
+  },
+  temperature: {
+    1526305125: {repeat: 10}
+  },
+  orientation: {}
+})
+
+const { Types, Creators } = createActions({
+  save: ['alarm']
+}, {
+  prefix: 'alarm/'
+})
+
+export const AlarmTypes = Types
+
+export const save = (state = INITIAL_STATE, action) => {
+  const { alarm } = action
+  return {
+    ...state,
+    respiratory: {
+      ...state.respiratory,
+      ..._.get(alarm, 'respiratory', {})
+    },
+    temperature: {
+      ...state.temperature,
+      ..._.get(alarm, 'temperature', {})
+    },
+    orientation: {
+      ...state.orientation,
+      ..._.get(alarm, 'orientation', {})
+    }
+  }
+}
+
+export const reducer = createReducer(INITIAL_STATE, {
+  [Types.SAVE]: save
+})
+
+
+export default Creators

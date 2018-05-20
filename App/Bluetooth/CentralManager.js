@@ -1,4 +1,4 @@
-import { BleManager } from 'react-native-ble-plx'
+import { BleManager, LogLevel } from 'react-native-ble-plx'
 import UUID from './UUID'
 import moment from 'moment'
 import Ninix from './Ninix'
@@ -8,12 +8,15 @@ import { NordicDFU, DFUEmitter } from "react-native-nordic-dfu"
 class CentralManager {
 
   device = null
+  forceDisconnect = false
+  tries = 0
   scannedDevices = {}
   readyForUpdate = false
   dfuStart = false
 
   constructor () {
     this.manager = new BleManager()
+    this.manager.setLogLevel(LogLevel.Verbose)
     this.period = 5
     this.connectionTimeout = 30
   }
@@ -64,12 +67,19 @@ class CentralManager {
 
   // TODO: decide between first stop scan then connect or reverse
   async connect (device) {
-    // timeout is in milli seconds
-    this.device = await device.connect({ autoConnect: true, timeout: this.connectionTimeout * 1000 })
+    this.tries += 1
+    this.connectingDevice = device
+    this.device = await device.connect({ autoConnect: false, timeout: this.connectionTimeout * 1000 })
     this.stopScan()
     return this.device
   }
 
+  async cancelConnection () {
+    if (this.connectingDevice) {
+      return await this.manager.cancelDeviceConnection(this.connectingDevice.id)
+    }
+    return null
+  }
 
   async start () {
     this.ninix = new Ninix(this.device)
@@ -80,15 +90,19 @@ class CentralManager {
   }
 
   async disconnect () {
-    const isConnected = await this.device.isConnected()
-    if (isConnected) {
-      this.device = await this.manager.cancelDeviceConnection(this.device.id)
+    this.forceDisconnect = true
+    if (this.device) {
+      const isConnected = await this.device.isConnected()
+      if (isConnected) {
+        this.device = await this.device.cancelConnection()
+      }
     }
     this.ninix = null
   }
 
   onDisconnected (listener) {
     return this.device.onDisconnected((error, device) => {
+
       if (this.readyForUpdate) {
         this.updateFirmware()
       }

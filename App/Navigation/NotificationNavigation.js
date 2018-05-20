@@ -22,26 +22,24 @@ const config = {
     iconStyle: styles.icon,
     style: styles.container,
   },
-  initialRouteName: 'All',
+  initialRouteName: 'Temperature',
   order: [
-    'All', 'Danger', 'Warning', 'Normal'
+    'Temperature', 'Respiratory', 'Orientation'
   ]
 }
 
 const NotificationNavigation = TabNavigator({
-  All: {
+
+  Temperature: {
     screen: NotificationList,
     param: {
-      type: 'all'
+      type: 'temperature'
     }
   },
-  Danger: {
+  Respiratory: {
     screen: NotificationList
   },
-  Warning: {
-    screen: NotificationList
-  },
-  Normal: {
+  Orientation: {
     screen: NotificationList
   }
 }, config)

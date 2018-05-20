@@ -11,7 +11,7 @@ import TextInputWithIcon from '../Components/TextInputWithIcon'
 
 // Styles
 import styles from './Styles/LoginStyle'
-import { Colors } from '../Themes/index'
+import { Colors } from '../Themes'
 
 class Login extends Component {
 
@@ -188,6 +188,7 @@ class Login extends Component {
           Login
         </Button>
     )
+
   }
 }
 

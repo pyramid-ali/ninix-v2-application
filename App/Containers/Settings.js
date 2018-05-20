@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { ScrollView, View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Header, ListItem } from 'react-native-elements'
+import PushNotification from 'react-native-push-notification-ce'
 
 // Dependencies
 import AppAction from '../Redux/AppRedux'
@@ -11,7 +12,6 @@ import AppAction from '../Redux/AppRedux'
 // Styles
 import styles from './Styles/SettingsStyle'
 import Colors from '../Themes/Colors'
-import CentralManager from '../Bluetooth/CentralManager';
 
 
 // TODO: we must have following options here
@@ -99,6 +99,14 @@ class Settings extends Component {
                 key={i}
                 title={item.title}
                 leftIcon={{name: item.icon}}
+                onPress={() => {
+                  PushNotification.localNotification({
+                    title: "My Notification Title", // (optional)
+                    message: "My Notification Message",
+                    playSound: true,
+                    soundName: 'samsung_galaxy_best.mp3'
+                  })
+                }}
                 chevron
               />
             ))

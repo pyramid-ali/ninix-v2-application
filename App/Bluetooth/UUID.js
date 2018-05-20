@@ -4,7 +4,8 @@ export const services = {
     chars: {
       stream: "00001524-0000-1000-8000-00805f9b34fb",
       synchronize: "00001525-0000-1000-8000-00805f9b34fb",
-      command: "00001526-0000-1000-8000-00805f9b34fb"
+      command: "00001526-0000-1000-8000-00805f9b34fb",
+      alarm: "00001527-0000-1000-8000-00805f9b34fb",
     }
   },
   genericAccess: {

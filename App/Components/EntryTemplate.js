@@ -2,12 +2,11 @@
 import React, { Component } from 'react'
 import { View, Text, Keyboard, Animated, KeyboardAvoidingView } from 'react-native'
 import PropTypes from 'prop-types'
-
-// Dependencies
-import NavigationBar from './NavigationBar'
+import { Header } from 'react-native-elements'
 
 // Styles
 import styles from './Styles/EntryTemplateStyle'
+import Colors from '../Themes/Colors'
 
 export default class EntryTemplate extends Component {
 
@@ -17,13 +16,13 @@ export default class EntryTemplate extends Component {
   }
 
   componentWillMount () {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this))
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this))
   }
 
   componentWillUnmount () {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove()
+    this.keyboardDidHideListener.remove()
   }
 
   _keyboardDidShow () {
@@ -54,37 +53,21 @@ export default class EntryTemplate extends Component {
     ).start()
   }
 
-  static defaultProps = {
-    leftBarButton: <Text/>,
-    rightBarButton: <Text/>,
-    onPressLeftButton: () => {},
-    onPressRightButton: () => {}
-  }
-
   render () {
-    const {
-      children,
-      imageSource,
-      leftBarButton,
-      onPressRightBarButton,
-      onPressLeftBarButton,
-      rightBarButton,
-      title
-    } = this.props
+    const { children, imageSource, onPressCancel, title } = this.props
     const { marginTop } = this.state
     return (
       <KeyboardAvoidingView
         behavior='padding'
         style={styles.wrapper}>
-        <NavigationBar
-          style={styles.navBar}
-          leftButton={leftBarButton}
-          rightButton={rightBarButton}
-          onPressRightButton={onPressRightBarButton}
-          onPressLeftButton={onPressLeftBarButton}
-        >
-          { title }
-        </NavigationBar>
+
+        <Header
+          statusBarProps={{backgroundColor: Colors.dark, translucent: false}}
+          backgroundColor={Colors.dark}
+          centerComponent={{ text: title, style: { color: '#fff' } }}
+          leftComponent={{ icon: 'clear', color: '#fff', onPress: onPressCancel }}
+        />
+
 
         <View style={styles.container}>
           <View style={[styles.imageHolder]}>
@@ -104,20 +87,10 @@ export default class EntryTemplate extends Component {
 
 EntryTemplate.propTypes = {
   imageSource: PropTypes.number.isRequired,
-  leftBarButton: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
-  ]),
-  onPressRightBarButton: PropTypes.func,
-  onPressLeftBarButton: PropTypes.func,
-  rightBarButton: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
-  ]),
+  onPressCancel: PropTypes.func,
   title: PropTypes.string.isRequired
 }
 
 EntryTemplate.defaultProps = {
-  onPressRightBarButton: () => {},
-  onPressLeftBarButton: () => {},
+  onPressCancel: () => {}
 }

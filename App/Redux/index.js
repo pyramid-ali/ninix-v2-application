@@ -16,6 +16,7 @@ export default () => {
     mother:        require('./ParentRedux').motherReducer,
     nav:           require('./NavigationRedux').reducer,
     ninix:         require('./NinixRedux').reducer,
+    alarm:         require('./AlarmRedux').reducer,
     signup:        require('./SignupRedux').reducer,
     style:         require('./StyleRedux').reducer,
     user:          require('./UserRedux').reducer,

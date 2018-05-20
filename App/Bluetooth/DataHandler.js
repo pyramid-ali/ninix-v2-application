@@ -51,6 +51,14 @@ function sync (data, diffTime) {
   return result.reverse()
 }
 
+function alarm (data) {
+  return {
+    respiratory: !!data[0],
+    orientation: !!data[1],
+    temperature: !!data[2]
+  }
+}
+
 
 function round (number, degree = 0) {
   return Math.round(number * Math.pow(10, degree)) / Math.pow(10, degree)
@@ -172,5 +180,6 @@ function toSignInteger (bytes) {
 
 export default {
   stream,
-  sync
+  sync,
+  alarm
 }

@@ -15,98 +15,68 @@ import Colors from '../Themes/Colors'
 
 export default class PasswordEntrance extends Component {
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      showPassword: false
-    }
-  }
 
   render () {
 
-    const { showPassword } = this.state
-    const { password, onAccept } = this.props
+    const { value, fetching, onChangeValue } = this.props
 
     return (
-      <View style={styles.form}>
+      <View>
 
-        <Text style={styles.password}>{ password }</Text>
+        <Text style={styles.title}>
+          Password
+        </Text>
         <Text style={styles.description}>
-          This password automatically generated for your account
+          please enter your password, password should not be smaller than 6 characters
         </Text>
-
-        <Text
-          onPress={() => {
-            this.setState({
-              showPassword: !showPassword
-            })
-          }}
-          style={styles.link}>
-          {showPassword ? 'Use Generated Password' : 'Set New Password'}
-        </Text>
-        {showPassword ?
-          this.renderPasswordBox()
-          :
-          <Button
-            onPress={onAccept}
-            color={Colors.white}
-            backgroundColor={Colors.dark}>
-            Accept
-          </Button>
-        }
+        <TextInputWithIcon
+          secureTextEntry={true}
+          icon="key"
+          ref="passwordInput"
+          size={20}
+          selectionColor={Colors.dark}
+          color={Colors.dark}
+          value={value}
+          editable={!fetching}
+          onChangeText={onChangeValue}
+          placeholder='Enter your password'/>
+        {fetching ? <ActivityIndicator size={24}/> : this.renderActivateButton()}
       </View>
     )
   }
 
-  renderPasswordBox () {
-
-    const { showPassword } = this.state
-    const { fetching, onChangeValue, onChangePassword, valid } = this.props
+  renderActivateButton() {
+    const {onPress, valid} = this.props
+    const {passwordInput} = this.refs
 
     return (
-      <View>
-        <TextInputWithIcon
-          ref="passwordInput"
-          secureTextEntry={!showPassword}
-          selectionColor="black"
-          icon="key"
-          size={20}
-          color={Colors.dark}
-          onChangeText={onChangeValue}
-          placeholder='New Password'/>
-        {fetching ?
-          <ActivityIndicator /> :
-          <Button
-            disabled={!valid}
-            onPress={() => {
-              const { passwordInput } = this.refs
-              onChangePassword()
-              passwordInput.blur()
-            }}
-            color={Colors.white}
-            backgroundColor={Colors.dark}>
-            Change Password
-          </Button>
-        }
-      </View>
+      <Button
+        disabled={!valid}
+        color={Colors.white}
+        backgroundColor={Colors.dark}
+        onPress={() => {
+          onPress()
+          passwordInput.blur()
+        }}>
+        Set Password
+      </Button>
     )
+
   }
 
 }
 
 PasswordEntrance.propTypes = {
   fetching: PropTypes.bool,
-  onAccept: PropTypes.func,
-  onChangePassword: PropTypes.func,
   onChangeValue: PropTypes.func,
-  password: PropTypes.string,
-  valid: PropTypes.bool
+  onPress: PropTypes.func,
+  valid: PropTypes.bool,
+  value: PropTypes.string
 }
 
 PasswordEntrance.defaultProps = {
   fetching: false,
-  onAccept: () => {},
-  onChangePassword: () => {},
   onChangeValue: () => {},
-  valid: true
+  onPress: () => {},
+  valid: true,
 }
