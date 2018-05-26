@@ -2,34 +2,20 @@ import { StyleSheet } from 'react-native'
 import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
-  container: {
+  textWrapper: {
     flex: 1,
-    marginTop: Metrics.navBarHeight,
-    paddingVertical: 10
-  },
-  navBar: {
-    backgroundColor: Colors.secondary,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.white
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   title: {
-    fontSize: 18,
-    color: Colors.white,
-    textAlign: 'center'
-  },
-  segment: {
-    marginHorizontal: 20,
+    textAlign: 'center',
+    fontSize: 20,
     marginBottom: 10
   },
-  chartWrapper: {
-    flex: 1,
-    marginVertical: 10,
-    backgroundColor: 'white'
-  },
-  chartTitle: {
+  subtitle: {
     textAlign: 'center',
-    fontSize: 18,
-    paddingVertical: 5,
-    marginBottom: 5
+    fontSize: 10,
+    color: 'gray',
+    padding: 30
   }
 })

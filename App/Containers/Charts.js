@@ -6,6 +6,7 @@ import { Header, Icon } from 'react-native-elements'
 import { transformTemperature, transformRespiratory } from '../Transform/ArrayDataManipulate'
 
 // Styles
+import styles from './Styles/ChartsStyle'
 import Colors from '../Themes/Colors'
 import LineChart from "../Components/LineChart"
 
@@ -121,12 +122,12 @@ class Charts extends Component {
 
   renderCharts () {
     const temperatures = transformTemperature(this.props.stream)
-    const resps = transformRespiratory(this.props.stream)
+    const respiratory = transformRespiratory(this.props.stream)
 
     return (
       <View style={{flex: 1}}>
-        <LineChart title='Temperature' data={temperatures} />
-        <LineChart title='Respiratory' data={resps} />
+        <LineChart title='Temperature' data={temperatures} formatLabel={value => `${value}˚C`} />
+        <LineChart title='Respiratory' data={respiratory} backgroundColor='#22c1c3' formatLabel={value => `${value}BPS`} />
       </View>
 
     )
@@ -134,10 +135,10 @@ class Charts extends Component {
 
   renderNoConnection () {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{textAlign: 'center', fontSize: 20, marginBottom: 10}}>No Connection</Text>
+      <View style={styles.textWrapper}>
+        <Text style={styles.title}>No Connection</Text>
         <Icon type='material-community' name='bluetooth-off' size={60} />
-        <Text style={{textAlign: 'center', fontSize: 10, color: 'gray', padding: 30}}>There is no connection between app and device, please go to device tap and connect to ninix device to see real time charts</Text>
+        <Text style={styles.subtitle}>There is no connection between app and device, please go to device tap and connect to ninix device to see real time charts</Text>
       </View>
     )
   }
