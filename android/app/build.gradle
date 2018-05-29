@@ -166,7 +166,6 @@ dependencies {
     compile project(':react-native-image-picker')
     compile project(':react-native-fetch-blob')
     compile project(':react-native-config')
-    compile project(':react-native-charts-wrapper')
     compile project(':react-native-ble-plx')
     compile project(':lottie-react-native')
     compile fileTree(dir: "libs", include: ["*.jar"])
@@ -181,8 +180,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-ext {
-    compileSdkVersion = 26
-    buildToolsVersion = "23.0.3"
-    targetSdkVersion = 26
-}
+

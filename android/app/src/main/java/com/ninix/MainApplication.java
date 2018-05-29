@@ -14,7 +14,6 @@ import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
-import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.polidea.reactnativeble.BlePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
@@ -47,7 +46,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new RNFetchBlobPackage(),
             new ReactNativeConfigPackage(),
-            new MPAndroidChartPackage(),
             new BlePackage(),
             new LottiePackage()
       );

@@ -1,5 +1,6 @@
 // Libraries
 import { put, call, fork, select } from 'redux-saga/effects'
+import { PermissionsAndroid } from 'react-native'
 
 // Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
@@ -20,6 +21,7 @@ import {
   setupBluetoothConnectionListener,
   setupBluetoothConnectionListenerChannel
 } from './Channels/BluetoothChannel'
+import {checkAndGetPermission} from "../Services/Permission";
 
 export function *connect(action) {
   // TODO: we should save logs in backend server
@@ -85,7 +87,14 @@ export function *disconnect() {
 }
 
 export function *startScan() {
-  yield fork(setupScanListener, yield call(setupScanListenerChannel))
+  const granted = yield checkAndGetPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION)
+  if (granted) {
+    yield fork(setupScanListener, yield call(setupScanListenerChannel))
+  } else {
+    yield put(BluetoothAction.stopScan())
+    yield put(BluetoothAction.didFail('For scanning new device we have to access to your location'))
+  }
+
 }
 
 export function *stopScan() {

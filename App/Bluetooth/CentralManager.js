@@ -168,15 +168,4 @@ class CentralManager {
 
 }
 
-CentralManager.sharedInstance = null
-
-CentralManager.getInstance = () => {
-  if (CentralManager.sharedInstance) {
-    return CentralManager.sharedInstance
-  }
-  return new CentralManager()
-}
-
-const centralManager = CentralManager.getInstance()
-
-export default centralManager
+export default centralManager = new CentralManager()
