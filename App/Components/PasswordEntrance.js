@@ -68,15 +68,13 @@ export default class PasswordEntrance extends Component {
 
 PasswordEntrance.propTypes = {
   fetching: PropTypes.bool,
-  onChangeValue: PropTypes.func,
-  onPress: PropTypes.func,
+  onChangeValue: PropTypes.func.isRequired,
+  onPress: PropTypes.func.isRequired,
   valid: PropTypes.bool,
   value: PropTypes.string
 }
 
 PasswordEntrance.defaultProps = {
   fetching: false,
-  onChangeValue: () => {},
-  onPress: () => {},
-  valid: true,
+  valid: true
 }

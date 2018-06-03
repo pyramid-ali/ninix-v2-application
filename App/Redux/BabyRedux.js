@@ -1,66 +1,76 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
+import moment from 'moment'
 
 // define initial state when for first time launch
 export const INITIAL_STATE = Immutable({
+  id: null,
   name: null,
-  birthDate: null,
+  weight: null,
+  height: null,
+  head: null,
+  gestation: null,
   gender: null,
-  image: null,
-  progress: null,
-  bloodGroup: null,
-  changeDate: null,
-  sync: true
+  birthDate: null,
+  number: null,
+  error: null,
+  lastUpdate: null,
+  fetch: false
 })
 
 // define types and actions
 const { Types, Creators } = createActions({
-  changeInformation: ['payload'],
-  setInformation: ['payload'],
-  saveInformation: ['payload'],
   getInformation: null,
-  setImage: ['payload'],
-
+  saveInformation: ['payload'],
+  setInformation: ['payload'],
+  didFail: ['error']
 }, {
   prefix: 'baby/'
 })
 
 export const BabyTypes = Types
 
-export const change = (state = INITIAL_STATE, action) => {
+export const setInformation = (state = INITIAL_STATE, action) => {
   const { payload } = action
   return {
     ...state,
     ...payload,
-    sync: false
+    error: null,
+    fetch: false,
+    lastUpdate: moment()
   }
 }
 
-export const set = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+export const didFail = (state = INITIAL_STATE, action) => {
+  const { error } = action
   return {
     ...state,
-    ...payload,
-    sync: true
+    error,
+    lastUpdate: moment()
   }
 }
 
-export const setImage = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+export const saveInformation = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    ...payload,
-    progress: 1
+    error: null,
+    fetch: true
   }
 }
 
-
+export const getInformation = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    error: null,
+    fetch: true
+  }
+}
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.CHANGE_INFORMATION]: change,
-  [Types.SET_INFORMATION]: set,
-  [Types.SET_IMAGE]: setImage,
-
+  [Types.SET_INFORMATION]: setInformation,
+  [Types.GET_INFORMATION]: getInformation,
+  [Types.SAVE_INFORMATION]: saveInformation,
+  [Types.DID_FAIL]: didFail,
 })
 
 

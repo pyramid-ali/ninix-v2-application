@@ -19,7 +19,7 @@ class Signup extends Component {
     super(props)
     this.state = {
       stage: 'mobile',
-      mobile: '09',
+      mobile: '',
       token: '',
       password: ''
     }
@@ -72,13 +72,6 @@ class Signup extends Component {
     )
   }
 
-  didMobileApproved (mobile) {
-    this.setState({
-      mobile,
-      stage: 'token'
-    })
-  }
-
   renderTokenEntrance () {
     const { verifyToken, signup } = this.props
 
@@ -93,19 +86,24 @@ class Signup extends Component {
   }
 
   renderPasswordEntrance () {
-    // TODO: handle when user want to change their password
-    const { password } = this.state
+    const { mobile, token, password } = this.state
 
     return (
       <PasswordEntrance
         valid={password.length >= 6}
         value={password}
         onChangeValue={(password) => this.setState({password})}
-        onChangePassword={() => {}}
-        onPress={() => this.props.gotoMain()}
-        fetching={false}
+        onPress={() => this.props.register(mobile, token, password)}
+        fetching={this.props.signup.fetching}
       />
     )
+  }
+
+  didMobileApproved (mobile) {
+    this.setState({
+      mobile,
+      stage: 'token'
+    })
   }
 
   didTokenValidate (mobile, token) {
@@ -122,8 +120,7 @@ class Signup extends Component {
       stage: 'mobile',
       mobile: '09',
       token: '',
-      password: '',
-      newPassword: ''
+      password: ''
     })
   }
 
@@ -140,8 +137,8 @@ const mapDispatchToProps = (dispatch) => {
 
   return {
     requestToken: (mobile, callback) => dispatch(SignupAction.requestToken(mobile, callback)),
-    verifyToken: (token, callback) => dispatch(SignupAction.checkToken(token, callback)),
-    gotoMain: () => dispatch(Router.navigateToMain)
+    verifyToken: (mobile, token, callback) => dispatch(SignupAction.checkToken(mobile, token, callback)),
+    register: (mobile, token, password) => dispatch(SignupAction.register(mobile, token, password))
   }
 }
 

@@ -44,7 +44,6 @@ export function *init (api, action) {
       return
     }
 
-
     if (!isTokenValid(token)) {
 
       const refreshToken = token.refreshToken
@@ -61,7 +60,7 @@ export function *init (api, action) {
       yield put(AuthAction.issueToken(token))
     }
 
-    // yield put(AppAction.sync())
+    yield put(AppAction.sync())
     yield put(Router.navigateToMain)
 
   }
@@ -87,7 +86,9 @@ export function *init (api, action) {
 // TODO: synchronization with server handle in the latest stage
 export function *sync () {
 
+  // TODO: why we need to check auth
   const { auth } = yield select()
+  console.tron.log({log: 'sync', auth})
   if (!auth.accessToken) {
     yield put(AppAction.didSync())
     return
@@ -95,10 +96,8 @@ export function *sync () {
 
   // 1. get user information
   // 2. get mother and father user information
-  yield put(ParentAction.getFatherInformation())
-  yield put(ParentAction.getMotherInformation())
   yield put(BabyAction.getInformation())
-  yield put(DataAction.syncWithServer())
+  // yield put(DataAction.syncWithServer())
   // 3. check for parent picture sync
   // 4. check data received from device is sync or not
 

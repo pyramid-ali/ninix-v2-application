@@ -28,7 +28,7 @@ class Profile extends Component {
 
   render () {
     const { mother, father, baby } = this.props
-    const babyImage   = baby.image   ? {uri: baby.image.uri}   : require('../Images/Profile/3-3.jpg')
+    const babyImage = baby.image ? {uri: baby.image.uri} : require('../Images/Profile/3-3.jpg')
 
 
     const data = [

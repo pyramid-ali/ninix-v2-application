@@ -13,7 +13,7 @@ import Router from '../Navigation/Router'
 export function *requestToken (api, action) {
 
   const { mobile, callback } = action
-  const response = yield call(api.requestActivationCode, mobile)
+  const response = yield call(api.requestRegisterToken, mobile)
 
   try {
     const data = yield call(Response.resolve, response)
@@ -27,15 +27,13 @@ export function *requestToken (api, action) {
 }
 
 /***
- * check activation code is correct, if activation code is correct try to get access token with provided password
- * if getting access token failed, call failure callback
- * if everything was ok, then call callback function
+ * check if provided token with given mobile number is valid or not
  * @param api
  * @param action
  */
 export function *checkToken(api, action) {
   const { mobile, token, callback } = action
-  const response = yield call(api.checkActivationCode, mobile, token)
+  const response = yield call(api.checkToken, mobile, token)
 
   try {
     const data = yield call(Response.resolve, response)
@@ -48,6 +46,11 @@ export function *checkToken(api, action) {
 
 }
 
+/***
+ * register user
+ * @param api
+ * @param action
+ */
 export function *register(api, action) {
   const { mobile, token, password } = action
   const response = yield call(api.register, mobile, token, password)

@@ -3,7 +3,7 @@ import apisauce from 'apisauce'
 import Form from './Form'
 
 // TODO: user Config.API_URL
-const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
+const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
 
   /***
    * create new api
@@ -15,7 +15,7 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
       'Accept': 'application/json',
       'Cache-Control': 'no-cache'
     },
-    timeout: 10000
+    timeout: 100 * 1000
   })
 
   const authorizationHeader = (accessToken) => ({headers: {Authorization: `Bearer ${accessToken}`}})
@@ -24,14 +24,15 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
    * request mobile activation code
    * @param mobile string, regex: \09\d{9}\
    */
-  const requestActivationCode = (mobile) => api.post('api/register/mobile', { mobile })
+  const requestRegisterToken = (mobile) => api.post('register/request_token', { mobile })
 
   /***
    * check activation code with provided mobile route
    * @param mobile string,
    * @param token string, 4 character code
    */
-  const checkActivationCode = (mobile, token) => api.post('api/register/activation/sms', {mobile, token})
+    // TODO: change checkToken to check_token
+  const checkToken = (mobile, token) => api.post('checkToken', {mobile, token})
 
   /***
    * register new user
@@ -39,7 +40,7 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
    * @param token string, 4 character code
    * @param password
    */
-  const register = (mobile, token, password) => api('api/register', {mobile, token, password})
+  const register = (mobile, token, password) => api.post('register', {mobile, token, password})
 
   /***
    * login with username (mobile) and password
@@ -67,11 +68,17 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
   const changePassword = (passwords, token: string) => api.post('api/user/change_password', passwords, authorizationHeader(token))
 
   /***
-   * get parent or baby information
-   * @param type string, one of (baby|father|mother)
+   * get baby information
    * @param token
    */
-  const getInformation = (type: string, token: string) => api.get('api/information/' + type, {}, authorizationHeader(token))
+  const getBaby = (token: string) => api.get('baby', {}, authorizationHeader(token))
+
+  /***
+   * update baby information
+   * @param data
+   * @param token
+   */
+  const updateBaby = (data, token) => api.put('baby/update', data, authorizationHeader(token))
 
   /***
    * get devices logs for this user
@@ -121,12 +128,14 @@ const create = (baseURL = 'https://V2-TEST.NINIXCO.COM/') => {
 
   return {
     login,
-    requestActivationCode,
-    checkActivationCode,
+    requestRegisterToken,
+    checkToken,
+    register,
     refreshToken,
     userInformation,
     changePassword,
-    getInformation,
+    getBaby,
+    updateBaby,
     getDeviceLogs,
     getPhoto,
     sendPhoto,

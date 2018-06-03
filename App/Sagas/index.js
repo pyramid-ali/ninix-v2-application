@@ -55,14 +55,14 @@ const root = function * root () {
     takeLatest(SignupTypes.REGISTER, SignupSagas.register, api),
 
     // Parent Sagas
-    takeLatest(ParentTypes.SAVE_FATHER_INFORMATION, ParentSagas.saveFatherInformation, api),
-    takeLatest(ParentTypes.SAVE_MOTHER_INFORMATION, ParentSagas.saveMotherInformation, api),
-    takeLatest(ParentTypes.GET_FATHER_INFORMATION, ParentSagas.getFatherInformation, api),
-    takeLatest(ParentTypes.GET_MOTHER_INFORMATION, ParentSagas.getMotherInformation, api),
+    // takeLatest(ParentTypes.SAVE_FATHER_INFORMATION, ParentSagas.saveFatherInformation, api),
+    // takeLatest(ParentTypes.SAVE_MOTHER_INFORMATION, ParentSagas.saveMotherInformation, api),
+    // takeLatest(ParentTypes.GET_FATHER_INFORMATION, ParentSagas.getFatherInformation, api),
+    // takeLatest(ParentTypes.GET_MOTHER_INFORMATION, ParentSagas.getMotherInformation, api),
 
     // Baby Sagas
-    takeLatest(BabyTypes.SAVE_INFORMATION, BabySagas.saveBabyInformation, api),
-    takeLatest(BabyTypes.GET_INFORMATION, BabySagas.getBabyInformation, api),
+    takeLatest(BabyTypes.SAVE_INFORMATION, BabySagas.saveInformation, api),
+    takeLatest(BabyTypes.GET_INFORMATION, BabySagas.getInformation, api),
 
     // Device Sagas
     // takeLatest(DeviceTypes.PULL_DEVICE_LOGS, DeviceSagas.pullDeviceLogs, api),

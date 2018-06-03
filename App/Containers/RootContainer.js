@@ -49,6 +49,7 @@ class RootContainer extends Component {
     })
 
     PushNotification.appStart()
+
   }
 
   render () {
