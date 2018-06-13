@@ -6,9 +6,8 @@ import { put, take, select } from 'redux-saga/effects'
 import DataAction from '../../Redux/DataRedux'
 import BluetoothAction from '../../Redux/BluetoothRedux'
 import CentralManager from '../../Bluetooth/CentralManager'
-import NotificationService from "../../Services/NotificationService"
 import AlarmAction from '../../Redux/AlarmRedux'
-import AlarmService from "../../Services/AlarmService";
+import AlarmService from '../../Services/AlarmService'
 
 let isSyncing = false
 

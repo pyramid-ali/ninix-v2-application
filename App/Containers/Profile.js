@@ -13,6 +13,7 @@ import BabyAction from '../Redux/BabyRedux'
 import styles from './Styles/ProfileStyle'
 import { Icon, ListItem} from 'react-native-elements'
 import Colors from '../Themes/Colors'
+import DailyStatHelper from "../Transform/DailyStatHelper";
 
 class Profile extends Component {
 
@@ -30,24 +31,28 @@ class Profile extends Component {
     const { mother, father, baby } = this.props
     const babyImage = baby.image ? {uri: baby.image.uri} : require('../Images/Profile/3-3.jpg')
 
+    DailyStatHelper.getLastStatFor(this.props.stats, 'weight')
 
     const data = [
       {
         title: 'Height',
         icon: 'show-chart',
-        value: '- cm',
+        value: `${DailyStatHelper.getLastStatFor(this.props.stats, 'height', '-')} cm`,
+        rightSubtitle: DailyStatHelper.getLastDateFor(this.props.stats, 'height'),
         onPress: () => this.props.navigation.navigate('BabyHeight')
       },
       {
         title: 'Weight',
         icon: 'fitness-center',
-        value: '3700 gr',
+        value: `${DailyStatHelper.getLastStatFor(this.props.stats, 'weight', '-')} gr`,
+        rightSubtitle: DailyStatHelper.getLastDateFor(this.props.stats, 'weight'),
         onPress: () => this.props.navigation.navigate('BabyWeight')
       },
       {
         title: 'Head Circumference',
         icon: 'child-care',
-        value: '20 cm',
+        value: `${DailyStatHelper.getLastStatFor(this.props.stats, 'head', '-')} cm`,
+        rightSubtitle: DailyStatHelper.getLastDateFor(this.props.stats, 'head'),
         onPress: () => this.props.navigation.navigate('BabyHead')
       },
     ]
@@ -88,10 +93,9 @@ class Profile extends Component {
               <Icon
                 name='settings'
                 color='#fff'
-                onPress={() => this.props.navigation.navigate('EditBabyInformation')}
+                onPress={() => this.props.navigation.navigate('Settings')}
               />
             </View>
-
 
             <View
               style={styles.babyContainer}>
@@ -117,6 +121,22 @@ class Profile extends Component {
 
           <View style={styles.list}>
             <Text style={styles.listTitle}>
+              baby Information
+            </Text>
+            <ListItem
+              title='Baby Information'
+              leftAvatar={{source: require('../Images/Profile/3-3.jpg')}}
+              onPress={() => this.props.navigation.navigate('EditBabyInformation')}
+              chevron
+            />
+          </View>
+
+        </View>
+
+        <View style={styles.bottomContainer}>
+
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>
               Daily Information
             </Text>
             {
@@ -124,7 +144,7 @@ class Profile extends Component {
                 <ListItem
                   key={i}
                   title={item.title}
-                  rightSubtitle='6d ago'
+                  rightSubtitle={item.rightSubtitle}
                   leftIcon={{name: item.icon}}
                   rightTitle={item.value}
                   rightTitleStyle={styles.rightTitle}
@@ -203,9 +223,10 @@ Profile.navigationOptions = {
 }
 
 const mapStateToProps = (state) => {
-  const { mother, father, baby } = state
+  const { mother, father, baby, dailyStats } = state
   return {
-    mother, father, baby
+    mother, father, baby,
+    stats: dailyStats.data
   }
 }
 

@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text } from 'react-native'
+import LottieView from 'lottie-react-native'
 
 // Dependencies
 import AppAction from '../Redux/AppRedux'
@@ -13,6 +14,7 @@ class SplashScreen extends Component {
 
   componentDidMount () {
     // initialize app, show NINIX logo until all works done
+    this.animation.play()
     this.props.init()
   }
 
@@ -20,6 +22,12 @@ class SplashScreen extends Component {
     // TODO: we should have interactive animation here, user waiting must be acceptable
     return (
       <View style={styles.container}>
+        <LottieView
+          ref={animation => {
+            this.animation = animation
+          }}
+          source={require('../../assets/lotties/loader_animation.json')}
+        />
         <Text style={styles.center}>NINIX</Text>
       </View>
     )

@@ -13,7 +13,7 @@ import { SignupTypes }    from '../Redux/SignupRedux'
 import { DeviceTypes }    from '../Redux/DeviceRedux'
 import { StartupTypes }   from '../Redux/StartupRedux'
 import { UserTypes }      from '../Redux/UserRedux'
-
+import { DailyStatTypes } from '../Redux/DailyStatRedux'
 
 /* ------------- Sagas ------------- */
 
@@ -26,6 +26,7 @@ const LoginSagas = require('./LoginSagas')
 const DeviceSagas = require('./DeviceSagas')
 const ParentSagas = require('./ParentSagas')
 const SignupSagas = require('./SignupSagas')
+const DailyStatSagas = require('./DailyStatSaga')
 
 /* ------------- API ------------- */
 // The API we use is only used from Sagas, so we create it here and pass along
@@ -83,6 +84,9 @@ const root = function * root () {
     takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),
     takeLatest(DataTypes.SYNC_WITH_SERVER, DataSagas.syncWithServer, api),
 
+    // DailyStat Sagas
+    takeLatest(DailyStatTypes.SET, DailyStatSagas.didAddNewRecord, api),
+    takeLatest(DailyStatTypes.RETRIEVE_FROM_SERVER, DailyStatSagas.retrieveFromServer, api),
   ])
 }
 

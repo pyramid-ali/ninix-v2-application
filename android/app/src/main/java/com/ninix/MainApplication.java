@@ -3,6 +3,8 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.zmxv.RNSound.RNSoundPackage;
 import com.horcrux.svg.SvgPackage;
 import io.sentry.RNSentryPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -36,6 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTimerPackage(),
+            new RNSoundPackage(),
             new SvgPackage(),
             new RNSentryPackage(MainApplication.this),
             new ReactNativePushNotificationPackage(),

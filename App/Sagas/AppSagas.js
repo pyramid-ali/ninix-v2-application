@@ -94,6 +94,7 @@ export function *sync () {
     return
   }
 
+  // TODO: getting daily information
   // 1. get user information
   // 2. get mother and father user information
   yield put(BabyAction.getInformation())

@@ -3,11 +3,13 @@ import { View, Text, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Swiper from '@nart/react-native-swiper'
 import moment from 'moment'
+import _ from 'lodash'
 
+import DailyStatHelper from '../Transform/DailyStatHelper'
 import SkewedView from '../Components/SkewedView'
 import Counter from '../Components/Counter'
 import SuffixText from '../Components/SuffixText'
-import DataAction from '../Redux/DataRedux'
+import DailyStatAction from '../Redux/DailyStatRedux'
 
 // Styles
 import styles from './Styles/BabyWeightStyle'
@@ -18,11 +20,10 @@ class BabyWeight extends Component {
 
   constructor (props) {
     super(props)
-    const { weights } = this.props.data
-    const today = weights[Object.keys(weights).sort().reverse()[0]]
     this.state = {
-      counter: today ? today.value : 3000
+      counter: DailyStatHelper.getLastStatFor(this.props.stats, 'weight', 3000)
     }
+    this.changeWeight = _.debounce(this.changeWeight, 500)
   }
 
   componentDidMount() {
@@ -56,11 +57,23 @@ class BabyWeight extends Component {
   }
 
   renderAtAGlancePage () {
-
+    const birthDate = this.props.birthDate ? moment(this.props.birthDate).format('YYYY/MM/DD') : 'Unknown'
+    const lastWeight = DailyStatHelper.getLastStatFor(this.props.stats, 'weight')
+    const lastDate = DailyStatHelper.getLastDateFor(this.props.stats, 'weight')
     return (
       <SkewedView degree={15}>
-        { this.renderHighlightedText('Birth Weight', '3200', 'birth date: 1992/02/11') }
-        { this.renderHighlightedText('Current Weight', '3600', 'last weighted: 6 days ago') }
+        { this.renderHighlightedText(
+          'Birth Weight',
+          this.props.birthWeight || 'Unknown',
+          `birth date: ${birthDate}`,
+          this.props.birthWeight)
+        }
+        { this.renderHighlightedText(
+          'Current Weight',
+          lastWeight || 'Not weighted yet' ,
+          lastDate ? `last updated: ${lastDate}` : '',
+          lastWeight)
+        }
       </SkewedView>
     )
 
@@ -90,14 +103,14 @@ class BabyWeight extends Component {
 
   }
 
-  renderHighlightedText (title, text, subtitle) {
+  renderHighlightedText (title, text, subtitle, suffix) {
     return (
       <View>
         <Text style={styles.title}>{title}</Text>
         <SuffixText
           textStyle={styles.focusText}
           suffixStyle={styles.suffix}
-          suffix='gr'>
+          suffix={suffix ? 'gr' : ''}>
           {text}
         </SuffixText>
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -106,20 +119,20 @@ class BabyWeight extends Component {
   }
 
   changeWeight () {
+    console.tron.log({log: 'change weight'})
     const { counter } = this.state
     this.props.addWeight(counter)
   }
 
   renderFooter() {
-    const { weights } = this.props.data
-    const today = weights[moment().format('YYYY-MM-DD')]
+    const todayWeight = DailyStatHelper.getTodayStatFor(this.props.stats, 'weight')
 
     return (
       <View
-        style={{opacity: today ? 1 : 0}} >
+        style={{opacity: todayWeight ? 1 : 0}} >
         <TouchableOpacity
           onPress={() => this.props.removeWeight()} >
-          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Weight set to: { today ? today.value : 'N/A' }gr</Text>
+          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Weight set to: { todayWeight } gr</Text>
           <Text style={{paddingTop: 10, fontSize: 18, paddingHorizontal: 15, color: Colors.dark, fontFamily: 'PoiretOne-Regular' , textAlign: 'center'}}>Tap to remove</Text>
         </TouchableOpacity>
       </View>
@@ -130,17 +143,19 @@ class BabyWeight extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { data } = state
+  const { dailyStats, baby } = state
   return {
-    data
+    birthWeight: baby.weight,
+    birthDate: baby.birthDate,
+    stats: dailyStats.data
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
 
   return {
-    addWeight: (value) => dispatch(DataAction.addWeight(value)),
-    removeWeight: () => dispatch(DataAction.removeWeight())
+    addWeight: (value) => dispatch(DailyStatAction.set({weight: value})),
+    removeWeight: () => dispatch(DailyStatAction.set({weight: null}))
   }
 }
 

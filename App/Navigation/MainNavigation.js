@@ -6,6 +6,8 @@ import Device from '../Containers/Device'
 import Settings from '../Containers/Settings'
 import Colors from '../Themes/Colors'
 import styles from './Styles/MainNavigationStyle'
+import Sleep from '../Containers/Sleep'
+import Notification from '../Containers/Notification'
 
 const config = {
   tabBarComponent: TabBarBottom,
@@ -23,9 +25,9 @@ const config = {
     labelStyle: styles.label,
     tabStyle: styles.tab
   },
-  initialRouteName: 'Profile',
+  initialRouteName: 'Dashboard',
   order: [
-    'Dashboard', 'Charts', 'Profile', 'Device', 'Settings'
+    'Sleep', 'Charts', 'Dashboard', 'Notification', 'Profile'
   ]
 }
 
@@ -39,11 +41,11 @@ const MainNavigation = TabNavigator({
   Profile: {
     screen: Profile
   },
-  Device: {
-    screen: Device
+  Notification: {
+    screen: Notification
   },
-  Settings: {
-    screen: Settings
+  Sleep: {
+    screen: Sleep
   }
 }, config)
 

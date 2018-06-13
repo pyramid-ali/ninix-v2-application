@@ -35,6 +35,7 @@ class Device extends Component {
           backgroundColor={Colors.primary}
           centerComponent={{ text: 'DEVICE', style: { color: '#fff' } }}
           rightComponent={{ icon: 'search', color: '#fff', onPress: () => this.props.navigation.navigate('AddDevice') }}
+          leftComponent={{ icon: 'arrow-left', type: 'material-community', color: '#fff', onPress: () => this.props.navigation.goBack() }}
         />
 
         { this.renderContent() }

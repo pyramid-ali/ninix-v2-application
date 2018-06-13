@@ -1,16 +1,16 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 import _ from 'lodash'
-import {respiratory} from "../Transform/DataDisplay"
+
+import {respiratory} from '../Transform/DataDisplay'
 
 export const INITIAL_STATE = Immutable({
   respiratory: {
-    1526305115: {repeat: 10}
   },
   temperature: {
-    1526305125: {repeat: 10}
   },
-  orientation: {}
+  orientation: {
+  }
 })
 
 const { Types, Creators } = createActions({

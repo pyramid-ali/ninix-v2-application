@@ -3,27 +3,26 @@ import { View, Text, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Swiper from '@nart/react-native-swiper'
 import moment from 'moment'
+import _ from 'lodash'
 
+import DailyStatHelper from '../Transform/DailyStatHelper'
 import SkewedView from '../Components/SkewedView'
 import Counter from '../Components/Counter'
 import SuffixText from '../Components/SuffixText'
-import DataAction from '../Redux/DataRedux'
+import DailyStatAction from '../Redux/DailyStatRedux'
 
 // Styles
 import Colors from '../Themes/Colors'
-
-// Styles
 import styles from './Styles/BabyHeadStyle'
 
 class BabyHead extends Component {
 
   constructor (props) {
     super(props)
-    const { heads } = this.props.data
-    const today = heads[Object.keys(heads).sort().reverse()[0]]
     this.state = {
-      counter: today ? today.value : 45
+      counter: DailyStatHelper.getLastStatFor(this.props.stats, 'head', 30)
     }
+    this.changeHead = _.debounce(this.changeHead, 500)
   }
 
   componentDidMount() {
@@ -57,11 +56,23 @@ class BabyHead extends Component {
   }
 
   renderAtAGlancePage () {
-
+    const birthDate = this.props.birthDate ? moment(this.props.birthDate).format('YYYY/MM/DD') : 'Unknown'
+    const lastHead = DailyStatHelper.getLastStatFor(this.props.stats, 'head')
+    const lastDate = DailyStatHelper.getLastDateFor(this.props.stats, 'head')
     return (
       <SkewedView degree={15}>
-        { this.renderHighlightedText('Birth Head', '45', 'birth date: 1992/02/11') }
-        { this.renderHighlightedText('Current Head', '50', 'last head record: 6 days ago') }
+        { this.renderHighlightedText(
+          'Birth Head',
+          this.props.birthHead || 'Unknown',
+          `birth date: ${birthDate}`,
+          this.props.birthHead)
+        }
+        { this.renderHighlightedText(
+          'Current Head',
+          lastHead || 'Not measured yet' ,
+          lastDate ? `last updated: ${lastDate}` : '',
+          lastHead)
+        }
       </SkewedView>
     )
 
@@ -74,8 +85,8 @@ class BabyHead extends Component {
         <Text style={styles.inputTitle}>What is your baby head today?</Text>
         <Text style={styles.inputSubtitle}>track progress of your child gross by submitting today stats</Text>
         <Counter
-          onPlusPress={() => this.setState({counter: this.state.counter + 1}, this.changeWeight.bind(this))}
-          onMinusPress={() => this.setState({counter: this.state.counter - 1}, this.changeWeight.bind(this))}
+          onPlusPress={() => this.setState({counter: this.state.counter + 1}, this.changeHead.bind(this))}
+          onMinusPress={() => this.setState({counter: this.state.counter - 1}, this.changeHead.bind(this))}
         >
           <SuffixText
             containerStyle={{paddingVertical: 30}}
@@ -91,14 +102,14 @@ class BabyHead extends Component {
 
   }
 
-  renderHighlightedText (title, text, subtitle) {
+  renderHighlightedText (title, text, subtitle, suffix) {
     return (
       <View>
         <Text style={styles.title}>{title}</Text>
         <SuffixText
           textStyle={styles.focusText}
           suffixStyle={styles.suffix}
-          suffix='cm'>
+          suffix={suffix ? 'cm' : ''}>
           {text}
         </SuffixText>
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -106,21 +117,20 @@ class BabyHead extends Component {
     )
   }
 
-  changeWeight () {
+  changeHead () {
     const { counter } = this.state
     this.props.addHead(counter)
   }
 
   renderFooter() {
-    const { heads } = this.props.data
-    const today = heads[moment().format('YYYY-MM-DD')]
+    const todayHead = DailyStatHelper.getTodayStatFor(this.props.stats, 'head')
 
     return (
       <View
-        style={{opacity: today ? 1 : 0}} >
+        style={{opacity: todayHead ? 1 : 0}} >
         <TouchableOpacity
           onPress={() => this.props.removeHead()} >
-          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Head set to: { today ? today.value : 'N/A' }cm</Text>
+          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Head set to: { todayHead } cm</Text>
           <Text style={{paddingTop: 10, fontSize: 18, paddingHorizontal: 15, color: Colors.dark, fontFamily: 'PoiretOne-Regular' , textAlign: 'center'}}>Tap to remove</Text>
         </TouchableOpacity>
       </View>
@@ -131,17 +141,19 @@ class BabyHead extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { data } = state
+  const { dailyStats, baby } = state
   return {
-    data
+    birthHead: baby.head,
+    birthDate: baby.birthDate,
+    stats: dailyStats.data
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
 
   return {
-    addHead: (value) => dispatch(DataAction.addHead(value)),
-    removeHead: () => dispatch(DataAction.removeHead())
+    addHead: (value) => dispatch(DailyStatAction.set({head: value})),
+    removeHead: () => dispatch(DailyStatAction.set({head: null}))
   }
 }
 

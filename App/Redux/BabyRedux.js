@@ -46,6 +46,7 @@ export const didFail = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     error,
+    fetch: false,
     lastUpdate: moment()
   }
 }

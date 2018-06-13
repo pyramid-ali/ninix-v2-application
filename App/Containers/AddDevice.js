@@ -1,8 +1,7 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, FlatList } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { Text, View, ScrollView } from 'react-native'
 
 // Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
@@ -43,14 +42,14 @@ class AddDevice extends Component {
               blink={blink}
               lightColor={color} />
           </View>
-          <View style={{flex: 1, backgroundColor: Colors.white}}>
+          <ScrollView style={{flex: 1, backgroundColor: Colors.white}}>
             { this.props.bluetooth.error ? this.renderError() : null}
             <Header
               backgroundColor={Colors.dark}
               centerComponent={{ text: 'Available Devices', style: { color: '#fff' } }}
             />
             { data.map(this.renderItemList.bind(this) ) }
-          </View>
+          </ScrollView>
 
           { this.renderModal() }
 
@@ -105,26 +104,6 @@ class AddDevice extends Component {
     )
   }
 
-  renderItem (device) {
-    return (
-      <FoundedDeviceItem onPress={() => this.props.connect(device)} text={device.name} key={device.id} />
-    )
-  }
-
-  listHeaderComponent () {
-    return (
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Available Ninix Devices</Text>
-      </View>
-    )
-  }
-
-  separatorComponent () {
-    return (
-      <View style={styles.line} />
-    )
-  }
-
   search() {
     const { isScanning, isConnected, state } = this.props.bluetooth
     if (isConnected) {
@@ -149,7 +128,7 @@ class AddDevice extends Component {
     return (
       <View style={styles.error}>
         <Text style={styles.white}>Error</Text>
-        <Text style={styles.white}>{ _.truncate(this.props.bluetooth.error) }</Text>
+        <Text style={styles.white}>{ this.props.bluetooth.error }</Text>
       </View>
     )
   }

@@ -1,7 +1,6 @@
  import moment from 'moment'
 
 const baby = model => {
-  console.tron.log({model})
   return {
     name: model.name,
     weight: model.weight,
@@ -12,9 +11,18 @@ const baby = model => {
     birth_date: moment(model.birthDate).toISOString(),
     number: model.number
   }
+}
 
+const dailyStat = model => {
+  return {
+    weight: model.weight,
+    height: model.height,
+    head: model.head,
+    register_at: model.registerAt
+  }
 }
 
 export default {
-  baby
+  baby,
+  dailyStat
 }

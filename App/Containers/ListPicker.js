@@ -21,8 +21,7 @@ class ListPicker extends Component {
     return (
       <View style={{flex: 1}}>
         <Header
-          statusBarProps={{ backgroundColor: Colors.secondary }}
-          backgroundColor={Colors.primary}
+          backgroundColor={params.backgroundHeader}
           leftComponent={{ icon: 'arrow-left', color: '#fff', type: 'material-community', onPress: () => this.props.navigation.goBack() }}
           centerComponent={{ text: 'Select One', style: { color: '#fff' } }}
         />
@@ -37,7 +36,7 @@ class ListPicker extends Component {
                 title={item.label}
                 titleStyle={styles.labelStyle}
                 leftIcon={{ name: 'chevron-right', type: 'material-community' }}
-                rightIcon={item.default ? {name: 'check', type: 'material-community', color: Colors.primary} : null}
+                rightIcon={params.value === item.value ? {name: 'check', type: 'material-community', color: Colors.primary} : null}
                 onPress={() => {
                   params.onChange(item.value)
                   this.props.navigation.goBack()

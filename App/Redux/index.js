@@ -9,6 +9,7 @@ export default () => {
     auth:          require('./AuthRedux').reducer,
     baby:          require('./BabyRedux').reducer,
     bluetooth:     require('./BluetoothRedux').reducer,
+    dailyStats:     require('./DailyStatRedux').reducer,
     data:          require('./DataRedux').reducer,
     device:        require('./DeviceRedux').reducer,
     father:        require('./ParentRedux').fatherReducer,

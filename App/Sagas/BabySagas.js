@@ -17,7 +17,6 @@ export function *saveInformation (api, action) {
     yield put(BabyAction.setInformation(JsonToModel.baby(data.baby)))
   }
   catch (error) {
-    console.tron.error({error})
     yield put(BabyAction.didFail(error.message))
   }
 }
@@ -33,7 +32,6 @@ export function *getInformation (api) {
     yield put(BabyAction.setInformation(JsonToModel.baby(data.baby)))
   }
   catch (error) {
-    console.tron.error({error})
     yield put(BabyAction.didFail(error.message))
   }
 

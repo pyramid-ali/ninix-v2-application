@@ -14,7 +14,7 @@ function analyze (alarms, newAlarm, type) {
 
     if (item && index + item.repeat <= now) {
       return {
-        [index] : {type, repeat: item.repeat + 1}
+        [index] : {type, repeat: item.repeat + 1, registerAt: moment(index * 1000)}
       }
     }
 
@@ -25,7 +25,7 @@ function analyze (alarms, newAlarm, type) {
     })
 
     return {
-      [now] : {type, repeat: 1}
+      [now] : {type, repeat: 1, registerAt: moment(index * 1000)}
     }
 
   }

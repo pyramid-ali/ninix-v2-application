@@ -11,7 +11,7 @@ export default class LineChart extends Component {
 
   render () {
 
-    const { title, backgroundColor, data, formatLabel } = this.props
+    const { backgroundColor, data, formatLabel, title } = this.props
 
     const Clips = ({ x, width }) => (
       <Defs key={ 'clips' }>

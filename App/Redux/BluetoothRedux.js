@@ -1,5 +1,7 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
+import moment from 'moment'
+
 import BluetoothStates from '../Bluetooth/BluetoothState'
 
 export const INITIAL_STATE = Immutable({
@@ -11,7 +13,9 @@ export const INITIAL_STATE = Immutable({
   isInitiating: false,
   error: null,
   isSyncing: false,
-  successSync: false
+  successSync: false,
+  connectedAt: null,
+  disconnectedAt: null
 })
 
 const { Types, Creators } = createActions({
@@ -94,7 +98,8 @@ export const didConnect = (state = INITIAL_STATE, action) => {
     isConnected: true,
     isInitiating: true,
     isConnecting: false,
-    isScanning: false
+    isScanning: false,
+    connectedAt: moment()
   }
 }
 
@@ -103,7 +108,8 @@ export const didDisconnect = (state = INITIAL_STATE, action) => {
     ...state,
     isConnected: false,
     isConnecting: false,
-    isInitiating: false
+    isInitiating: false,
+    disconnectedAt: moment()
   }
 }
 

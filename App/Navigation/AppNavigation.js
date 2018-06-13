@@ -1,5 +1,6 @@
 // import Libraries
 import { StackNavigator } from 'react-navigation'
+
 import EditMotherInformation from '../Containers/EditMotherInformation'
 import EditFatherInformation from '../Containers/EditFatherInformation'
 import ListPicker from '../Containers/ListPicker'
@@ -21,9 +22,13 @@ import ForgotPassword from '../Containers/ForgotPassword'
 // import Styles
 import styles from './Styles/NavigationStyles'
 import Login from '../Containers/Login'
+import Device from "../Containers/Device";
+import Settings from "../Containers/Settings";
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
+  Settings: { screen: Settings },
+  Device: { screen: Device },
   EditMotherInformation: { screen: EditMotherInformation },
   EditFatherInformation: { screen: EditFatherInformation },
   ListPicker: { screen: ListPicker },

@@ -31,8 +31,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
    * @param mobile string,
    * @param token string, 4 character code
    */
-    // TODO: change checkToken to check_token
-  const checkToken = (mobile, token) => api.post('checkToken', {mobile, token})
+  const checkToken = (mobile, token) => api.post('check_token', {mobile, token})
 
   /***
    * register new user
@@ -47,13 +46,13 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
    * @param mobile
    * @param password
    */
-  const login = (mobile, password) => api.post('oauth/token', Form.login(mobile, password))
+  const login = (mobile, password) => api.post('login', Form.login(mobile, password))
 
   /***
    * refresh token
    * @param refreshToken
    */
-  const refreshToken = (refreshToken) => api.post('oauth/token', Form.refreshToken(refreshToken))
+  const refreshToken = (refreshToken) => api.post('login ', Form.refreshToken(refreshToken))
 
   /***
    * get user information route
@@ -81,50 +80,62 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
   const updateBaby = (data, token) => api.put('baby/update', data, authorizationHeader(token))
 
   /***
-   * get devices logs for this user
-   * @param mac string, mac address of device
-   * @param token
-   */
-  const getDeviceLogs = (token: string) => api.get('api/device/logs', {}, authorizationHeader(token))
-
-  /***
-   * get parent or baby image
-   * @param type string, one of (baby|father|mother)
-   * @param token
-   */
-  const getPhoto = (type: string, token: string) => api.get('api/photo/' + type, {}, authorizationHeader(token))
-
-  /***
-   * send photo to server to save in cloud
-   * @param type
+   * update daily stat for baby, include: weight, height, head circumference
    * @param data
    * @param token
    */
-  const sendPhoto = (type: string, data, token: string) => api.post('api/photo/' + type, data, authorizationHeader(token))
+  const updateDailyStat = (data, token) => api.put('daily_stats/update', {daily_stats: data}, authorizationHeader(token))
 
   /***
-   * send information of parents or baby
-   * @param type string, one of (baby|father|mother)
-   * @param options
+   * get baby's daily stats
    * @param token
    */
-  const sendInformation = (type: string, options: Object, token: string) => api.post('api/information/' + type, options, authorizationHeader(token))
-
-  /***
-   * send device log to server to save them in cloud
-   * @param data
-   * @param token
-   */
-  const sendDeviceLog = (data: Object, token: string) => api.post('api/device/log', data, authorizationHeader(token))
-
-  /***
-   * send array of data obtained from ninix device
-   * @param data
-   * @param token
-   */
-  const sendData = (data: Object[], token: string) => api.post('api/data', data, authorizationHeader(token))
-
-  const getLatestFirmwareVersion = (token: string) => api.get('api/firmware/version', {}, authorizationHeader(token))
+  const getDailyStats = (token) => api.get('daily_stats', {}, authorizationHeader(token))
+  // /***
+  //  * get devices logs for this user
+  //  * @param mac string, mac address of device
+  //  * @param token
+  //  */
+  // const getDeviceLogs = (token: string) => api.get('api/device/logs', {}, authorizationHeader(token))
+  //
+  // /***
+  //  * get parent or baby image
+  //  * @param type string, one of (baby|father|mother)
+  //  * @param token
+  //  */
+  // const getPhoto = (type: string, token: string) => api.get('api/photo/' + type, {}, authorizationHeader(token))
+  //
+  // /***
+  //  * send photo to server to save in cloud
+  //  * @param type
+  //  * @param data
+  //  * @param token
+  //  */
+  // const sendPhoto = (type: string, data, token: string) => api.post('api/photo/' + type, data, authorizationHeader(token))
+  //
+  // /***
+  //  * send information of parents or baby
+  //  * @param type string, one of (baby|father|mother)
+  //  * @param options
+  //  * @param token
+  //  */
+  // const sendInformation = (type: string, options: Object, token: string) => api.post('api/information/' + type, options, authorizationHeader(token))
+  //
+  // /***
+  //  * send device log to server to save them in cloud
+  //  * @param data
+  //  * @param token
+  //  */
+  // const sendDeviceLog = (data: Object, token: string) => api.post('api/device/log', data, authorizationHeader(token))
+  //
+  // /***
+  //  * send array of data obtained from ninix device
+  //  * @param data
+  //  * @param token
+  //  */
+  // const sendData = (data: Object[], token: string) => api.post('api/data', data, authorizationHeader(token))
+  //
+  // const getLatestFirmwareVersion = (token: string) => api.get('api/firmware/version', {}, authorizationHeader(token))
 
   return {
     login,
@@ -136,13 +147,15 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
     changePassword,
     getBaby,
     updateBaby,
-    getDeviceLogs,
-    getPhoto,
-    sendPhoto,
-    sendInformation,
-    sendDeviceLog,
-    sendData,
-    getLatestFirmwareVersion
+    updateDailyStat,
+    getDailyStats,
+    // getDeviceLogs,
+    // getPhoto,
+    // sendPhoto,
+    // sendInformation,
+    // sendDeviceLog,
+    // sendData,
+    // getLatestFirmwareVersion
   }
 }
 

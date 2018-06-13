@@ -8,7 +8,7 @@ export function *didReceiveData (api, action) {
 
   const { data } = action
   RealmStorage.save(data)
-  yield sendDataToServer(api, data)
+  // yield sendDataToServer(api, data)
 
 }
 

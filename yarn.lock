@@ -5947,6 +5947,10 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-background-timer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-background-timer/-/react-native-background-timer-2.0.1.tgz#ef714a4bfd28fc47cbbd335631b581cf915604a2"
+
 react-native-ble-plx@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/react-native-ble-plx/-/react-native-ble-plx-0.9.0.tgz#1ffa18e73133193d96c3edd7100b87f86d4cb403"
@@ -6118,6 +6122,10 @@ react-native-sentry@^0.35.3:
   dependencies:
     "@sentry/wizard" "^0.9.1"
     raven-js "^3.22.1"
+
+react-native-sound@^0.10.9:
+  version "0.10.9"
+  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.10.9.tgz#6b00b0f4afd017cde09fbb9d171df1b5d5b851a8"
 
 react-native-svg-charts@^5.0.0:
   version "5.0.0"

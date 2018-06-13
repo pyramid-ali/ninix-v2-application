@@ -4,13 +4,14 @@ import { Colors, Metrics } from '../../Themes/'
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark,
+    backgroundColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center'
   },
   center: {
     textAlign: 'center',
     fontSize: 60,
-    color: Colors.white
+    color: Colors.secondary,
+    fontFamily: 'PoiretOne-Regular',
   }
 })

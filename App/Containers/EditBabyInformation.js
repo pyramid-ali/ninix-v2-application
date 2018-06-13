@@ -4,12 +4,15 @@ import { connect } from 'react-redux'
 import { Header, ListItem } from 'react-native-elements'
 import _ from 'lodash'
 import moment from 'moment'
+
+// Dependencies
 import BabyAction from '../Redux/BabyRedux'
+import DefaultTextInput from '../Components/DefaultTextInput'
 
 // Styles
 import styles from './Styles/EditBabyInformationStyle'
 import Colors from '../Themes/Colors'
-import DefaultTextInput from '../Components/DefaultTextInput'
+
 
 class EditBabyInformation extends Component {
   constructor (props) {
@@ -59,7 +62,6 @@ class EditBabyInformation extends Component {
   }
 
   render () {
-
     return (
       <View style={{flex: 1}}>
         <Header
@@ -73,6 +75,14 @@ class EditBabyInformation extends Component {
         />
 
         <ScrollView style={styles.container}>
+
+          { this.props.baby.error ?
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{ this.props.baby.error }</Text>
+            </View> :
+            null
+          }
+
 
           <View style={styles.sectionTitleContainer}>
             <Text style={styles.sectionTitle}>GENERAL</Text>

@@ -3,27 +3,26 @@ import { View, Text, StatusBar, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import Swiper from '@nart/react-native-swiper'
 import moment from 'moment'
+import _ from 'lodash'
 
+import DailyStatHelper from '../Transform/DailyStatHelper'
 import SkewedView from '../Components/SkewedView'
 import Counter from '../Components/Counter'
 import SuffixText from '../Components/SuffixText'
-import DataAction from '../Redux/DataRedux'
+import DailyStatAction from '../Redux/DailyStatRedux'
 
 // Styles
 import Colors from '../Themes/Colors'
-
-// Styles
 import styles from './Styles/BabyHeightStyle'
 
 class BabyHeight extends Component {
 
   constructor (props) {
     super(props)
-    const { heights } = this.props.data
-    const today = heights[Object.keys(heights).sort().reverse()[0]]
     this.state = {
-      counter: today ? today.value : 45
+      counter: DailyStatHelper.getLastStatFor(this.props.stats, 'height', 40)
     }
+    this.changeHeight = _.debounce(this.changeHeight, 500)
   }
 
   componentDidMount() {
@@ -57,11 +56,23 @@ class BabyHeight extends Component {
   }
 
   renderAtAGlancePage () {
-
+    const birthDate = this.props.birthDate ? moment(this.props.birthDate).format('YYYY/MM/DD') : 'Unknown'
+    const lastHeight = DailyStatHelper.getLastStatFor(this.props.stats, 'height')
+    const lastDate = DailyStatHelper.getLastDateFor(this.props.stats, 'height')
     return (
       <SkewedView degree={15}>
-        { this.renderHighlightedText('Birth Height', '45', 'birth date: 1992/02/11') }
-        { this.renderHighlightedText('Current Height', '50', 'last height record: 6 days ago') }
+        { this.renderHighlightedText(
+          'Birth Height',
+          this.props.birthHeight || 'Unknown',
+          `birth date: ${birthDate}`,
+          this.props.birthHeight)
+        }
+        { this.renderHighlightedText(
+          'Current Height',
+          lastHeight || 'Not Measured yet' ,
+          lastDate ? `last updated: ${lastDate}` : '',
+          lastHeight)
+        }
       </SkewedView>
     )
 
@@ -74,8 +85,8 @@ class BabyHeight extends Component {
         <Text style={styles.inputTitle}>What is your baby height today?</Text>
         <Text style={styles.inputSubtitle}>track progress of your child gross by submitting today stats</Text>
         <Counter
-          onPlusPress={() => this.setState({counter: this.state.counter + 1}, this.changeWeight.bind(this))}
-          onMinusPress={() => this.setState({counter: this.state.counter - 1}, this.changeWeight.bind(this))}
+          onPlusPress={() => this.setState({counter: this.state.counter + 1}, this.changeHeight.bind(this))}
+          onMinusPress={() => this.setState({counter: this.state.counter - 1}, this.changeHeight.bind(this))}
         >
           <SuffixText
             containerStyle={{paddingVertical: 30}}
@@ -91,14 +102,14 @@ class BabyHeight extends Component {
 
   }
 
-  renderHighlightedText (title, text, subtitle) {
+  renderHighlightedText (title, text, subtitle, suffix) {
     return (
       <View>
         <Text style={styles.title}>{title}</Text>
         <SuffixText
           textStyle={styles.focusText}
           suffixStyle={styles.suffix}
-          suffix='cm'>
+          suffix={suffix ? 'cm' : ''}>
           {text}
         </SuffixText>
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -106,21 +117,21 @@ class BabyHeight extends Component {
     )
   }
 
-  changeWeight () {
+  changeHeight () {
+    console.tron.log({log: 'change height'})
     const { counter } = this.state
     this.props.addHeight(counter)
   }
 
   renderFooter() {
-    const { heights } = this.props.data
-    const today = heights[moment().format('YYYY-MM-DD')]
+    const todayHeight = DailyStatHelper.getTodayStatFor(this.props.stats, 'height')
 
     return (
       <View
-        style={{opacity: today ? 1 : 0}} >
+        style={{opacity: todayHeight ? 1 : 0}} >
         <TouchableOpacity
           onPress={() => this.props.removeHeight()} >
-          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Height set to: { today ? today.value : 'N/A' }cm</Text>
+          <Text style={{paddingTop: 10, fontSize: 14, paddingHorizontal: 15, fontFamily: 'PoiretOne-Regular' , textAlign: 'center', color: Colors.secondary}}>Today's Height set to: { todayHeight } cm</Text>
           <Text style={{paddingTop: 10, fontSize: 18, paddingHorizontal: 15, color: Colors.dark, fontFamily: 'PoiretOne-Regular' , textAlign: 'center'}}>Tap to remove</Text>
         </TouchableOpacity>
       </View>
@@ -131,17 +142,19 @@ class BabyHeight extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { data } = state
+  const { dailyStats, baby } = state
   return {
-    data
+    birthHeight: baby.height,
+    birthDate: baby.birthDate,
+    stats: dailyStats.data
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
 
   return {
-    addHeight: (value) => dispatch(DataAction.addHeight(value)),
-    removeHeight: () => dispatch(DataAction.removeHeight())
+    addHeight: (value) => dispatch(DailyStatAction.set({height: value})),
+    removeHeight: () => dispatch(DailyStatAction.set({height: null}))
   }
 }
 

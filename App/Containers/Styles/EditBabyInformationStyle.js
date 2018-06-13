@@ -45,5 +45,14 @@ export default StyleSheet.create({
   },
   picker: {
     flex: 1
+  },
+
+  errorContainer: {
+    backgroundColor: Colors.alert
+  },
+  errorText: {
+    textAlign: 'center',
+    margin: 10,
+    color: Colors.white
   }
 })
