@@ -24,7 +24,7 @@
   "dependencies": {
     "@nart/react-native-swiper": "^1.5.13",
     "antd-mobile": "^2.1.8",
-    "apisauce": "^0.14.3",
+    "apisauce": "^0.15.2",
     "format-json": "^1.0.3",
     "immutability-helper": "^2.6.6",
     "js-base64": "^2.4.3",
