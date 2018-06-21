@@ -15,7 +15,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
       'Accept': 'application/json',
       'Cache-Control': 'no-cache'
     },
-    timeout: 100 * 1000
+    timeout: 10 * 1000
   })
 
   const authorizationHeader = (accessToken) => ({headers: {Authorization: `Bearer ${accessToken}`}})
