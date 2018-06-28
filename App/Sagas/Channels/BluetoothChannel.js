@@ -8,6 +8,7 @@ import BluetoothAction from '../../Redux/BluetoothRedux'
 import CentralManager from '../../Bluetooth/CentralManager'
 import AlarmAction from '../../Redux/AlarmRedux'
 import AlarmService from '../../Services/AlarmService'
+import DeviceLogAction from '../../Redux/DeviceLogRedux'
 
 let isSyncing = false
 
@@ -117,7 +118,8 @@ export function *setupBluetoothConnectionListener (channel) {
     while (true) {
 
       const { error, device } = yield take(channel)
-      console.tron.log({forceDisconnect: CentralManager.forceDisconnect, tries: CentralManager.tries})
+      const state = yield select()
+      yield put(DeviceLogAction.didDisconnect({...state.device, error}))
       if (CentralManager.forceDisconnect) {
         yield put(BluetoothAction.didDisconnect())
         CentralManager.forceDisconnect = false

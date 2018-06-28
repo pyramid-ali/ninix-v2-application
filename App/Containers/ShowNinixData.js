@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {ScrollView, Text, View} from 'react-native'
 import { connect } from 'react-redux'
-import RNFetchBlob from "react-native-fetch-blob"
+import RNFetchBlob from "rn-fetch-blob"
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 

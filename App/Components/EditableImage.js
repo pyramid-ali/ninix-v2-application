@@ -30,7 +30,7 @@ export default class EditableImage extends Component {
         {
           progress !== null ?
             <View style={[styles.hover, innerStyle.image, {backgroundColor: `rgba(${Colors.blackRGB}, ${1 - progress / 200})`}]}>
-              <Text style={[styles.progressText, {fontSize: size / 3}]}>{progress - 1}%</Text>
+              <Text style={[styles.progressText, {fontSize: size / 3}]}>{progress}%</Text>
             </View>
             :
             null
@@ -76,7 +76,10 @@ EditableImage.propTypes = {
   ]),
   onPress: PropTypes.func,
   progress: PropTypes.number,
-  source: PropTypes.number,
+  source: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object
+  ]),
   size: PropTypes.number,
   style: PropTypes.oneOfType([
     PropTypes.number,

@@ -16,13 +16,14 @@ export default class DefaultTextInput extends Component {
 
   render () {
 
-    const { placeholder, label, icon, suffix, onChangeText, value } = this.props
+    const { placeholder, label, icon, suffix, onChangeText, value, secureTextEntry } = this.props
 
     return (
       <Input
         placeholder={placeholder}
         autoCapatilize
         label={label}
+        secureTextEntry={secureTextEntry}
         labelStyle={styles.labelStyle}
         selectionColor={Colors.dark}
         containerStyle={{marginLeft: 15, marginVertical: 15}}
@@ -51,7 +52,7 @@ export default class DefaultTextInput extends Component {
 }
 
 DefaultTextInput.defaultProps = {
-
+  secureTextEntry: false
 }
 
 DefaultTextInput.propTypes = {
@@ -59,6 +60,7 @@ DefaultTextInput.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.string,
   suffix: PropTypes.string,
-  onChangeText: PropTypes.func.isRequired
+  onChangeText: PropTypes.func.isRequired,
+  secureTextEntry: PropTypes.bool
 }
 

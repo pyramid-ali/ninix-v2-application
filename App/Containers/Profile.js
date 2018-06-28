@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, Text, View, Image, StatusBar } from 'react-native'
 
-
 // Dependencies
 import EditableImage from '../Components/EditableImage'
 import ParentAction from '../Redux/ParentRedux'
@@ -28,10 +27,8 @@ class Profile extends Component {
   }
 
   render () {
-    const { mother, father, baby } = this.props
+    const { baby, mother, father } = this.props
     const babyImage = baby.image ? {uri: baby.image.uri} : require('../Images/Profile/3-3.jpg')
-
-    DailyStatHelper.getLastStatFor(this.props.stats, 'weight')
 
     const data = [
       {
@@ -61,14 +58,14 @@ class Profile extends Component {
       {
         title: 'Father',
         avatar: require('../Images/Profile/3-1.jpg'),
-        subtitle: 'Habib Shabani',
+        subtitle: father.name || 'Father',
         type: 'father',
         onPress: () => this.props.navigation.navigate('EditFatherInformation')
       },
       {
         title: 'Mother',
-        avatar: mother.image ? {uri: mother.image.uri} : require('../Images/Profile/3-2.jpg'),
-        subtitle: 'Masume Shiri',
+        avatar: require('../Images/Profile/3-2.jpg'),
+        subtitle: mother.name || 'Mother',
         type: 'mother',
         onPress: () => this.props.navigation.navigate('EditMotherInformation')
       }
@@ -100,7 +97,7 @@ class Profile extends Component {
             <View
               style={styles.babyContainer}>
               <EditableImage
-                progress={baby.progress}
+                progress={baby.imageProgress}
                 style={styles.babyImage}
                 size={120}
                 source={babyImage}
@@ -111,7 +108,7 @@ class Profile extends Component {
                 {baby.name ? baby.name : 'Baby'}
               </Text>
               <Text style={styles.description}>
-                Your baby health is normal
+                Babies are such a nice way to start people
               </Text>
             </View>
           </View>
@@ -124,7 +121,7 @@ class Profile extends Component {
               baby Information
             </Text>
             <ListItem
-              title='Baby Information'
+              title={baby.name || 'Baby'}
               leftAvatar={{source: require('../Images/Profile/3-3.jpg')}}
               onPress={() => this.props.navigation.navigate('EditBabyInformation')}
               chevron
@@ -188,26 +185,10 @@ class Profile extends Component {
     )
   }
 
-  setMotherImage (response) {
-    if (response.data) {
-      this.props.setMotherImage(response, this.props.mother.image, this.failure)
-    }
-  }
-
-  setFatherImage (response) {
-    if (response.data) {
-      this.props.setFatherImage(response, this.props.father.image, this.failure)
-    }
-  }
-
   setBabyImage (response) {
     if (response.data) {
       this.props.setBabyImage(response, this.props.baby.image, this.failure)
     }
-  }
-
-  failure (error) {
-    alert('something went wrong to upload image, please try again' + '\nReason: ' + error.message)
   }
 }
 
@@ -232,8 +213,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setFatherImage: (image, previousImage, failure) => dispatch(ParentAction.setFatherImage({image, previousImage, failure})),
-    setMotherImage: (image, previousImage, failure) => dispatch(ParentAction.setMotherImage({image, previousImage, failure})),
     setBabyImage: (image, previousImage, failure) => dispatch(BabyAction.setImage({image, previousImage, failure})),
   }
 }

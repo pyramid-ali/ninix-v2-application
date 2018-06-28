@@ -2,19 +2,19 @@
 import React, { Component } from 'react'
 import {Text, View} from 'react-native'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/FontAwesome'
 
-// Styles
-import styles from './Styles/SignupStyle'
+// Dependencies
 import EntryTemplate from '../Components/EntryTemplate'
 import MobileEntrance from '../Components/MobileEntrance'
 import TokenEntrance from '../Components/TokenEntrance'
 import SignupAction from '../Redux/SignupRedux'
 import PasswordEntrance from '../Components/PasswordEntrance'
-import Router from '../Navigation/Router'
 
-// TODO: correct signup
+// Styles
+import styles from './Styles/SignupStyle'
+
 class Signup extends Component {
+
   constructor (props) {
     super(props)
     this.state = {
@@ -29,6 +29,10 @@ class Signup extends Component {
       token: require('../Images/Signup/token.png'),
       password: require('../Images/Signup/password.png')
     }
+  }
+
+  componentWillUnmount() {
+    this.props.cancel()
   }
 
   render () {
@@ -114,7 +118,6 @@ class Signup extends Component {
     })
   }
 
-
   resetState () {
     this.setState({
       stage: 'mobile',
@@ -138,7 +141,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     requestToken: (mobile, callback) => dispatch(SignupAction.requestToken(mobile, callback)),
     verifyToken: (mobile, token, callback) => dispatch(SignupAction.checkToken(mobile, token, callback)),
-    register: (mobile, token, password) => dispatch(SignupAction.register(mobile, token, password))
+    register: (mobile, token, password) => dispatch(SignupAction.register(mobile, token, password)),
+    cancel: () => dispatch(SignupAction.cancel())
   }
 }
 

@@ -2,9 +2,18 @@ import { StyleSheet } from 'react-native'
 import { Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
-  container: {
+  formContainer: {
     flex: 1,
-    marginTop: Metrics.navBarHeight,
-    backgroundColor: Colors.background
+    paddingBottom: 20,
+    paddingHorizontal: '10%',
+    justifyContent: 'flex-end'
+  },
+  error: {
+    padding: 5,
+    backgroundColor: 'red',
+    color: 'white'
+  },
+  barButton: {
+    color: 'white'
   }
 })

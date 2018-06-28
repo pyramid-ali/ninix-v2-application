@@ -13,6 +13,14 @@ const baby = model => {
   }
 }
 
+const father = model => ({
+  name: model.name
+})
+
+const mother = model => ({
+ name: model.name
+})
+
 const dailyStat = model => {
   return {
     weight: model.weight,
@@ -22,7 +30,44 @@ const dailyStat = model => {
   }
 }
 
+const vitalSign = model => ({
+  temperature: model.temperature,
+  respiratory: model.respiratory,
+  orientation: model.orientation,
+  humidity: model.humidity,
+  register_at: moment(model.registerAt * 1000)
+})
+
+const connectivityLog = model => ({
+  device: {
+    name: model.name,
+    mac: model.mac,
+    serial: model.serial,
+    firmware: model.firmware,
+    revision: model.revision,
+  },
+  error: model.error,
+  happened_at: model.happenedAt
+})
+
+const alarm = model => ({
+  type: model.type,
+  duration: model.duration,
+  register_at: model.registerAt
+})
+
+const changePassword = model => ({
+  new_password: model.newPassword,
+  old_password: model.oldPassword
+})
+
 export default {
   baby,
-  dailyStat
+  father,
+  mother,
+  dailyStat,
+  vitalSign,
+  connectivityLog,
+  alarm,
+  changePassword
 }

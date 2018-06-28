@@ -3,6 +3,7 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.horcrux.svg.SvgPackage;
@@ -14,7 +15,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 // import io.sentry.RNSentryPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.polidea.reactnativeble.BlePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -38,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
             new BackgroundTimerPackage(),
             new RNSoundPackage(),
             new SvgPackage(),
@@ -48,7 +49,6 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new LinearGradientPackage(),
             new ImagePickerPackage(),
-            new RNFetchBlobPackage(),
             new ReactNativeConfigPackage(),
             new BlePackage(),
             new LottiePackage()

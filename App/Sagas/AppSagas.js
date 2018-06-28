@@ -1,15 +1,15 @@
-import { NetInfo } from 'react-native'
 import { put, call, select, fork } from 'redux-saga/effects'
 
 import { getToken, isTokenValid } from '../Services/TokenManager'
 import AppAction from '../Redux/AppRedux'
 import AuthAction from '../Redux/AuthRedux'
-import ParentAction from '../Redux/ParentRedux'
 import BabyAction from '../Redux/BabyRedux'
+import FatherAction from '../Redux/FatherRedux'
+import MotherAction from '../Redux/MotherRedux'
+import DailyStatAction from '../Redux/DailyStatRedux'
 import BluetoothAction from '../Redux/BluetoothRedux'
-import DataAction from '../Redux/DataRedux'
+import FirmwareAction from '../Redux/FirmwareRedux'
 import Router from '../Navigation/Router'
-import Form from '../Services/Form'
 import Response from '../Services/Response'
 
 // channels
@@ -98,16 +98,21 @@ export function *sync () {
   // 1. get user information
   // 2. get mother and father user information
   yield put(BabyAction.getInformation())
+  yield put(FatherAction.getInformation())
+  yield put(MotherAction.getInformation())
+  yield put(DailyStatAction.retrieveFromServer())
+  yield put(FirmwareAction.checkLatestVersion())
   // yield put(DataAction.syncWithServer())
   // 3. check for parent picture sync
   // 4. check data received from device is sync or not
 
 }
 
-export function *logout (action) {
+export function *logout (api, action) {
 
+  const { auth } = yield select()
   yield put(BluetoothAction.disconnect())
   yield put(AuthAction.revokeToken())
   yield put(Router.navigateToLogin)
-
+  yield call(api.logout, auth.accessToken)
 }

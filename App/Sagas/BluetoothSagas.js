@@ -4,6 +4,7 @@ import { PermissionsAndroid } from 'react-native'
 
 // Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
+import DeviceLogAction from '../Redux/DeviceLogRedux'
 import CentralManager from '../Bluetooth/CentralManager'
 import DeviceAction from '../Redux/DeviceRedux'
 import Router from '../Navigation/Router'
@@ -27,8 +28,6 @@ export function *connect(action) {
   // TODO: we should save logs in backend server
   const { device } = action
   try {
-    // connect to device
-
     const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
     yield put(DeviceAction.setDevice(connectedDevice))
     yield put(BluetoothAction.didConnect(connectedDevice))
@@ -40,6 +39,8 @@ export function *connect(action) {
     yield fork(setupNinixAlarmListener, yield call(setupNinixAlarmListenerChannel, CentralManager.ninix))
 
     yield getErrorLog(CentralManager.ninix)
+    const state = yield select()
+    yield put(DeviceLogAction.didConnect(state.device))
 
     const { nav } = yield select()
     if (nav.index === 1) {
@@ -50,7 +51,6 @@ export function *connect(action) {
 
   }
   catch (error) {
-    // yield put(BluetoothAction.disconnect())
     yield put(BluetoothAction.didFail(error.message))
     console.tron.log({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
   }
@@ -126,12 +126,10 @@ export function *startSync() {
 }
 
 export function *getDeviceInformation() {
-
   yield put(DeviceAction.setName(yield call(CentralManager.ninix.getName.bind(CentralManager.ninix))))
   yield put(DeviceAction.setSerial(yield call(CentralManager.ninix.getSerial.bind(CentralManager.ninix))))
   yield put(DeviceAction.setFirmware(yield call(CentralManager.ninix.getFirmware.bind(CentralManager.ninix))))
   yield put(DeviceAction.setRevision(yield call(CentralManager.ninix.getHardwareRevision.bind(CentralManager.ninix))))
-
 }
 
 export function *turnOffDevice() {

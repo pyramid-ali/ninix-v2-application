@@ -133,7 +133,7 @@ class Device extends Component {
 
   renderConnected () {
 
-    const { data, device } = this.props
+    const { data, device, firmware } = this.props
     const { stream } = data
     const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
 
@@ -172,27 +172,16 @@ class Device extends Component {
 
           <ListItem
             title='Firmware Version'
-            subtitle={'Latest Version'}
+            subtitle={firmware.version > device.firmware ? 'Update is Available' : 'Latest Version'}
             subtitleStyle={styles.connectedListSubtitle}
             leftIcon={{name: "donut-large"}}
             rightTitle={'V' + device.firmware}
             rightTitleStyle={styles.connectedRightTitle}
+            onPress={() => this.props.navigation.navigate('FirmwareUpdate')}
+            chevron
           />
 
         </View>
-
-        <Button
-          buttonStyle={styles.turnOffButton}
-          onPress={this.turnOffDevice.bind(this)}
-          icon={
-            <Icon
-              name='portable-wifi-off'
-              size={15}
-              color='white'
-            />
-          }
-          title='Turn Off Device'
-        />
 
         <Button
           buttonStyle={styles.disconnectButton}
@@ -239,9 +228,9 @@ Device.navigationOptions = {
 }
 
 const mapStateToProps = (state) => {
-  const { bluetooth, data, device } = state
+  const { bluetooth, data, device, firmware } = state
   return {
-    bluetooth, data, device
+    bluetooth, data, device, firmware
   }
 }
 

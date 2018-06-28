@@ -12,14 +12,27 @@ const baby = json => ({
   number: json.number
 })
 
-const dailyStat = json => ({
-  weight: json.weight,
-  height: json.height,
-  head: json.head,
-  registerAt: json.register_at
+const father = json => ({
+  name: json.name
 })
+
+const mother = json => ({
+  name: json.name
+})
+
+const dailyStat = json => {
+  console.tron.log({json, a: json.weight})
+  return ({
+    weight: json.weight,
+    height: json.height,
+    head: json.head,
+    registerAt: json.register_at
+  })
+}
 
 export default {
   baby,
+  father,
+  mother,
   dailyStat
 }

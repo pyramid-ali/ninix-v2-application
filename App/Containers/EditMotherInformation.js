@@ -1,17 +1,26 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View, StatusBar, DatePickerAndroid } from 'react-native'
+import {ScrollView, Text, View, StatusBar, DatePickerAndroid, Alert, Keyboard, ActivityIndicator} from 'react-native'
 import { connect } from 'react-redux'
-import {Input, Icon, Header, ListItem} from 'react-native-elements'
+import {Header, ListItem} from 'react-native-elements'
+import moment from 'moment/moment'
+import _ from 'lodash'
+
+// Dependencies
+import DefaultTextInput from '../Components/DefaultTextInput'
+import MotherAction from '../Redux/MotherRedux'
 
 // Styles
 import styles from './Styles/EditMotherInformationStyle'
 import Colors from '../Themes/Colors'
+import FatherAction from "../Redux/FatherRedux";
+
 
 class EditMotherInformation extends Component {
+
   constructor (props) {
     super(props)
     this.state = {
-      name: ''
+      name: this.props.mother.name
     }
   }
 
@@ -25,263 +34,117 @@ class EditMotherInformation extends Component {
     this._navListener.remove()
   }
 
+  onChangeText (state) {
+    return (text) => this.setState({[state]: text})
+  }
+
   render () {
     return (
       <View style={{flex: 1}}>
         <Header
           statusBarProps={{ backgroundColor: Colors.secondary }}
           backgroundColor={Colors.primary}
-          leftComponent={{ icon: 'clear', color: '#fff' }}
-          centerComponent={{ text: 'Edit Information', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'check', color: '#fff' }}
+          leftComponent={{ icon: 'clear', color: '#fff', onPress: this.cancel.bind(this) }}
+          centerComponent={{ text: 'Edit Mother Information', style: { color: '#fff' } }}
+          rightComponent={this.props.mother.fetch ?
+            <ActivityIndicator color='#fff' size={18} /> :
+            { icon: 'check', color: '#fff', onPress: this.submit.bind(this) }}
         />
 
         <ScrollView style={styles.container}>
 
+          { this.props.mother.error ?
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>{ this.props.mother.error }</Text>
+            </View> :
+            null
+          }
+
+
           <View style={styles.sectionTitleContainer}>
-            <Text style={styles.sectionTitle}>General Information</Text>
+            <Text style={styles.sectionTitle}>GENERAL</Text>
           </View>
 
           <View style={styles.section}>
-            <Input
-              placeholder='What is your baby name?'
-              autoCapatilize
+            <DefaultTextInput
               label="name"
-              labelStyle={styles.labelStyle}
-              selectionColor={Colors.dark}
-              containerStyle={{marginLeft: 15, marginVertical: 15}}
-              placeholderTextColor={Colors.gray}
-              inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-              onFocus={() => this.setState({focus: true})}
-              onBlur={() => this.setState({focus: false})}
-              onChangeText={(text) => this.setState({name: text})}
-              inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
-              leftIcon={
-                <Icon
-                  type='material-community'
-                  name='pencil-circle'
-                  size={24}
-                  color='black'
-                />
-              }
+              placeholder='Name?'
+              icon='pencil-circle'
+              value={this.state.name}
+              onChangeText={this.onChangeText('name')}
             />
           </View>
 
-          <View style={styles.sectionTitleContainer}>
-            <Text style={styles.sectionTitle}>BirthDate Information</Text>
-          </View>
+          {/*<View style={styles.sectionTitleContainer}>*/}
+            {/*<Text style={styles.sectionTitle}>OTHER</Text>*/}
+          {/*</View>*/}
 
-          <View style={styles.section}>
+          {/*<View style={styles.section}>*/}
+            {/*<ListItem*/}
+              {/*title='Birth Date'*/}
+              {/*rightTitle={ this.state.birthDate ? moment(this.state.birthDate).format('YYYY-MM-DD') : 'N/A'}*/}
+              {/*rightTitleStyle={[styles.labelStyle, {fontSize: 12}]}*/}
+              {/*titleStyle={styles.labelStyle}*/}
+              {/*leftIcon={{ name: 'cake-variant', type: 'material-community' }}*/}
+              {/*chevron*/}
+              {/*onPress={() => {*/}
+                {/*try {*/}
 
-            <Input
-              placeholder='Weight in birthday?'
-              autoCapatilize
-              label="weight"
-              labelStyle={styles.labelStyle}
-              selectionColor={Colors.dark}
-              containerStyle={{marginLeft: 15, marginVertical: 15}}
-              placeholderTextColor={Colors.gray}
-              inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-              onFocus={() => this.setState({focus: true})}
-              onBlur={() => this.setState({focus: false})}
-              onChangeText={(text) => this.setState({name: text})}
-              inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
-              leftIcon={
-                <Icon
-                  type='material-community'
-                  name='weight-kilogram'
-                  size={24}
-                  color='black'
-                />
-              }
-              rightIcon={
-                <Text style={styles.suffix}>gr
-                </Text>
-              }
-            />
+                  {/*DatePickerAndroid.open({*/}
+                    {/*date: new Date()*/}
+                  {/*}).then(res => this.setState({birthDate: moment(_.pick(res, ['year', 'month', 'day']))}))*/}
 
-            <Input
-              placeholder='Height in birthday?'
-              autoCapatilize
-              label="height"
-              labelStyle={styles.labelStyle}
-              selectionColor={Colors.dark}
-              containerStyle={{marginLeft: 15, marginVertical: 15}}
-              placeholderTextColor={Colors.gray}
-              inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-              onFocus={() => this.setState({focus: true})}
-              onBlur={() => this.setState({focus: false})}
-              onChangeText={(text) => this.setState({name: text})}
-              inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
-              leftIcon={
-                <Icon
-                  type='material-community'
-                  name='trending-up'
-                  size={24}
-                  color='black'
-                />
-              }
-              rightIcon={
-                <Text style={styles.suffix}>cm</Text>
-              }
-            />
-
-            <Input
-              placeholder='Head in birthday?'
-              autoCapatilize
-              label="head"
-              labelStyle={styles.labelStyle}
-              selectionColor={Colors.dark}
-              containerStyle={{marginLeft: 15, marginVertical: 15}}
-              placeholderTextColor={Colors.gray}
-              inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-              onFocus={() => this.setState({focus: true})}
-              onBlur={() => this.setState({focus: false})}
-              onChangeText={(text) => this.setState({name: text})}
-              inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
-              leftIcon={
-                <Icon
-                  type='material-community'
-                  name='face'
-                  size={24}
-                  color='black'
-                />
-              }
-              rightIcon={
-                <Text style={styles.suffix}>cm</Text>
-              }
-            />
-
-            <Input
-              placeholder="What is gestation year?"
-              autoCapatilize
-              label="gestation"
-              labelStyle={styles.labelStyle}
-              selectionColor={Colors.dark}
-              containerStyle={{marginLeft: 15, marginVertical: 15}}
-              placeholderTextColor={Colors.gray}
-              inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-              onFocus={() => this.setState({focus: true})}
-              onBlur={() => this.setState({focus: false})}
-              onChangeText={(text) => this.setState({name: text})}
-              inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
-              leftIcon={
-                <Icon
-                  type='material-community'
-                  name='coins'
-                  size={24}
-                  color='black'
-                />
-              }
-              rightIcon={
-                <Text style={styles.suffix}>years old</Text>
-              }
-            />
-          </View>
-
-          <View style={styles.sectionTitleContainer}>
-            <Text style={styles.sectionTitle}>Additional Information</Text>
-          </View>
-
-          <View style={styles.section}>
-            <ListItem
-              title='Birth Date'
-              rightTitle='2017-01-12'
-              rightTitleStyle={styles.labelStyle}
-              titleStyle={styles.labelStyle}
-              leftIcon={{ name: 'cake-variant', type: 'material-community' }}
-              chevron
-              onPress={() => {
-                try {
-
-                  DatePickerAndroid.open({
-                    // Use `new Date()` for current date.
-                    // May 25 2020. Month 0 is January.
-                    date: new Date(2020, 4, 25)
-                  }).then((res) => console.tron.log(res))
-
-                } catch ({code, message}) {
-                  console.warn('Cannot open date picker', message);
-                }
-              }}
-            />
-
-            <ListItem
-              title='Gender'
-              titleStyle={styles.labelStyle}
-              leftIcon={{ name: 'gender-male-female', type: 'material-community' }}
-              rightTitle='boy'
-              rightTitleStyle={styles.labelStyle}
-              chevron
-              onPress={() => this.props.navigation.navigate('ListPicker', {
-                onChange: (value) => console.tron.log(value),
-                items: [
-                  {
-                    label: 'male',
-                    value: 0,
-                    default: true
-                  },
-                  {
-                    label: 'female',
-                    value: 0
-                  }
-                ]
-              })}
-            />
-
-            <ListItem
-              title='Nth Child'
-              titleStyle={styles.labelStyle}
-              leftIcon={{ name: 'gender-male-female', type: 'material-community' }}
-              rightTitle='2'
-              rightTitleStyle={styles.labelStyle}
-              chevron
-              onPress={() => this.props.navigation.navigate('ListPicker', {
-                onChange: (value) => console.tron.log(value),
-                items: [
-                  {
-                    label: 1,
-                    value: 1,
-                  },
-                  {
-                    label: 2,
-                    value: 2,
-                    default: true
-                  },
-                  {
-                    label: 3,
-                    value: 3
-                  },
-                  {
-                    label: 4,
-                    value: 5
-                  },
-                  {
-                    label: 6,
-                    value: 7
-                  }
-                ]
-              })}
-            />
-
-
-
-          </View>
+                {/*} catch ({code, message}) {*/}
+                  {/*console.warn('Cannot open date picker', message);*/}
+                {/*}*/}
+              {/*}}*/}
+            {/*/>*/}
+          {/*</View>*/}
 
         </ScrollView>
       </View>
 
     )
   }
+
+  submit () {
+    Keyboard.dismiss()
+    this.props.saveInformation(this.state)
+  }
+
+  cancel () {
+    const attributes = ['name']
+
+    for (let i = 0; i < attributes.length; i++) {
+      if (this.props.mother[attributes[i]] != this.state[attributes[i]]) {
+        Alert.alert(
+          'Unsaved Data',
+          'you have unsaved data, are you sure you want to leave?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => this.props.navigation.goBack()},
+          ],
+          { cancelable: false }
+        )
+        return
+      }
+    }
+
+    this.props.navigation.goBack()
+  }
+
 }
 
 const mapStateToProps = (state) => {
+  const { mother } = state
   return {
+    mother
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    saveInformation: (data) => dispatch(MotherAction.saveInformation(data))
   }
 }
 

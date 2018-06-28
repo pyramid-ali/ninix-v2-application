@@ -1,6 +1,7 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 import moment from 'moment'
+import _ from 'lodash'
 
 // define initial state when for first time launch
 export const INITIAL_STATE = Immutable({
@@ -15,7 +16,10 @@ export const INITIAL_STATE = Immutable({
   number: null,
   error: null,
   lastUpdate: null,
-  fetch: false
+  fetch: false,
+  image: null,
+  imageProgress: null,
+
 })
 
 // define types and actions
@@ -23,7 +27,12 @@ const { Types, Creators } = createActions({
   getInformation: null,
   saveInformation: ['payload'],
   setInformation: ['payload'],
-  didFail: ['error']
+  setImage: ['payload'],
+  imageProgressUpdate: ['progress'],
+  didFail: ['error'],
+  didImageSet: null,
+  didImageFail: ['previousImage'],
+  retrieveImage: ['payload']
 }, {
   prefix: 'baby/'
 })
@@ -67,11 +76,57 @@ export const getInformation = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const setImage = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    image: _.pick(payload.image, ['uri']),
+    imageProgress: 0
+  }
+}
+
+export const retrieveImage = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    image: payload
+  }
+}
+
+export const imageProgressUpdate = (state = INITIAL_STATE, action) => {
+  const { progress } = action
+  return {
+    ...state,
+    imageProgress: progress
+  }
+}
+
+export const didImageSet = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    imageProgress: null
+  }
+}
+
+export const didImageFail = (state = INITIAL_STATE, action) => {
+  const { previousImage } = action
+  return {
+    ...state,
+    image: previousImage ? _.pick(previousImage, ['uri']) : null,
+    imageProgress: null
+  }
+}
+
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET_INFORMATION]: setInformation,
   [Types.GET_INFORMATION]: getInformation,
   [Types.SAVE_INFORMATION]: saveInformation,
   [Types.DID_FAIL]: didFail,
+  [Types.SET_IMAGE]: setImage,
+  [Types.IMAGE_PROGRESS_UPDATE]: imageProgressUpdate,
+  [Types.DID_IMAGE_SET]: didImageSet,
+  [Types.DID_IMAGE_FAIL]: didImageFail,
+  [Types.RETRIEVE_IMAGE]: retrieveImage,
 })
 
 

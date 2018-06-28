@@ -1,10 +1,9 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, View, Text } from 'react-native'
+import { ScrollView, View, Text, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Header, ListItem } from 'react-native-elements'
-import PushNotification from 'react-native-push-notification-ce'
 
 // Dependencies
 import AppAction from '../Redux/AppRedux'
@@ -12,6 +11,7 @@ import AppAction from '../Redux/AppRedux'
 // Styles
 import styles from './Styles/SettingsStyle'
 import Colors from '../Themes/Colors'
+import CentralManager from "../Bluetooth/CentralManager";
 
 
 // TODO: we must have following options here
@@ -20,34 +20,105 @@ class Settings extends Component {
 
   render () {
 
-    const list = [
+    const Settings = [
       {
-        title: 'Appointments',
-        icon: 'av-timer'
+        title: 'Change Password',
+        leftIcon: {name: 'key-variant', type: 'material-community'},
+        onPress: () => this.props.navigation.navigate('ChangePassword')
       },
       {
-        title: 'Trips',
-        icon: 'flight-takeoff'
+        title: 'Privacy and Policy',
+        leftIcon: {name: 'book-open', type: 'material-community'},
+        onPress: () => this.props.navigation.navigate('PrivacyPolicy')
       },
       {
-        title: 'Trips',
-        icon: 'search'
+        title: 'Ninix',
+        leftIcon: {name: 'info'},
+        subtitle: 'V2.0.0',
+        rightTitle: '2017-06-24'
+      },
+      {
+        title: 'Logout',
+        leftIcon: {name: 'logout', type: 'material-community'},
+        onPress: () => {
+          Alert.alert(
+            'Logout',
+            'Are you sure you want to logout from app?',
+            [
+              {text: 'Cancel', style: 'cancel'},
+              {text: 'OK', onPress: this.props.logout.bind(this)},
+            ]
+          )
+
+        }
       }
     ]
 
-    const profileSettings = [
+    const device = [
       {
-        title: 'Father',
-        icon: 'av-timer'
+        title: 'Reset Device',
+        leftIcon: {name: 'refresh', type: 'material-community'},
+        onPress: () => {
+          if (this.props.isConnected) {
+            Alert.alert(
+              'Reset Device',
+              'Are you sure you want to Reset Device?' + "\n" + 'with this action you hard reset ninix device, and all data stored in device will lost',
+              [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'OK', onPress: CentralManager.ninix.sendResetCommand(() => {
+                    Alert.alert(
+                      'Success',
+                      'device did reset successfully',
+                      [
+                        {text: 'OK'},
+                      ]
+                    )
+                  })},
+              ]
+            )
+          } else {
+            Alert.alert(
+              'No Device Connected',
+              'For resetting device you should connect to a device first',
+              [
+                {text: 'OK'},
+              ]
+            )
+          }
+        }
       },
       {
-        title: 'Mother',
-        icon: 'av-timer'
-      },
-      {
-        title: 'baby',
-        icon: 'av-timer'
-      },
+        title: 'Turn off Device',
+        leftIcon: {name: 'bluetooth-off', type: 'material-community'},
+        onPress: () => {
+          if (this.props.isConnected) {
+            Alert.alert(
+              'Turn Off Device',
+              'Are you sure you want to Turn Off Device?',
+              [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'OK', onPress: CentralManager.ninix.sendTurnOffDevice().then(() => {
+                    Alert.alert(
+                      'Success',
+                      'device turned off successfully',
+                      [
+                        {text: 'OK'},
+                      ]
+                    )
+                  })},
+              ]
+            )
+          } else {
+            Alert.alert(
+              'No Device Connected',
+              'there is no device connected to application',
+              [
+                {text: 'OK'},
+              ]
+            )
+          }
+        }
+      }
     ]
 
     return (
@@ -55,6 +126,7 @@ class Settings extends Component {
         <Header
           statusBarProps={{backgroundColor: Colors.primary}}
           backgroundColor={Colors.primary}
+          leftComponent={{ icon: 'arrow-left', type: 'material-community', color: '#fff', onPress: () => this.props.navigation.goBack() }}
           centerComponent={{ text: 'SETTINGS', style: { color: '#fff' } }}
         />
         <View style={styles.list}>
@@ -62,11 +134,15 @@ class Settings extends Component {
             General
           </Text>
           {
-            list.map((item, i) => (
+            Settings.map((item, i) => (
               <ListItem
                 key={i}
                 title={item.title}
-                leftIcon={{name: item.icon}}
+                subtitle={item.subtitle}
+                rightTitle={item.rightTitle}
+                rightTitleStyle={{fontSize: 12}}
+                leftIcon={item.leftIcon}
+                onPress={item.onPress}
                 chevron
               />
             ))
@@ -75,59 +151,22 @@ class Settings extends Component {
 
         <View style={styles.list}>
           <Text style={styles.listTitle}>
-            App
+            Device
           </Text>
           {
-            list.map((item, i) => (
+            device.map((item, i) => (
               <ListItem
                 key={i}
                 title={item.title}
-                leftIcon={{name: item.icon}}
+                subtitle={item.subtitle}
+                rightTitle={item.rightTitle}
+                rightTitleStyle={{fontSize: 12}}
+                leftIcon={item.leftIcon}
+                onPress={item.onPress}
                 chevron
               />
             ))
           }
-        </View>
-
-        <View style={styles.list}>
-          <Text style={styles.listTitle}>
-            Information
-          </Text>
-          {
-            profileSettings.map((item, i) => (
-              <ListItem
-                key={i}
-                title={item.title}
-                leftIcon={{name: item.icon}}
-                onPress={() => {
-                  PushNotification.localNotification({
-                    title: "My Notification Title", // (optional)
-                    message: "My Notification Message",
-                    playSound: true,
-                    soundName: 'samsung_galaxy_best.mp3'
-                  })
-                }}
-                chevron
-              />
-            ))
-          }
-        </View>
-
-        <View>
-
-          <ListItem
-            title='Logout'
-            scaleProps={{
-              friction: 90,
-              tension: 100,
-              activeScale: 0.95,
-            }}
-            containerStyle={{backgroundColor: 'red'}}
-            leftIcon={{name: 'cancel', color: 'white'}}
-            titleStyle={{color: 'white'}}
-            onPress={() => this.props.logout()}
-          />
-
         </View>
 
       </ScrollView>
@@ -149,13 +188,14 @@ Settings.navigationOptions = {
 
 
 const mapStateToProps = (state) => {
+  const { bluetooth } = state
   return {
+    isConnected: bluetooth.isConnected
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-
     logout: () => dispatch(AppAction.logout())
   }
 }

@@ -1,6 +1,7 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 import _ from 'lodash'
+import moment from 'moment'
 
 import {respiratory} from '../Transform/DataDisplay'
 
@@ -14,7 +15,8 @@ export const INITIAL_STATE = Immutable({
 })
 
 const { Types, Creators } = createActions({
-  save: ['alarm']
+  save: ['alarm'],
+  sync: ['data']
 }, {
   prefix: 'alarm/'
 })
@@ -40,8 +42,18 @@ export const save = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const sync = (state = INITIAL_STATE, action) => {
+  const { data } = action
+  const oldState = {...state}
+  for (let i = 0; i < data.length; i++) {
+    oldState[data[i]['type']][moment(data[i]['registerAt']).unix()]['sync'] = true
+  }
+  return oldState
+}
+
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.SAVE]: save
+  [Types.SAVE]: save,
+  [Types.SYNC]: sync,
 })
 
 

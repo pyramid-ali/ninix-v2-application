@@ -103,7 +103,7 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     marginHorizontal: 15,
-    marginVertical: 5
+    marginVertical: 15
   },
   turnOffButton: {
     backgroundColor: Colors.dark,

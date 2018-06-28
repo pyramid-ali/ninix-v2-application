@@ -1,38 +1,22 @@
 import { put, call, select } from 'redux-saga/effects'
+import Response from '../Services/Response'
 import UserAction from '../Redux/UserRedux'
-import ErrorMessage from '../Transform/ErrorMessage'
-
+import ModelToJson from "../Transform/ModelToJson";
 
 export function *changePassword (api, action) {
+  const { newPassword, oldPassword, onSuccess, onFail } = action
+  const { auth } = yield select()
 
-  const { newPassword, oldPassword, callback } = action
-  const { changePassword } = api.methods()
+  const response = yield call(api.changePassword, ModelToJson.changePassword({newPassword, oldPassword}), auth.accessToken)
 
-  const response = yield call(changePassword, {
-    'old_password': oldPassword,
-    'new_password': newPassword
-  })
-
-  if (response.ok) {
-    yield put(UserAction.success())
-    callback()
-    return
+  try {
+    const result = yield call(Response.resolve, response)
+    onSuccess(result)
+  }
+  catch (e) {
+    onFail(e.message)
   }
 
-  if (!response.data) {
-    yield put(UserAction.failure(response.problem))
-  }
-  else {
-    const error = ErrorMessage.parse(response.errors)
-    yield put(UserAction.failure(error || response.message))
-  }
-
-
-}
-
-// TODO: we can send logout date to server
-export function *logout (api, action) {
-
-
+  yield put(UserAction.end())
 
 }

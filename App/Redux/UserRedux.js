@@ -20,9 +20,10 @@ export const INITIAL_STATE = Immutable({
 const { Types, Creators } = createActions({
   loggedIn: null,
   loggedOut: null,
-  changePassword: ['oldPassword', 'newPassword', 'callback'],
+  changePassword: ['newPassword', 'oldPassword', 'onSuccess', 'onFail'],
   failure: ['error'],
-  success: null
+  success: null,
+  end: null
 }, {
   prefix: 'AUTHENTICATION_'
 })
@@ -63,11 +64,10 @@ export const failure = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const success = (state = INITIAL_STATE, action) => {
+export const end = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    fetching: false,
-    error: null
+    fetching: false
   }
 }
 
@@ -78,7 +78,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOGGED_IN]: loggedIn,
   [Types.LOGGED_OUT]: loggedOut,
   [Types.CHANGE_PASSWORD]: changePassword,
-  [Types.SUCCESS]: success
+  [Types.END]: end,
 })
 
 export default Creators

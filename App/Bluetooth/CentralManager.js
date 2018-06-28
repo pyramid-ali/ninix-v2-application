@@ -46,6 +46,9 @@ class CentralManager {
       [UUID.services.main.uuid],
       { allowDuplicates: true },
       (error, device) => {
+        if (!device.name.toLowerCase().includes('ninix')) {
+          return
+        }
         const oldScannedDevices = this.scannedDevices
         this.scannedDevices = {
           ...oldScannedDevices,

@@ -40,6 +40,7 @@ class Sleep extends Component {
   }
 
   componentWillUnmount() {
+    this.stopSound()
     this._navListener.remove()
   }
 
@@ -156,7 +157,13 @@ class Sleep extends Component {
   }
 
   setTimerLoop(duration) {
-    this.sound.setNumberOfLoops(Math.round(this.state.duration * 60 / duration - 1))
+    if (duration) {
+      this.sound.setNumberOfLoops(Math.round(this.state.duration * 60 / duration - 1))
+    }
+    else {
+      this.sound.setNumberOfLoops(Infinity)
+    }
+
     if (Platform.OS === 'android') {
       if (this.state.duration > 0) {
         this.timeout = BackgroundTimer.setTimeout(() => {
@@ -169,11 +176,13 @@ class Sleep extends Component {
   }
 
   setTracker() {
-    this.trackerInterval = BackgroundTimer.setInterval(() => {
-      this.setState({
-        progress: this.state.progress + 1 / (this.state.duration * 60)
-      })
-    }, 1000)
+    if (this.state.duration > 0) {
+      this.trackerInterval = BackgroundTimer.setInterval(() => {
+        this.setState({
+          progress: this.state.progress + 1 / (this.state.duration * 60)
+        })
+      }, 1000)
+    }
   }
 
 }

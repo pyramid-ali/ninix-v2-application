@@ -18,16 +18,16 @@ export default class PasswordEntrance extends Component {
 
   render () {
 
-    const { value, fetching, onChangeValue } = this.props
+    const { title, description, placeholder, value, fetching, onChangeValue } = this.props
 
     return (
       <View>
 
         <Text style={styles.title}>
-          Password
+          { title }
         </Text>
         <Text style={styles.description}>
-          please enter your password, password should not be smaller than 6 characters
+          { description }
         </Text>
         <TextInputWithIcon
           secureTextEntry={true}
@@ -39,7 +39,7 @@ export default class PasswordEntrance extends Component {
           value={value}
           editable={!fetching}
           onChangeText={onChangeValue}
-          placeholder='Enter your password'/>
+          placeholder={placeholder}/>
         {fetching ? <ActivityIndicator size={24}/> : this.renderActivateButton()}
       </View>
     )
@@ -67,6 +67,9 @@ export default class PasswordEntrance extends Component {
 }
 
 PasswordEntrance.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  placeholder: PropTypes.string,
   fetching: PropTypes.bool,
   onChangeValue: PropTypes.func.isRequired,
   onPress: PropTypes.func.isRequired,
@@ -75,6 +78,9 @@ PasswordEntrance.propTypes = {
 }
 
 PasswordEntrance.defaultProps = {
+  title: 'Password',
+  description: 'please enter your password, password should not be smaller than 6 characters',
+  placeholder: 'Enter your password',
   fetching: false,
   valid: true
 }

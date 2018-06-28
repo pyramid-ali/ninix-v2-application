@@ -13,7 +13,8 @@ export function *didAddNewRecord (api, action) {
   const response = yield call(api.updateDailyStat, data, auth.accessToken)
   try {
     const result = yield call(Response.resolve, response)
-    put(DailyStatAction.update(result.daily_stats.map(item => JsonToModel.dailyStat(item))))
+    console.tron.log({result: result.daily_stats})
+    yield put(DailyStatAction.update(result.daily_stats.map(item => JsonToModel.dailyStat(item))))
   }
   catch (error) {
     console.tron.log({error})
@@ -25,7 +26,7 @@ export function *retrieveFromServer (api, action) {
   const response = yield call(api.getDailyStats, auth.accessToken)
   try {
     const result = yield call(Response.resolve, response)
-    put(DailyStatAction.update(result.daily_stats.map(item => JsonToModel.dailyStat(item))))
+    yield put(DailyStatAction.update(result.daily_stats.map(item => JsonToModel.dailyStat(item))))
   }
   catch (error) {
     console.tron.log({error})
