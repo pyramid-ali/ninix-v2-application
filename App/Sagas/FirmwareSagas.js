@@ -1,8 +1,13 @@
 import { put, call, select } from 'redux-saga/effects'
-import {Platform} from 'react-native'
+import { DFUEmitter } from 'react-native-nordic-dfu'
+import { eventChannel } from 'redux-saga'
+
+import CentralManager from '../Bluetooth/CentralManager'
 import FirmwareAction from '../Redux/FirmwareRedux'
+import JsonToModel from '../Transform/JsonToModel'
 import Response from '../Services/Response'
 import Api from '../Services/Api'
+
 
 export function *checkLatestVersion(api) {
 
@@ -18,10 +23,8 @@ export function *checkLatestVersion(api) {
     if (result.firmware.version > device.firmware) {
       const firmwareFile = yield call(Api.download, result.firmware.path, auth.accessToken)
       yield put(FirmwareAction.setLatestVersion({
-        name: result.firmware.name,
-        version: result.firmware.version,
-        description: result.firmware.description,
-        path: Platform.OS === 'android' ? 'file://' + firmwareFile.path() : '' + firmwareFile.path()
+        ...JsonToModel.firmware(result.firmware),
+        path: firmwareFile.path()
       }))
     }
   }
@@ -30,4 +33,54 @@ export function *checkLatestVersion(api) {
     console.tron.log({e})
   }
 
+}
+
+export function *update() {
+  const { firmware } = yield select()
+  yield call(CentralManager.startUpdate, firmware.path)
+  yield
+}
+
+export function *setupDFUProgress (channel) {
+  try {
+    while (true) {
+      const payload = yield take(channel)
+      yield put(FirmwareAction.dfuProgress(payload))
+    }
+  }
+  finally {}
+}
+
+export function setupDFUProgressChannel () {
+  return eventChannel(emit => {
+    const listener = state => {
+      emit(state)
+    }
+    DFUEmitter.addlistener("DFUProgress", listener)
+    return () => {
+      DFUEmitter.removeListener("DFUProgress")
+    }
+  })
+}
+
+export function *setupDFUStateChange (channel) {
+  try {
+    while (true) {
+      const {state} = yield take(channel)
+      yield put(FirmwareAction.dfuStateChange(state))
+    }
+  }
+  finally {}
+}
+
+export function setupDFUStateChangeChannel () {
+  return eventChannel(emit => {
+    const listener = state => {
+      emit(state)
+    }
+    DFUEmitter.addlistener("DFUStateChanged", listener)
+    return () => {
+      DFUEmitter.removeListener("DFUStateChanged")
+    }
+  })
 }

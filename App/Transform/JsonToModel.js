@@ -20,19 +20,23 @@ const mother = json => ({
   name: json.name
 })
 
-const dailyStat = json => {
-  console.tron.log({json, a: json.weight})
-  return ({
-    weight: json.weight,
-    height: json.height,
-    head: json.head,
-    registerAt: json.register_at
-  })
-}
+const dailyStat = json => ({
+  weight: json.weight,
+  height: json.height,
+  head: json.head,
+  registerAt: json.register_at
+})
+
+const firmware = json => ({
+  name: json.name,
+  version: json.version,
+  description: json.description
+})
 
 export default {
   baby,
   father,
   mother,
-  dailyStat
+  dailyStat,
+  firmware
 }

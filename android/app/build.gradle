@@ -102,6 +102,7 @@ android {
 
     dexOptions {
         jumboMode true
+        // incremental true
     }
 
     defaultConfig {
@@ -113,6 +114,8 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+
+
     }
     signingConfigs {
         release {
@@ -152,7 +155,15 @@ android {
             }
         }
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+
 }
+
 
 dependencies {
     compile project(':rn-fetch-blob')

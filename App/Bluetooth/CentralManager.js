@@ -107,8 +107,10 @@ class CentralManager {
     return this.device.onDisconnected((error, device) => {
 
       if (this.readyForUpdate) {
+        this.forceDisconnect = true
         this.updateFirmware()
       }
+
       listener(error, device)
     })
   }
@@ -117,34 +119,25 @@ class CentralManager {
     return this.manager.onStateChange(listener, emitCurrentState)
   }
 
-  startUpdate (path) {
+  async startUpdate (path) {
     this.readyForUpdate = true
     this.path = path
 
     console.tron.log({log: 'set ready for update', readyForUpdate: this.readyForUpdate})
-    this.ninix.sendUpdateFirmwareCommand().then(
-      (char) => console.tron.log({log: 'command send', char})
-    )
+    return await this.ninix.sendUpdateFirmwareCommand()
   }
 
   updateFirmware () {
     console.tron.log({log: 'start update firmware', device: this.device})
 
-    DFUEmitter.addListener("DFUProgress", ({ percent }) => {
-      console.tron.log({log: "DFU progress:", percent})
-    })
-    DFUEmitter.addListener("DFUStateChanged", ({ state }) => {
-      console.tron.log({log: "DFU state:", state})
-    })
-
     console.tron.log({log: 'scan for new devices'})
-
+    const id = this.getFirmwareUpdateDeviceId(this.device.id)
     this.manager.startDeviceScan(
       null,
       { allowDuplicates: true },
       (error, device) => {
         console.tron.log({log: 'device found', device})
-        if (device.id === 'D8:9E:69:13:2A:04' && !this.dfuStart) {
+        if (device.id === id && !this.dfuStart) {
           this.dfuStart = true
           console.tron.log({log: 'finally we find true device', device})
 
@@ -167,6 +160,12 @@ class CentralManager {
 
   cancelTransaction (id) {
     this.manager.cancelTransaction(id)
+  }
+
+  getFirmwareUpdateDeviceId (oldId) {
+    let lastPartId = (parseInt(oldId.split(':').slice(-1), 16) + 1).toString(16).toUpperCase()
+    lastPartId = lastPartId.length === 1 ? '0' + lastPartId : lastPartId
+    return _.concat(id.split(':').slice(0, 5), lastPartId).join(':')
   }
 
 }
