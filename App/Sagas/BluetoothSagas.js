@@ -3,11 +3,13 @@ import { put, call, fork, select } from 'redux-saga/effects'
 import { PermissionsAndroid } from 'react-native'
 
 // Dependencies
+import { checkAndGetPermission } from '../Services/Permission'
+import CentralManager from '../Bluetooth/CentralManager'
 import BluetoothAction from '../Redux/BluetoothRedux'
 import DeviceLogAction from '../Redux/DeviceLogRedux'
-import CentralManager from '../Bluetooth/CentralManager'
 import DeviceAction from '../Redux/DeviceRedux'
 import Router from '../Navigation/Router'
+
 
 // Listeners
 import {
@@ -22,10 +24,13 @@ import {
   setupBluetoothConnectionListener,
   setupBluetoothConnectionListenerChannel
 } from './Channels/BluetoothChannel'
-import {checkAndGetPermission} from "../Services/Permission";
 
+/***
+ * connect to chased device
+ * @param action
+ * @returns {IterableIterator<*>}
+ */
 export function *connect(action) {
-  // TODO: we should save logs in backend server
   const { device } = action
   try {
     const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)

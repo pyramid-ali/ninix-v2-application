@@ -19,16 +19,21 @@ export const INITIAL_STATE = Immutable({
   partsTotal: null,
   avgSpeed: null,
   speed: null,
-  state: null
+  state: null,
+  successfulUpdate: false
 })
 
 const { Types, Creators } = createActions({
   checkLatestVersion: null,
   setLatestVersion: ['payload'],
   startUpdate: null,
+  update: null,
   dfuProgress: ['payload'],
   dfuStateChange: ['state'],
-  didFail: ['error']
+  didFail: ['error'],
+  didUpdateSuccess: null,
+  didUpdateFail: ['error'],
+  didLeaveUpdate: null
 }, {
   prefix: 'firmware/'
 })
@@ -63,10 +68,10 @@ export const didFail = (state = INITIAL_STATE, action) => {
 }
 
 export const startUpdate = (state = INITIAL_STATE, action) => {
-  const { error } = action
   return {
     ...state,
-    error,
+    percent: 0,
+    state: 'SENDING_COMMAND',
     updating: true
   }
 }
@@ -86,6 +91,42 @@ export const dfuStateChange = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const didUpdateSuccess = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    updating: false,
+    percent: null,
+    currentPart: null,
+    partsTotal: null,
+    avgSpeed: null,
+    speed: null,
+    state: null,
+    successfulUpdate: true
+  }
+}
+
+export const didUpdateFail = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    updating: false,
+    percent: null,
+    currentPart: null,
+    partsTotal: null,
+    avgSpeed: null,
+    speed: null,
+    state: null
+  }
+}
+
+export const didLeaveUpdate = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    successfulUpdate: false,
+    error: false
+  }
+}
+
+
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.CHECK_LATEST_VERSION]: checkLatestVersion,
   [Types.SET_LATEST_VERSION]: setLatestVersion,
@@ -93,6 +134,9 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DFU_PROGRESS]: dfuProgress,
   [Types.DFU_STATE_CHANGE]: dfuStateChange,
   [Types.DID_FAIL]: didFail,
+  [Types.DID_UPDATE_SUCCESS]: didUpdateSuccess,
+  [Types.DID_UPDATE_FAIL]: didUpdateFail,
+  [Types.DID_LEAVE_UPDATE]: didLeaveUpdate,
 })
 
 export default Creators

@@ -30,9 +30,15 @@ import Settings from "../Containers/Settings";
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator({
-  FirmwareUpdate: { screen: FirmwareUpdate },
-  PrivacyPolicy: { screen: PrivacyPolicy },
-  ChangePassword: { screen: ChangePassword },
+  FirmwareUpdate: {
+    screen: FirmwareUpdate
+  },
+  PrivacyPolicy: {
+    screen: PrivacyPolicy
+  },
+  ChangePassword: {
+    screen: ChangePassword
+  },
   Settings: {
     screen: Settings
   },

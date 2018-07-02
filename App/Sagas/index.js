@@ -82,7 +82,7 @@ const root = function * root () {
 
     // Logs
     takeLatest(DeviceLogTypes.DID_CONNECT, DeviceLogSagas.didConnect, api),
-    takeLatest(DeviceLogTypes.DID_DISCONNECT, DeviceLogSagas.didDisconnect, api),
+    // takeLatest(DeviceLogTypes.DID_DISCONNECT, DeviceLogSagas.didDisconnect, api),
 
     // Bluetooth Sagas
     takeLatest(BluetoothTypes.START_SCAN, BluetoothSagas.startScan),
@@ -106,7 +106,9 @@ const root = function * root () {
     takeLatest(UserTypes.CHANGE_PASSWORD, UserSagas.changePassword, api),
 
     // firmware
-    takeLatest(FirmwareTypes.CHECK_LATEST_VERSION, FirmwareSagas.checkLatestVersion, api)
+    takeLatest(FirmwareTypes.CHECK_LATEST_VERSION, FirmwareSagas.checkLatestVersion, api),
+    takeLatest(FirmwareTypes.START_UPDATE, FirmwareSagas.startUpdate),
+    takeLatest(FirmwareTypes.UPDATE, FirmwareSagas.updateFirmware)
   ])
 }
 

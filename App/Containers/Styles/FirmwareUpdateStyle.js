@@ -10,20 +10,41 @@ export default StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  notConnected: {
+  notConnectedTitle: {
     color: Colors.alert,
-    fontSize: 18,
-    textAlign: 'center'
+    fontSize: 20,
+    textAlign: 'center',
+    marginVertical: 10
   },
-  error: {
-    color: Colors.alert,
+  notConnectedText: {
+    color: Colors.gray,
     fontSize: 14,
     textAlign: 'center',
+    marginVertical: 10,
+    marginHorizontal: 40
+  },
+  error: {
+    color: Colors.white,
+    backgroundColor: Colors.alert,
+    padding: 10,
+    marginHorizontal: 20,
+    borderRadius: 20,
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 10,
   },
   text: {
     textAlign: 'center',
-    color: Colors.gray,
-    fontSize: 16
+    color: Colors.black,
+    marginVertical: 10,
+    fontSize: 16,
+    fontFamily: 'PoiretOne-Regular'
+  },
+  subtitle: {
+    marginVertical: 10,
+    textAlign: 'center',
+    fontSize: 12,
+    fontFamily: 'PoiretOne-Regular'
   },
   description: {
     textAlign: 'center',
@@ -33,7 +54,13 @@ export default StyleSheet.create({
   button: {
     marginHorizontal: 30,
     marginVertical: 15,
-    backgroundColor: Colors.secondary,
-    padding: 10
-  }
+    backgroundColor: 'transparent',
+    padding: 10,
+    borderRadius: 30,
+    borderColor: Colors.dark,
+    borderWidth: 1
+  },
+  buttonText: {
+    color: Colors.dark
+  },
 })

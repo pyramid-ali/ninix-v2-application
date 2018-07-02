@@ -9,6 +9,7 @@ import CentralManager from '../../Bluetooth/CentralManager'
 import AlarmAction from '../../Redux/AlarmRedux'
 import AlarmService from '../../Services/AlarmService'
 import DeviceLogAction from '../../Redux/DeviceLogRedux'
+import FirmwareAction from '../../Redux/FirmwareRedux'
 
 let isSyncing = false
 
@@ -116,11 +117,13 @@ export function setupNinixSyncListenerChannel (ninix) {
 export function *setupBluetoothConnectionListener (channel) {
   try {
     while (true) {
-
       const { error, device } = yield take(channel)
       const state = yield select()
+      if (state.firmware.updating) {
+        yield put(FirmwareAction.update())
+      }
       yield put(DeviceLogAction.didDisconnect({...state.device, error}))
-      if (CentralManager.forceDisconnect) {
+      if (CentralManager.forceDisconnect || state.firmware.updating) {
         yield put(BluetoothAction.didDisconnect())
         CentralManager.forceDisconnect = false
         CentralManager.tries = 0
@@ -142,7 +145,7 @@ export function *setupBluetoothConnectionListener (channel) {
 
 export function setupBluetoothConnectionListenerChannel (device) {
   return eventChannel(emit => {
-    const listener = (error, device, forceDisconnect) => {
+    const listener = (error, device) => {
       emit({error, device})
     }
     const subscription = device.onDisconnected(listener)
