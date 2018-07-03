@@ -1,29 +1,34 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, FlatList } from 'react-native'
+import { Header, ListItem } from 'react-native-elements'
+import _ from 'lodash'
 
 // Dependencies
 import BluetoothAction from '../Redux/BluetoothRedux'
 import BluetoothState from '../Bluetooth/BluetoothState'
-import NavigationBar from '../Components/NavigationBar'
 import NinixDevice from '../Components/NinixDevice'
 import ModalDeviceConnect from '../Components/ModalDeviceConnect'
-import FoundedDeviceItem from '../Components/FoundedDeviceItem'
-import _ from 'lodash'
 
 // Styles
 import styles from './Styles/AddDeviceStyle'
 import Colors from '../Themes/Colors'
-import {Header, ListItem} from 'react-native-elements';
 
-// TODO: change list Item
 class AddDevice extends Component {
 
+  constructor(props) {
+    super(props)
+    this.keyExtractor = item => item.id
+  }
+
+  componentDidMount() {
+    this.renderItemList = this.renderItemList.bind(this)
+  }
+
   render () {
-    const { bluetooth } = this.props
-    const data = Object.keys(bluetooth.devices).map((item) => bluetooth.devices[item].device)
-    const {logo, blink, color} = this.getNinixStatus(bluetooth)
+    const scannedDevices = _.values(this.props.scannedDevices).map(item => item.device)
+    const {logo, blink, color} = this.getNinixStatus()
 
     return (
         <View style={styles.container}>
@@ -31,8 +36,8 @@ class AddDevice extends Component {
           <Header
             statusBarProps={{backgroundColor: Colors.primary}}
             backgroundColor={Colors.primary}
-            centerComponent={{ text: 'ADD Device', style: { color: '#fff' } }}
-            leftComponent={{ icon: 'arrow-back', color: '#fff', onPress: () => this.props.navigation.goBack() }}
+            centerComponent={{text: 'ADD Device', style: { color: '#fff' }}}
+            leftComponent={{icon: 'arrow-back', color: '#fff', onPress: () => this.props.navigation.goBack()}}
           />
 
           <View style={{flex: 1}}>
@@ -42,23 +47,31 @@ class AddDevice extends Component {
               blink={blink}
               lightColor={color} />
           </View>
-          <ScrollView style={{flex: 1, backgroundColor: Colors.white}}>
-            { this.props.bluetooth.error ? this.renderError() : null}
+          <View style={{flex: 1, backgroundColor: Colors.white}}>
+            <Error message={this.props.error}/>
             <Header
               backgroundColor={Colors.dark}
               centerComponent={{ text: 'Available Devices', style: { color: '#fff' } }}
             />
-            { data.map(this.renderItemList.bind(this) ) }
-          </ScrollView>
+            <FlatList
+              keyExtractor={this.keyExtractor}
+              data={scannedDevices}
+              renderItem={this.renderItemList}
+            />
+          </View>
 
-          { this.renderModal() }
+          <Modal
+            visible={this.props.isConnecting || this.props.isInitiating}
+            title={this.props.isConnecting ? 'Connecting...' : 'Setup...'}
+            description={this.props.isConnecting ? "We're trying to connect to device, please wait" : "We're working on initial setup, after this you can receive data, please wait"}
+          />
 
         </View>
     )
   }
 
-  getNinixStatus (bluetooth) {
-    if (bluetooth.isConnected) {
+  getNinixStatus () {
+    if (this.props.isConnected) {
       return {
         logo: 'Connected\nTap To cancel',
         blink: false,
@@ -66,7 +79,7 @@ class AddDevice extends Component {
       }
     }
 
-    if (bluetooth.isScanning) {
+    if (this.props.isScanning) {
       return {
         logo: 'Searching...\nTap To cancel',
         blink: true,
@@ -74,7 +87,7 @@ class AddDevice extends Component {
       }
     }
 
-    switch (bluetooth.state) {
+    switch (this.props.bluetoothState) {
       case BluetoothState.poweredOn:
         return {
           logo: 'Start Scan',
@@ -90,22 +103,25 @@ class AddDevice extends Component {
     }
   }
 
-  renderItemList (device) {
+  renderItemList ({item}) {
     return (
       <ListItem
-        key={device.id}
+        title={item.name}
+        subtitle={item.id}
+        rightTitle='Connect'
+        rightSubtitle={`${item.rssi}db`}
+        subtitleStyle={styles.listSubtitle}
+        rightSubtitleStyle={styles.listSubtitle}
         leftAvatar={<NinixDevice containerStyle={{flex: -1}} size={35} />}
         titleStyle={{color: Colors.primary}}
-        title={device.name}
-        rightTitle='connect'
+        onPress={() => this.props.connect(item)}
         chevron
-        onPress={() => this.props.connect(device)}
       />
     )
   }
 
   search() {
-    const { isScanning, isConnected, state } = this.props.bluetooth
+    const { isScanning, isConnected, bluetoothState } = this.props
     if (isConnected) {
       this.props.disconnect()
       return
@@ -115,7 +131,7 @@ class AddDevice extends Component {
       return
     }
 
-    if (state === BluetoothState.poweredOn) {
+    if (bluetoothState === BluetoothState.poweredOn) {
       this.props.startScan()
       return
     }
@@ -124,7 +140,11 @@ class AddDevice extends Component {
 
   }
 
-  renderError () {
+}
+
+// helper components, if these are general use component, then move them to components folders
+function Error(props) {
+  if (props.message) {
     return (
       <View style={styles.error}>
         <Text style={styles.white}>Error</Text>
@@ -132,28 +152,30 @@ class AddDevice extends Component {
       </View>
     )
   }
+  return null
+}
 
-  renderModal () {
-    const { bluetooth } = this.props
-    const visible = bluetooth.isConnecting || bluetooth.isInitiating
-    const title = bluetooth.isConnecting ? 'Connecting...' : 'Setup...'
-    const description = bluetooth.isConnecting ? "we're trying to connect to device, please wait" : "we're working on initial setup, after this you can receive data, please wait"
-    return (
-      <ModalDeviceConnect
-        title={title}
-        visible={visible}
-      >
-        <Text>{ description }</Text>
-      </ModalDeviceConnect>
-    )
-  }
-
+function Modal(props) {
+  return (
+    <ModalDeviceConnect
+      title={props.title}
+      visible={props.visible}
+    >
+      <Text>{props.description}</Text>
+    </ModalDeviceConnect>
+  )
 }
 
 const mapStateToProps = (state) => {
   const { bluetooth } = state
   return {
-    bluetooth
+    scannedDevices: bluetooth.devices,
+    bluetoothState: bluetooth.state,
+    isScanning: bluetooth.isScanning,
+    isConnecting: bluetooth.isConnecting,
+    isInitiating: bluetooth.isInitiating,
+    isConnected: bluetooth.isConnected,
+    error: bluetooth.error
   }
 }
 
