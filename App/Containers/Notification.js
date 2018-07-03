@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, StatusBar } from 'react-native'
+import { ScrollView, FlatList, StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import { Icon, Header, ListItem } from 'react-native-elements'
 import _ from 'lodash'
 import moment from 'moment'
-// Add Actions - replace 'Your' with whatever your reducer is called :)
-// import YourActions from '../Redux/YourRedux'
 
 // Styles
 import styles from './Styles/NotificationStyle'
@@ -14,14 +12,13 @@ import Colors from '../Themes/Colors'
 class Notification extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.keyExtractor = item => (item.type + item.registerAt)
   }
 
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBackgroundColor(Colors.secondary, true)
     })
-
   }
 
   componentWillUnmount() {
@@ -30,7 +27,6 @@ class Notification extends Component {
 
   render () {
     const notifications = this.sort()
-    console.tron.log({notifications})
     return (
       <ScrollView style={styles.container}>
         <Header
@@ -38,35 +34,40 @@ class Notification extends Component {
           backgroundColor={Colors.secondary}
           centerComponent={{ text: 'Notifications', style: { color: '#fff' } }}
         />
-        { notifications.map(notification => {
-          let icon, color
-          if (notification.type === 'temperature') {
-            icon = 'temperature-celsius'
-            color = Colors.alert
-          }
-          else if (notification.type === 'respiratory') {
-            icon = 'weather-windy'
-            color = Colors.normal
-          }
-          else if (notification.type === 'orientation') {
-            icon = 'undo'
-            color = Colors.warning
-          }
-          console.tron.log({r: notification.registerAt})
-          return (
-            <ListItem
-              key={notification.type + notification.registerAt}
-              title={_.capitalize(notification.type)}
-              subtitle={`your baby ${notification.type} is in dangerous condition`}
-              subtitleStyle={{fontFamily: 'PoiretOne-Regular'}}
-              rightTitle={moment(notification.registerAt).fromNow()}
-              rightTitleStyle={{fontFamily: 'Courgette-Regular'}}
-              leftIcon={{name: icon, type: 'material-community', color}}
-              bottomDivider
-            />
-          )
-        })}
+        <FlatList
+          keyExtractor={this.keyExtractor}
+          data={notifications}
+          renderItem={this.renderListItem}
+        />
       </ScrollView>
+    )
+  }
+
+  renderListItem ({item}) {
+    let icon, color
+    if (item.type === 'temperature') {
+      icon = 'temperature-celsius'
+      color = Colors.alert
+    }
+    else if (item.type === 'respiratory') {
+      icon = 'weather-windy'
+      color = Colors.normal
+    }
+    else if (item.type === 'orientation') {
+      icon = 'undo'
+      color = Colors.warning
+    }
+    return (
+      <ListItem
+        key={item.type + item.registerAt}
+        title={_.capitalize(item.type)}
+        subtitle={`your baby ${item.type} is in dangerous condition`}
+        subtitleStyle={{fontFamily: 'PoiretOne-Regular'}}
+        rightTitle={moment(item.registerAt).fromNow()}
+        rightTitleStyle={{fontFamily: 'Courgette-Regular'}}
+        leftIcon={{name: icon, type: 'material-community', color}}
+        bottomDivider
+      />
     )
   }
 
