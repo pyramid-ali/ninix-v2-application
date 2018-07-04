@@ -11,7 +11,6 @@ export default () => {
     bluetooth:      require('./BluetoothRedux').reducer,
     dailyStats:     require('./DailyStatRedux').reducer,
     data:           require('./DataRedux').reducer,
-    device:         require('./DeviceRedux').reducer,
     deviceLogs:     require('./DeviceLogRedux').reducer,
     father:         require('./FatherRedux').reducer,
     firmware:       require('./FirmwareRedux').reducer,
