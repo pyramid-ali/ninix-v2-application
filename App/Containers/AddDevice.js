@@ -148,7 +148,7 @@ function Error(props) {
     return (
       <View style={styles.error}>
         <Text style={styles.white}>Error</Text>
-        <Text style={styles.white}>{ this.props.bluetooth.error }</Text>
+        <Text style={styles.white}>{ props.message }</Text>
       </View>
     )
   }

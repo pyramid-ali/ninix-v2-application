@@ -62,6 +62,7 @@ class Dashboard extends Component {
       type: 'alert',
       button: <Button
         title='Reconnect'
+        // TODO: we must use reconnect here
         onPress={() => this.props.connect(this.props.device)}
         containerStyle={styles.outer}
         buttonStyle={[styles.buttonStyle, {backgroundColor: Colors.primary}]}
@@ -198,14 +199,12 @@ Dashboard.navigationOptions = {
 }
 
 const mapStateToProps = (state) => {
-  const { data, bluetooth, device } = state
+  const { data, bluetooth, ninix } = state
   return {
-    data,
-    bluetooth,
     streams: data.stream,
     isConnecting: bluetooth.isConnecting,
     isConnected: bluetooth.isConnected,
-    device: device.device,
+    device: ninix.device,
     connectedAt: bluetooth.connectedAt,
     disconnectedAt: bluetooth.disconnectedAt,
     disconnectError: bluetooth.error

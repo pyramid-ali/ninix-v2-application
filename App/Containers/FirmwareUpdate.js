@@ -49,101 +49,121 @@ class FirmwareUpdate extends Component {
   }
 
   renderContent() {
-    const { device, bluetooth, firmware } = this.props
+    const { isConnected, successfulUpdate,
+      currentFirmware, latestFirmware, updating } = this.props
 
-    if (firmware.successfulUpdate) {
-      return (
-        <View>
-          <Icon
-            reverse
-            color={Colors.secondary}
-            name='check-all'
-            type='material-community'
-            containerStyle={{alignSelf: 'center', marginBottom: 30}}
-            size={80}
-          />
-          <Text style={styles.text}>Firmware Updated Successfully</Text>
-          <Button
-            titleStyle={styles.buttonText}
-            buttonStyle={styles.button}
-            icon={
-              <Icon
-                name='check'
-                size={15}
-                color={Colors.dark}
-              />
-            }
-            title={'DONE'}
-            clear
-            onPress={() => this.props.navigation.goBack()}
-          />
-          { bluetooth.isConnecting ?
-            <Text style={styles.subtitle}>We're trying to reconnect to ninix</Text> :
-            <Text style={styles.subtitle}>Current Version: V{device.firmware}</Text>
+    if (successfulUpdate) {
+      { this.renderSuccessfulUpdate() }
+    }
+
+    if (!isConnected && !updating) {
+      { this.renderNotConnected() }
+    }
+
+    if (currentFirmware < latestFirmware) {
+      { this.renderUpdatingState()}
+    }
+
+    { this.renderCheckUpdate() }
+  }
+
+  renderSuccessfulUpdate() {
+    const { isConnecting, currentFirmware } = this.props
+    return (
+      <View>
+        <Icon
+          reverse
+          color={Colors.secondary}
+          name='check-all'
+          type='material-community'
+          containerStyle={{alignSelf: 'center', marginBottom: 30}}
+          size={80}
+        />
+        <Text style={styles.text}>Firmware Updated Successfully</Text>
+        <Button
+          titleStyle={styles.buttonText}
+          buttonStyle={styles.button}
+          icon={
+            <Icon
+              name='check'
+              size={15}
+              color={Colors.dark}
+            />
           }
-        </View>
-      )
-    }
+          title={'DONE'}
+          clear
+          onPress={() => this.props.navigation.goBack()}
+        />
+        { isConnecting ?
+          <Text style={styles.subtitle}>We're trying to reconnect to ninix</Text> :
+          <Text style={styles.subtitle}>Current Version: V{currentFirmware}</Text>
+        }
+      </View>
+    )
+  }
 
-    if (!bluetooth.isConnected && !firmware.updating) {
-      return (
-        <View>
-          <Icon name='bluetooth-off' type='material-community' color={Colors.alert} size={30}/>
-          <Text style={styles.notConnectedTitle}>Not Connected</Text>
-          <Text style={styles.notConnectedText}>For updating device firmware you must connect to device</Text>
-        </View>
-      )
-    }
+  renderNotConnected() {
+    return (
+      <View>
+        <Icon name='bluetooth-off' type='material-community' color={Colors.alert} size={30}/>
+        <Text style={styles.notConnectedTitle}>Not Connected</Text>
+        <Text style={styles.notConnectedText}>For updating device firmware you must connect to device</Text>
+      </View>
+    )
+  }
 
-    if (device.firmware < firmware.version) {
-      return (
-        <View>
-          <Icon
-            reverse
-            color={Colors.secondary}
-            name='shape-circle-plus'
-            type='material-community'
-            containerStyle={{alignSelf: 'center', marginBottom: 30}}
-            size={80}
-          />
-          <Text style={styles.text}>There is newer version of NINIX firmware</Text>
-          <Button
-            disabled={firmware.updating}
-            disabledTitleStyle={{color: Colors.dark}}
-            loadingProps={{color: Colors.dark}}
-            loadingStyle={{padding: 10}}
-            titleStyle={styles.buttonText}
-            buttonStyle={styles.button}
-            title={firmware.updating ? 'UPDATING...' : 'UPDATE NOW'}
-            clear
-            onPress={this.props.update.bind(this)}
-          />
-          {firmware.updating ?
-            <View>
-              <View style={{flexDirection: 'row', marginRight: 10}}>
-                <Slider
-                  thumbStyle={{width: 0}}
-                  minimumTrackTintColor={Colors.secondary}
-                  style={{flex: 1, marginHorizontal: 10, height: 2, marginTop: 7}} step={1} minimumValue={0} maximumValue={100} value={firmware.percent} disabled />
-                <Text style={{fontFamily: 'PoiretOne-Regular', width: 40}}>{firmware.percent}%</Text>
-              </View>
-              <View>
-                <Text style={styles.subtitle}>State: {firmware.state}</Text>
-                <Text style={styles.subtitle}>Part: {firmware.currentPart}/{firmware.partsTotal}</Text>
-                <Text style={styles.subtitle}>Speed: {Math.round(firmware.speed * 100) / 100} KB/S</Text>
-                <Text style={styles.subtitle}>Average Speed: {Math.round(firmware.avgSpeed * 100) / 100} KB/S</Text>
-              </View>
-            </View>:
-            <View>
-              <Text style={styles.subtitle}>Current Version: V{device.firmware}</Text>
-              <Text style={styles.subtitle}>Latest Version: V{firmware.version}</Text>
+  renderUpdatingState() {
+    const { updating, percent, firmwareState, currentPart, partsTotal, avgSpeed, currentFirmware, latestFirmware } = this.props
+    return (
+      <View>
+        <Icon
+          reverse
+          color={Colors.secondary}
+          name='shape-circle-plus'
+          type='material-community'
+          containerStyle={{alignSelf: 'center', marginBottom: 30}}
+          size={80}
+        />
+        <Text style={styles.text}>There is newer version of NINIX firmware</Text>
+        <Button
+          disabled={updating}
+          disabledTitleStyle={{color: Colors.dark}}
+          loadingProps={{color: Colors.dark}}
+          loadingStyle={{padding: 10}}
+          titleStyle={styles.buttonText}
+          buttonStyle={styles.button}
+          title={updating ? 'UPDATING...' : 'UPDATE NOW'}
+          clear
+          onPress={this.props.update.bind(this)}
+        />
+        {updating ?
+          <View>
+            <View style={{flexDirection: 'row', marginRight: 10}}>
+              <Slider
+                thumbStyle={{width: 0}}
+                minimumTrackTintColor={Colors.secondary}
+                style={{flex: 1, marginHorizontal: 10, height: 2, marginTop: 7}} step={1} minimumValue={0} maximumValue={100} value={percent} disabled />
+              <Text style={{fontFamily: 'PoiretOne-Regular', width: 40}}>{percent}%</Text>
             </View>
-          }
+            <View>
+              <Text style={styles.subtitle}>State: {firmwareState}</Text>
+              <Text style={styles.subtitle}>Part: {currentPart}/{partsTotal}</Text>
+              <Text style={styles.subtitle}>Speed: {Math.round(speed * 100) / 100} KB/S</Text>
+              <Text style={styles.subtitle}>Average Speed: {Math.round(avgSpeed * 100) / 100} KB/S</Text>
+            </View>
+          </View>:
+          <View>
+            <Text style={styles.subtitle}>Current Version: V{currentFirmware}</Text>
+            <Text style={styles.subtitle}>Latest Version: V{latestFirmware}</Text>
+          </View>
+        }
 
-        </View>
-      )
-    }
+      </View>
+    )
+  }
 
+  renderCheckUpdate() {
+    const { currentFirmware, error } = this.props
     return (
       <View>
         <Icon
@@ -156,7 +176,7 @@ class FirmwareUpdate extends Component {
         />
         <Text style={styles.text}>You're using latest firmware version</Text>
         <Button
-          loading={firmware.fetch}
+          loading={fetch}
           loadingProps={{color: Colors.dark}}
           loadingStyle={{padding: 10}}
           titleStyle={styles.buttonText}
@@ -165,22 +185,39 @@ class FirmwareUpdate extends Component {
           clear
           onPress={this.props.checkLatestVersion.bind(this)}
         />
-        <Text style={styles.subtitle}>Current Version: V{device.firmware}</Text>
-        {firmware.error ?
-          <Text style={styles.error}>{firmware.error}</Text> :
-          null
-        }
+        <Text style={styles.subtitle}>Current Version: V{currentFirmware}</Text>
+        <Error message={error} />
       </View>
     )
   }
 }
 
+function Error(props) {
+  if (props.message) {
+    return (
+      <Text style={styles.error}>{props.message}</Text>
+    )
+  }
+  return null
+}
+
 const mapStateToProps = (state) => {
-  const { device, bluetooth, firmware } = state
+  const { ninix, bluetooth, firmware } = state
   return {
-    device,
-    bluetooth,
-    firmware
+    isConnecting: bluetooth.isConnecting,
+    isConnected: bluetooth.isConnected,
+    currentFirmware: ninix.firmware,
+    latestFirmware: firmware.version,
+    percent: firmware.percent,
+    firmwareState: firmware.state,
+    currentPart: firmware.currentPart,
+    partsTotal: firmware.partsTotal,
+    speed: firmware.speed,
+    fetch: firmware.fetch,
+    avgSpeed: firmware.avgSpeed,
+    updating: firmware.updating,
+    successfulUpdate: firmware.successfulUpdate,
+    error: firmware.error
   }
 }
 
