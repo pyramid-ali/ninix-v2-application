@@ -1,42 +1,61 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
-
+import _ from 'lodash'
+// TODO: we can move battery info here
+/***
+ * Initial state of login redux
+ */
 export const INITIAL_STATE = Immutable({
   device: null,
-  battery: null
+  name: null,
+  firmware: null,
+  revision: null,
+  serial: null,
+  battery: 0,
+  fullCharge: false,
+  charging: false,
+  lowBattery: false,
+  fetch: false
 })
 
 const { Types, Creators } = createActions({
-
-  updateBattery: ['battery'],
-  setDevice: ['device']
+  getInformation: ['payload'],
+  setInformation: ['payload'],
+  updateBattery: ['payload'],
 }, {
   prefix: 'ninix/'
 })
 
 export const NinixTypes = Types
 
+export const getInformation = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    fetch: true
+  }
+}
+
+export const setInformation = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  return {
+    ...state,
+    ..._.pick(payload, ['device', 'name', 'firmware', 'revision', 'serial']),
+    fetch: false
+  }
+}
+
 export const updateBattery = (state = INITIAL_STATE, action) => {
-  const { battery } = action
+  const { payload } = action
   return {
     ...state,
-    battery
+    ..._.pick(payload, ['battery', 'fullCharge', 'charging', 'lowBattery'])
   }
 }
-
-export const setDevice = (state = INITIAL_STATE, action) => {
-  const { device } = action
-  return {
-    ...state,
-    device
-  }
-}
-
 
 export const reducer = createReducer(INITIAL_STATE, {
+  [Types.GET_INFORMATION]: getInformation,
+  [Types.SET_INFORMATION]: setInformation,
   [Types.UPDATE_BATTERY]: updateBattery,
-  [Types.SET_DEVICE]: setDevice
 })
-
 
 export default Creators
