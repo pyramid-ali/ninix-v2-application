@@ -86,7 +86,6 @@ class Notification extends Component {
 
   sort() {
     const all = this.merge()
-    console.tron.log({all})
     return Object.keys(all).sort().map(key => all[key]).reduce((acc, curr) => [...acc, ...curr], [])
   }
 }
