@@ -13,7 +13,7 @@ import { FatherTypes } from '../Redux/FatherRedux'
 import { FirmwareTypes } from '../Redux/FirmwareRedux'
 import { MotherTypes } from '../Redux/MotherRedux'
 import { SignupTypes } from '../Redux/SignupRedux'
-import { DeviceTypes } from '../Redux/DeviceRedux'
+import { NinixTypes } from '../Redux/NinixRedux'
 import { DeviceLogTypes } from '../Redux/DeviceLogRedux'
 import { StartupTypes } from '../Redux/StartupRedux'
 import { UserTypes } from '../Redux/UserRedux'
@@ -29,7 +29,7 @@ const DataSagas = require('./DataSagas')
 const FirmwareSagas = require('./FirmwareSagas')
 const ForgotPasswordSagas = require('./ForgotPasswordSagas')
 const LoginSagas = require('./LoginSagas')
-const DeviceSagas = require('./DeviceSagas')
+const NinixSagas = require('./NinixSagas')
 const DeviceLogSagas = require('./DeviceLogSagas')
 const FatherSagas = require('./FatherSagas')
 const MotherSagas = require('./MotherSagas')
@@ -88,11 +88,17 @@ const root = function * root () {
     takeLatest(BluetoothTypes.START_SCAN, BluetoothSagas.startScan),
     takeLatest(BluetoothTypes.STOP_SCAN, BluetoothSagas.stopScan),
     takeLatest(BluetoothTypes.CONNECT, BluetoothSagas.connect),
+    takeLatest(BluetoothTypes.DID_CONNECT, BluetoothSagas.didConnect),
+    takeLatest(BluetoothTypes.SETUP, BluetoothSagas.setup),
+    takeLatest(BluetoothTypes.DID_SETUP, BluetoothSagas.didSetup),
     takeLatest(BluetoothTypes.RECONNECT, BluetoothSagas.reconnect),
     takeLatest(BluetoothTypes.DISCONNECT, BluetoothSagas.disconnect),
     takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
     takeLatest(BluetoothTypes.START_SYNC, BluetoothSagas.startSync),
     takeLatest(BluetoothTypes.TURN_OFF_DEVICE, BluetoothSagas.turnOffDevice),
+
+    // Device Types
+    takeLatest(NinixTypes.GET_INFORMATION, NinixSagas.getInformation),
 
     // Data Sagas
     takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),
