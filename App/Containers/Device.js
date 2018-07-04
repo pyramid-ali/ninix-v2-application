@@ -26,10 +26,8 @@ class Device extends Component {
   }
 
   render () {
-
     return (
       <View style={styles.container}>
-
         <Header
           statusBarProps={{backgroundColor: Colors.primary}}
           backgroundColor={Colors.primary}
@@ -37,25 +35,19 @@ class Device extends Component {
           rightComponent={{ icon: 'search', color: '#fff', onPress: () => this.props.navigation.navigate('AddDevice') }}
           leftComponent={{ icon: 'arrow-left', type: 'material-community', color: '#fff', onPress: () => this.props.navigation.goBack() }}
         />
-
         { this.renderContent() }
-
       </View>
     )
   }
 
   renderContent () {
-
-    const { device, bluetooth } = this.props
-
-    if (bluetooth.isConnected) {
+    const { device, isConnected } = this.props
+    if (isConnected) {
       return this.renderConnected()
     }
-
-    if (device.device) {
+    if (device) {
       return this.renderReconnect()
     }
-
     return this.renderNotConnected()
   }
 
@@ -89,13 +81,13 @@ class Device extends Component {
 
   renderReconnect () {
 
-    const { device, bluetooth } = this.props
+    const { name, isConnecting, error } = this.props
 
     return (
       <View style={styles.notConnectedContainer}>
 
         <Text style={styles.notConnectedTitle}>
-          { device.device.name || 'unknown' }
+          { name || 'unknown' }
         </Text>
         <Badge
           value={'Disconnected'}
@@ -109,9 +101,9 @@ class Device extends Component {
 
         <Button
           buttonStyle={styles.connectButton}
-          loading={bluetooth.isConnecting}
+          loading={isConnecting}
           loadingStyle={{width: 100, padding: 5}}
-          disabled={bluetooth.isConnecting}
+          disabled={isConnecting}
           onPress={this.reconnect.bind(this)}
           icon={
             <Icon
@@ -124,7 +116,7 @@ class Device extends Component {
         />
 
         <Text style={styles.disconnectReason}>
-          { bluetooth.error }
+          { error }
         </Text>
 
       </View>
@@ -133,9 +125,7 @@ class Device extends Component {
 
   renderConnected () {
 
-    const { data, device, firmware } = this.props
-    const { stream } = data
-    const { battery, fullCharge, charging, lowBattery } = stream[stream.length - 1] || { battery: 0, fullCharge: false, charging: false, lowBattery: false }
+    const { revision, name, currentFirmware, latestFirmware, battery, fullCharge, charging, lowBattery } = this.props
 
     return (
       <View style={styles.connectedContainer}>
@@ -163,19 +153,19 @@ class Device extends Component {
 
           <ListItem
             title='Device'
-            subtitle={'Revision V' + device.revision}
+            subtitle={'Revision V' + revision}
             subtitleStyle={styles.connectedListSubtitle}
             leftIcon={{name: "details"}}
-            rightTitle={device.device.name}
+            rightTitle={name}
             rightTitleStyle={styles.connectedRightTitle}
           />
 
           <ListItem
             title='Firmware Version'
-            subtitle={firmware.version > device.firmware ? 'Update is Available' : 'Latest Version'}
+            subtitle={latestFirmware > currentFirmware ? 'Update is Available' : 'Latest Version'}
             subtitleStyle={styles.connectedListSubtitle}
             leftIcon={{name: "donut-large"}}
-            rightTitle={'V' + device.firmware}
+            rightTitle={'V' + currentFirmware}
             rightTitleStyle={styles.connectedRightTitle}
             onPress={() => this.props.navigation.navigate('FirmwareUpdate')}
             chevron
@@ -201,45 +191,38 @@ class Device extends Component {
 
   }
 
-  turnOffDevice () {
-    this.props.turnOffDevice()
-  }
-
   disconnect () {
     this.props.disconnect()
   }
 
   reconnect () {
-    console.tron.log('device reconnect')
     this.props.reconnect()
   }
 
 }
 
-Device.navigationOptions = {
-  tabBarLabel: 'Device',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon
-      size={20}
-      name="bluetooth"
-      color={tintColor}
-    />
-  ),
-}
-
 const mapStateToProps = (state) => {
-  const { bluetooth, data, device, firmware } = state
+  const { bluetooth, ninix, firmware } = state
   return {
-    bluetooth, data, device, firmware
+    isConnected: bluetooth.isConnected,
+    isConnecting: bluetooth.isConnecting,
+    error: bluetooth.error,
+    device: ninix.device,
+    name: ninix.name,
+    revision: ninix.revision,
+    currentFirmware: ninix.firmware,
+    battery: ninix.battery,
+    fullCharge: ninix.fullCharge,
+    charging: ninix.charging,
+    lowBattery: ninix.lowBattery,
+    latestFirmware: firmware.version,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     disconnect: () => dispatch(BluetoothAction.disconnect()),
-    connect: (device) => dispatch(BluetoothAction.connect(device)),
-    reconnect: () => dispatch(BluetoothAction.reconnect()),
-    turnOffDevice: () => dispatch(BluetoothAction.turnOffDevice())
+    reconnect: () => dispatch(BluetoothAction.reconnect())
   }
 }
 
