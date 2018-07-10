@@ -37,7 +37,7 @@ class FirmwareUpdate extends Component {
         <Header
           statusBarProps={{backgroundColor: Colors.primary}}
           backgroundColor={Colors.primary}
-          leftComponent={{ icon: 'arrow-left', type: 'material-community', color: '#fff', onPress: () => this.props.firmware.updating ?  alert('please wait until update is done') : this.props.navigation.goBack() }}
+          leftComponent={{ icon: 'arrow-left', type: 'material-community', color: '#fff', onPress: () => this.props.updating ?  alert('please wait until update is done') : this.props.navigation.goBack() }}
           centerComponent={{ text: 'Firmware', style: { color: '#fff' } }}
         />
         <View style={styles.wrapper}>
@@ -53,18 +53,18 @@ class FirmwareUpdate extends Component {
       currentFirmware, latestFirmware, updating } = this.props
 
     if (successfulUpdate) {
-      { this.renderSuccessfulUpdate() }
+      { return this.renderSuccessfulUpdate() }
     }
 
     if (!isConnected && !updating) {
-      { this.renderNotConnected() }
+      { return this.renderNotConnected() }
     }
 
     if (currentFirmware < latestFirmware) {
-      { this.renderUpdatingState()}
+      { return this.renderUpdatingState()}
     }
 
-    { this.renderCheckUpdate() }
+    { return this.renderCheckUpdate() }
   }
 
   renderSuccessfulUpdate() {
@@ -163,7 +163,7 @@ class FirmwareUpdate extends Component {
   }
 
   renderCheckUpdate() {
-    const { currentFirmware, error } = this.props
+    const { currentFirmware, error, fetch } = this.props
     return (
       <View>
         <Icon

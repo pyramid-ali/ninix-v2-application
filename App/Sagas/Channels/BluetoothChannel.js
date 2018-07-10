@@ -1,17 +1,13 @@
 // Libraries
-import { eventChannel } from 'redux-saga'
+import { eventChannel, END } from 'redux-saga'
 import { put, take, select } from 'redux-saga/effects'
 
 // Dependencies
-import DataAction from '../../Redux/DataRedux'
 import BluetoothAction from '../../Redux/BluetoothRedux'
 import CentralManager from '../../Bluetooth/CentralManager'
-import AlarmAction from '../../Redux/AlarmRedux'
-import AlarmService from '../../Services/AlarmService'
-import DeviceLogAction from '../../Redux/DeviceLogRedux'
 import FirmwareAction from '../../Redux/FirmwareRedux'
+import NinixConnectionAction from '../../Redux/NinixConnectionRedux'
 
-let isSyncing = false
 
 export function *setupScanListener (channel) {
   try {
@@ -20,7 +16,9 @@ export function *setupScanListener (channel) {
       yield put(BluetoothAction.didDiscover(devices))
     }
   }
-  finally {}
+  finally {
+    console.tron.log({log: 'setupScanListener finally'})
+  }
 }
 
 export function setupScanListenerChannel () {
@@ -35,85 +33,6 @@ export function setupScanListenerChannel () {
   })
 }
 
-export function *setupNinixStreamListener (channel) {
-  try {
-    while (true) {
-      const result = yield take(channel)
-      yield put(DataAction.didReceiveData(result))
-      if ((result.flashStore || result.ramStore) && !isSyncing) {
-        isSyncing = true
-        yield put(BluetoothAction.startSync())
-      }
-    }
-  }
-  finally {
-    isSyncing = false
-  }
-}
-
-export function setupNinixStreamListenerChannel (ninix) {
-  return eventChannel(emit => {
-    const listener = result => {
-      emit(result)
-    }
-    const subscription = ninix.stream(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
-export function *setupNinixAlarmListener (channel) {
-  try {
-    while (true) {
-      const newAlarm = yield take(channel)
-      const { alarm } = yield select()
-      const output = AlarmService.receive(alarm, newAlarm)
-      yield put(AlarmAction.save(output))
-    }
-  }
-  finally {
-    isSyncing = false
-  }
-}
-
-export function setupNinixAlarmListenerChannel (ninix) {
-  return eventChannel(emit => {
-    const listener = result => {
-      emit(result)
-    }
-    const subscription = ninix.alarmListener(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
-export function *setupNinixSyncListener (channel) {
-  try {
-    while (true) {
-      const result = yield take(channel)
-      yield put(DataAction.didReceiveSync(result))
-      yield put(BluetoothAction.didSyncEnd())
-      yield put(DataAction.didSyncEnd())
-      isSyncing = false
-    }
-  }
-  finally {}
-}
-
-export function setupNinixSyncListenerChannel (ninix) {
-  return eventChannel(emit => {
-    const listener = result => {
-      emit(result)
-    }
-    const subscription = ninix.sync(listener)
-    return () => {
-      subscription.remove()
-    }
-  })
-}
-
 export function *setupBluetoothConnectionListener (channel) {
   try {
     while (true) {
@@ -122,7 +41,7 @@ export function *setupBluetoothConnectionListener (channel) {
       if (state.firmware.updating) {
         yield put(FirmwareAction.update())
       }
-      yield put(DeviceLogAction.didDisconnect({...state.device, error}))
+      yield put(NinixConnectionAction.didDisconnect({...state.ninix}))
       if (CentralManager.forceDisconnect || state.firmware.updating) {
         yield put(BluetoothAction.didDisconnect())
         CentralManager.forceDisconnect = false
@@ -140,13 +59,17 @@ export function *setupBluetoothConnectionListener (channel) {
 
     }
   }
-  finally {}
+  finally {
+    console.tron.log({log: 'end of disconnect listener'})
+  }
 }
 
 export function setupBluetoothConnectionListenerChannel (device) {
   return eventChannel(emit => {
     const listener = (error, device) => {
       emit({error, device})
+      // because every time we connect to a device we set a listener for it, then we don't need previous listener
+      emit(END)
     }
     const subscription = device.onDisconnected(listener)
     return () => {

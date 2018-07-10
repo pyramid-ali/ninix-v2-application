@@ -4,29 +4,57 @@ import { connect } from 'react-redux'
 import { Icon, Header, ListItem } from 'react-native-elements'
 import _ from 'lodash'
 import moment from 'moment'
+import Alarm from '../Realm/Alarm'
 
 // Styles
 import styles from './Styles/NotificationStyle'
 import Colors from '../Themes/Colors'
+import AlarmListener from "../Services/AlarmListener";
+import StreamListener from "../Services/StreamListener";
 
 class Notification extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      notifications: {}
+    }
     this.keyExtractor = item => (item.type + item.registerAt)
+    this.getNotifications = this.getNotifications.bind(this)
   }
 
   componentDidMount() {
+    this.getNotifications()
+    this.alarmListener = AlarmListener.subscribe(this.getNotifications)
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBackgroundColor(Colors.secondary, true)
+      this.getNotifications()
+      if (this.alarmListener.closed) {
+        this.alarmListener = StreamListener.subscribe(this.getNotifications)
+      }
     })
+    this._navBlueListener = this.props.navigation.addListener('didBlur', () => {
+      this.alarmListener.unsubscribe()
+    })
+
   }
 
   componentWillUnmount() {
     this._navListener.remove()
+    this._navBlueListener.remove()
+  }
+
+  getNotifications() {
+    Alarm.read().then(notifications => this.setState({notifications}))
+  }
+
+  addNotification(notification) {
+    this.setState({notifications : {notification, ...this.state.notifications}})
   }
 
   render () {
-    const notifications = this.sort()
+
+    const { notifications } = this.state
+
     return (
       <ScrollView style={styles.container}>
         <Header
@@ -63,7 +91,7 @@ class Notification extends Component {
         title={_.capitalize(item.type)}
         subtitle={`your baby ${item.type} is in dangerous condition`}
         subtitleStyle={{fontFamily: 'PoiretOne-Regular'}}
-        rightTitle={moment(item.registerAt).fromNow()}
+        rightTitle={moment(item.registerAt * 1000).fromNow()}
         rightTitleStyle={{fontFamily: 'Courgette-Regular'}}
         leftIcon={{name: icon, type: 'material-community', color}}
         bottomDivider

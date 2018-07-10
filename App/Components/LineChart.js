@@ -64,7 +64,12 @@ export default class LineChart extends Component {
     }
 
     return (
-      <View />
+      <View style={[styles.container, {backgroundColor}]}>
+        <Text style={styles.title}>{ title.toUpperCase() }</Text>
+        <View style={styles.textWrapper}>
+          <Text style={styles.description}>There is no valid data</Text>
+        </View>
+      </View>
     )
   }
 }

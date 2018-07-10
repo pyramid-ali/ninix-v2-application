@@ -1,7 +1,5 @@
 import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
-import moment from 'moment'
-import _ from 'lodash'
 
 export const INITIAL_STATE = Immutable({
   stream: [],

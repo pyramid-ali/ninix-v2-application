@@ -3,7 +3,7 @@ import { select, call, put } from 'redux-saga/effects'
 import Response from '../Services/Response'
 import moment from 'moment'
 import DataAction from '../Redux/DataRedux'
-import ModelToJson from "../Transform/ModelToJson";
+import ModelToJson from '../Transform/ModelToJson'
 
 export function *didReceiveData (api, action) {
 

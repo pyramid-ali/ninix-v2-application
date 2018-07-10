@@ -90,6 +90,7 @@ export default class Ninix {
     }
   }
 
+  /* ----------------------------------- getting information ------------------------------------- */
   async getName () {
     return await this.deviceNameCharacteristic.read().then(parseCharValue)
   }
@@ -106,10 +107,23 @@ export default class Ninix {
     return await this.deviceFirmawareCharacteristic.read().then(parseCharValue)
   }
 
+  async getInformation () {
+    const name = await this.getName()
+    const serial = await this.getSerial()
+    const revision = await this.getHardwareRevision()
+    const firmware = await this.getFirmware()
+
+    return {
+      name, serial, revision, firmware
+    }
+  }
+
   async getErrorLog () {
     await this.sendCommand(Commands.errorLog)
     return this.commandCharacteristic.read().then(this.getCharacteristicBytesString)
   }
+
+  /* ----------------------------------- end of getting information ------------------------------ */
 
   stream (listener) {
     return this.streamCharacteristic.monitor((error, char) => {

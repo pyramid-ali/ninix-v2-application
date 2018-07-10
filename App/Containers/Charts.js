@@ -4,32 +4,48 @@ import { View, Text, StatusBar } from 'react-native'
 import { Header, Icon } from 'react-native-elements'
 
 // Dependencies
-import LineChart from "../Components/LineChart"
-import { transformTemperature, transformRespiratory } from '../Transform/ArrayDataManipulate'
+import LineChart from '../Components/LineChart'
+import StreamListener from '../Services/StreamListener'
 
 // Styles
 import styles from './Styles/ChartsStyle'
 import Colors from '../Themes/Colors'
-
 
 class Charts extends Component {
 
   constructor (props) {
     super(props)
     this.state = {
-      chart: 'temperature'
+      temperatures: null,
+      respiratories: null
     }
+    this.updateChart = this.updateChart.bind(this)
   }
 
   componentDidMount() {
+    this.streamListener = StreamListener.subscribe(this.updateChart)
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBackgroundColor(Colors.secondary, true)
+      if (this.streamListener.closed) {
+        this.streamListener = StreamListener.subscribe(this.updateChart)
+      }
+    })
+    this._navBlueListener = this.props.navigation.addListener('didBlur', () => {
+      this.streamListener.unsubscribe()
     })
 
   }
 
+  updateChart(data) {
+    this.setState({
+      temperatures: StreamListener.getTemperatures(),
+      respiratories: StreamListener.getRespiratories()
+    })
+  }
+
   componentWillUnmount() {
     this._navListener.remove()
+    this._navBlueListener.remove()
   }
 
   render() {
@@ -53,28 +69,20 @@ class Charts extends Component {
   }
 
   renderCharts () {
-    const temperatures = transformTemperature(this.props.stream)
-    const respiratory = transformRespiratory(this.props.stream)
-    console.tron.log({temperatures, respiratory})
+    const { temperatures, respiratories } = this.state
     return (
       <View style={{flex: 1}}>
-        { temperatures ?
-          <LineChart
-            title='Temperature'
-            data={temperatures}
-            formatLabel={value => `${value}˚C`}
-          /> :
-          null
-        }
-        { respiratory ?
-          <LineChart
-            title='Respiratory'
-            data={respiratory}
-            backgroundColor='#22c1c3'
-            formatLabel={value => `${value}BPS`}
-          /> :
-          null
-        }
+        <LineChart
+          title='Temperature'
+          data={temperatures}
+          formatLabel={value => `${value}˚C`}
+        />
+        <LineChart
+          title='Respiratory'
+          data={respiratories}
+          backgroundColor='#22c1c3'
+          formatLabel={value => `${value}BPS`}
+        />
       </View>
 
     )

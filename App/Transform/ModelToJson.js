@@ -42,10 +42,11 @@ const connectivityLog = model => ({
   device: {
     name: model.name,
     mac: model.mac,
-    serial: model.serial,
+    serial: '' + model.serial,
     firmware: model.firmware,
     revision: model.revision,
   },
+  type: model.type,
   error: model.error,
   happened_at: model.happenedAt
 })

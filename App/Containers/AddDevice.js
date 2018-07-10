@@ -26,6 +26,10 @@ class AddDevice extends Component {
     this.renderItemList = this.renderItemList.bind(this)
   }
 
+  componentWillUnmount() {
+    this.props.stopScan()
+  }
+
   render () {
     const scannedDevices = _.values(this.props.scannedDevices).map(item => item.device)
     const {logo, blink, color} = this.getNinixStatus()

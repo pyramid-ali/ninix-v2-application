@@ -1,7 +1,7 @@
 // Libraries
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import {View, Text, ScrollView, StatusBar} from 'react-native'
 import { Button, ListItem, Icon } from 'react-native-elements'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -9,10 +9,13 @@ import LinearGradient from 'react-native-linear-gradient'
 import Banner from '../Components/Banner'
 import DataDisplay from '../Transform/DataDisplay'
 import BluetoothAction from '../Redux/BluetoothRedux'
+import StreamListener from '../Services/StreamListener'
+import BluetoothState from '../Bluetooth/BluetoothState'
 
 // Styles
 import styles from './Styles/DashboardStyle'
 import Colors from '../Themes/Colors'
+
 
 class Dashboard extends Component {
 
@@ -63,7 +66,7 @@ class Dashboard extends Component {
       button: <Button
         title='Reconnect'
         // TODO: we must use reconnect here
-        onPress={() => this.props.connect(this.props.device)}
+        onPress={() => this.props.bluetoothState === BluetoothState.poweredOn ? this.props.connect(this.props.device) : alert('Please turn on bluetooth first')}
         containerStyle={styles.outer}
         buttonStyle={[styles.buttonStyle, {backgroundColor: Colors.primary}]}
       >
@@ -73,6 +76,28 @@ class Dashboard extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      data: []
+    }
+  }
+
+  componentDidMount() {
+    this.streamListener = StreamListener.subscribe(data => this.setState({data: [data]}))
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBackgroundColor(Colors.secondary, true)
+      if (this.streamListener.closed) {
+        this.streamListener = StreamListener.subscribe(data => this.setState({data: [data]}))
+      }
+    })
+    this._navBlueListener = this.props.navigation.addListener('didBlur', () => {
+      this.streamListener.unsubscribe()
+    })
+
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove()
+    this._navBlueListener.remove()
   }
 
   getStatus() {
@@ -139,30 +164,31 @@ class Dashboard extends Component {
 
   vitalSigns() {
     const { isConnected, streams } = this.props
+    const { data } = this.state
     return [
       {
         key: 'temperature',
         title: 'Temperature',
         icon: {name: "oil-temperature", type: 'material-community'},
-        value: isConnected ? `${DataDisplay.temperature(streams)}` : '-'
+        value: isConnected ? `${DataDisplay.temperature(data)}` : '-'
       },
       {
         key: 'respiratory',
         title: 'Respiratory',
         icon: {name: "weather-windy", type: 'material-community'},
-        value: isConnected ? `${DataDisplay.respiratory(streams)}` : '-'
+        value: isConnected ? `${DataDisplay.respiratory(data)}` : '-'
       },
       {
         key: 'orientation',
         title: 'Orientation',
         icon: {name: "google-circles", type: 'material-community'},
-        value: isConnected ? `${DataDisplay.orientation(streams)}` : '-'
+        value: isConnected ? `${DataDisplay.orientation(data)}` : '-'
       },
       {
         key: 'poop_detection',
         title: 'Poop Detection',
         icon: {name: "water", type: 'material-community'},
-        value: isConnected ? `${DataDisplay.humidity(streams)}` : '-'
+        value: isConnected ? `${DataDisplay.humidity(data)}` : '-'
       }
     ]
   }
@@ -205,6 +231,7 @@ const mapStateToProps = (state) => {
     isConnecting: bluetooth.isConnecting,
     isConnected: bluetooth.isConnected,
     device: ninix.device,
+    bluetoothState: bluetooth.state,
     connectedAt: bluetooth.connectedAt,
     disconnectedAt: bluetooth.disconnectedAt,
     disconnectError: bluetooth.error

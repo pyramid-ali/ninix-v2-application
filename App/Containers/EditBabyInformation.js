@@ -105,24 +105,24 @@ class EditBabyInformation extends Component {
           <View style={styles.section}>
 
             <DefaultTextInput
-              label="weight"
-              placeholder='Weight in birthday?'
+              label="weight (gr)"
+              placeholder='Weight in birthday? (unit: gr)'
               icon='weight-kilogram'
               value={this.state.weight}
               onChangeText={this.onChangeText('weight')}
             />
 
             <DefaultTextInput
-              label="height"
-              placeholder='Height in birthday?'
+              label="height (cm)"
+              placeholder='Height in birthday? (unit: cm)'
               icon='trending-up'
               value={this.state.height}
               onChangeText={this.onChangeText('height')}
             />
 
             <DefaultTextInput
-              label="head"
-              placeholder='Head in birthday?'
+              label="head (cm)"
+              placeholder='Head in birthday? (unit: cm)'
               icon='face'
               value={this.state.head}
               onChangeText={this.onChangeText('head')}

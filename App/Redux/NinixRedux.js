@@ -39,7 +39,11 @@ export const setInformation = (state = INITIAL_STATE, action) => {
   const { payload } = action
   return {
     ...state,
-    ..._.pick(payload, ['device', 'name', 'firmware', 'revision', 'serial']),
+    ..._.pick(payload, ['name', 'firmware', 'revision', 'serial']),
+    device: _.pick(payload.device, [
+      'isConnectable', 'rssi', 'serviceData', 'overflowServiceUUIDs',
+      'mtu', 'localName', 'manufacturerData', 'txPowerLevel',
+      'id', 'solicitedServiceUUIDs', 'name', 'serviceUUIDs']),
     fetch: false
   }
 }

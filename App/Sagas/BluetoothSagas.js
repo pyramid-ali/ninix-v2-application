@@ -6,70 +6,63 @@ import { PermissionsAndroid } from 'react-native'
 import { checkAndGetPermission } from '../Services/Permission'
 import CentralManager from '../Bluetooth/CentralManager'
 import BluetoothAction from '../Redux/BluetoothRedux'
-import DeviceLogAction from '../Redux/DeviceLogRedux'
-import DeviceAction from '../Redux/DeviceRedux'
+import NinixAction from '../Redux/NinixRedux'
 import Router from '../Navigation/Router'
-
+import StreamListener from '../Services/StreamListener'
+import AlarmListener from '../Services/AlarmListener'
 
 // Listeners
 import {
   setupScanListener,
   setupScanListenerChannel,
-  setupNinixStreamListener,
-  setupNinixStreamListenerChannel,
-  setupNinixAlarmListener,
-  setupNinixAlarmListenerChannel,
-  setupNinixSyncListener,
-  setupNinixSyncListenerChannel,
   setupBluetoothConnectionListener,
   setupBluetoothConnectionListenerChannel
 } from './Channels/BluetoothChannel'
 
-/***
- * connect to chased device
- * @param action
- * @returns {IterableIterator<*>}
- */
 export function *connect(action) {
   const { device } = action
   try {
-    const connectedDevice = yield call(CentralManager.connect.bind(CentralManager), device)
-    yield put(DeviceAction.setDevice(connectedDevice))
+    const connectedDevice = yield call([CentralManager, CentralManager.connect], device)
     yield put(BluetoothAction.didConnect(connectedDevice))
-    yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, connectedDevice))
-    yield CentralManager.start()
-    yield put(BluetoothAction.didSetup())
-    yield getDeviceInformation()
-    yield fork(setupNinixStreamListener, yield call(setupNinixStreamListenerChannel, CentralManager.ninix))
-    yield fork(setupNinixAlarmListener, yield call(setupNinixAlarmListenerChannel, CentralManager.ninix))
-
-    yield getErrorLog(CentralManager.ninix)
-    const state = yield select()
-    yield put(DeviceLogAction.didConnect(state.device))
-
-    const { nav } = yield select()
-    if (nav.index === 1) {
-      if (nav.routes[1].routeName === 'AddDevice') {
-        yield put(Router.backFromAddDevice)
-      }
-    }
-
+    CentralManager.stopScan()
   }
   catch (error) {
     yield put(BluetoothAction.didFail(error.message))
-    console.tron.log({log: 'connect', error, 'message': error.message, 'code': error.errorCode})
   }
 
 }
 
-export function *getErrorLog(ninix) {
-  const log = yield ninix.getErrorLog()
-  // TODO: this log should be save and send to server
+export function *didConnect(action) {
+  const { device } = action
+  yield fork(setupBluetoothConnectionListener, yield call(setupBluetoothConnectionListenerChannel, device))
+  yield put(BluetoothAction.setup(device))
+}
+
+export function *setup(action) {
+  const { device } = action
+  const { auth } = yield select()
+  const ninix = yield call([CentralManager, CentralManager.setup])
+  yield put(NinixAction.getInformation({ninix, device}))
+  StreamListener.listen(ninix, { accessToken: auth.accessToken })
+  AlarmListener.listen(ninix)
+  yield put(BluetoothAction.didSetup({ninix, device}))
+}
+
+export function *didSetup(action) {
+  const { ninix, device } = action.payload
+  const { nav } = yield select()
+  if (nav.index >= 1) {
+    if (nav.routes[nav.routes.length - 1].routeName === 'AddDevice') {
+      yield put(Router.backFromAddDevice)
+    }
+  }
+  // TODO: get device error log
+  // TODO: send device log to server
 }
 
 export function *reconnect() {
-  const { device } = yield select()
-  yield put(BluetoothAction.connect(device.device))
+  const { ninix } = yield select()
+  yield put(BluetoothAction.connect(ninix.device))
 }
 
 export function *cancelConnection() {
@@ -104,37 +97,6 @@ export function *startScan() {
 
 export function *stopScan() {
   CentralManager.stopScan()
-}
-
-export function *startSync() {
-
-  let characteristic
-  const { data } = yield select()
-  const last = data.stream[data.stream.length - 1]
-  const ninix = CentralManager.ninix
-
-  if (last.flashStore) {
-    characteristic = yield call(ninix.flashSyncCommand.bind(ninix))
-  }
-  else if (last.ramStore) {
-    characteristic = yield call(ninix.ramSyncCommand.bind(ninix))
-  }
-  else {
-    return
-  }
-
-  if (characteristic) {
-    yield put(BluetoothAction.didSyncBegin())
-  }
-
-  yield fork(setupNinixSyncListener, yield call(setupNinixSyncListenerChannel, ninix))
-}
-
-export function *getDeviceInformation() {
-  yield put(DeviceAction.setName(yield call(CentralManager.ninix.getName.bind(CentralManager.ninix))))
-  yield put(DeviceAction.setSerial(yield call(CentralManager.ninix.getSerial.bind(CentralManager.ninix))))
-  yield put(DeviceAction.setFirmware(yield call(CentralManager.ninix.getFirmware.bind(CentralManager.ninix))))
-  yield put(DeviceAction.setRevision(yield call(CentralManager.ninix.getHardwareRevision.bind(CentralManager.ninix))))
 }
 
 export function *turnOffDevice() {

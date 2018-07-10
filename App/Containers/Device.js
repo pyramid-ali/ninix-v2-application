@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {Text, View, StatusBar} from 'react-native'
 import {Header, Button, Badge, ListItem, Icon} from 'react-native-elements'
+import _ from 'lodash'
 
 // Dependencies
 import Battery from '../Components/Battery'
@@ -11,18 +12,27 @@ import BluetoothAction from '../Redux/BluetoothRedux'
 // Styles
 import styles from './Styles/DeviceStyle'
 import Colors from '../Themes/Colors'
+import StreamListener from "../Services/StreamListener";
 
 class Device extends Component {
 
-  componentDidMount() {
-    this._navListener = this.props.navigation.addListener('didFocus', () => {
-      StatusBar.setBackgroundColor(Colors.primary, true)
-    })
+  constructor(props) {
+    super(props)
+    this.state = {
+      battery: 0,
+      fullCharge: false,
+      charging: false,
+      lowBattery: false,
+    }
+  }
 
+  componentDidMount() {
+    this.streamListener = StreamListener.subscribe(data => this.setState({..._.pick(data, ['battery', 'fullCharge', 'charging', 'lowBattery'])}))
+    StatusBar.setBackgroundColor(Colors.primary, true)
   }
 
   componentWillUnmount() {
-    this._navListener.remove()
+    this.streamListener.unsubscribe()
   }
 
   render () {
@@ -125,7 +135,8 @@ class Device extends Component {
 
   renderConnected () {
 
-    const { revision, name, currentFirmware, latestFirmware, battery, fullCharge, charging, lowBattery } = this.props
+    const { revision, name, currentFirmware, latestFirmware } = this.props
+    const { battery, fullCharge, charging, lowBattery } = this.state
 
     return (
       <View style={styles.connectedContainer}>
@@ -135,9 +146,6 @@ class Device extends Component {
             fullCharge={fullCharge}
             charging={charging}
             lowBattery={lowBattery}
-            onPress={() => {
-              this.props.navigation.navigate('ShowNinixData')
-            }}
           />
 
         </View>
@@ -211,10 +219,6 @@ const mapStateToProps = (state) => {
     name: ninix.name,
     revision: ninix.revision,
     currentFirmware: ninix.firmware,
-    battery: ninix.battery,
-    fullCharge: ninix.fullCharge,
-    charging: ninix.charging,
-    lowBattery: ninix.lowBattery,
     latestFirmware: firmware.version,
   }
 }

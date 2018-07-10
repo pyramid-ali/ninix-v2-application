@@ -1,28 +1,31 @@
 import { combineReducers } from 'redux'
+import { resettableReducer } from 'reduxsauce'
 import configureStore from './CreateStore'
 import rootSaga from '../Sagas/'
+
+const resettable = resettableReducer('RESET')
 
 export default () => {
   /* ------------- Assemble The Reducers ------------- */
   const rootReducer = combineReducers({
     app:            require('./AppRedux').reducer,
-    auth:           require('./AuthRedux').reducer,
-    baby:           require('./BabyRedux').reducer,
+    auth:           resettable(require('./AuthRedux').reducer),
+    baby:           resettable(require('./BabyRedux').reducer),
     bluetooth:      require('./BluetoothRedux').reducer,
-    dailyStats:     require('./DailyStatRedux').reducer,
-    data:           require('./DataRedux').reducer,
-    deviceLogs:     require('./DeviceLogRedux').reducer,
-    father:         require('./FatherRedux').reducer,
-    firmware:       require('./FirmwareRedux').reducer,
-    forgotPassword: require('./ForgotPasswordRedux').reducer,
-    login:          require('./LoginRedux').reducer,
-    mother:         require('./MotherRedux').reducer,
-    nav:            require('./NavigationRedux').reducer,
-    ninix:          require('./NinixRedux').reducer,
-    alarm:          require('./AlarmRedux').reducer,
-    signup:         require('./SignupRedux').reducer,
-    style:          require('./StyleRedux').reducer,
-    user:           require('./UserRedux').reducer,
+    dailyStats:     resettable(require('./DailyStatRedux').reducer),
+    data:           resettable(require('./DataRedux').reducer),
+    father:         resettable(require('./FatherRedux').reducer),
+    firmware:       resettable(require('./FirmwareRedux').reducer),
+    forgotPassword: resettable(require('./ForgotPasswordRedux').reducer),
+    login:          resettable(require('./LoginRedux').reducer),
+    mother:         resettable(require('./MotherRedux').reducer),
+    nav:            resettable(require('./NavigationRedux').reducer),
+    ninix:          resettable(require('./NinixRedux').reducer),
+    ninixConnection:resettable(require('./NinixConnectionRedux').reducer),
+    alarm:          resettable(require('./AlarmRedux').reducer),
+    signup:         resettable(require('./SignupRedux').reducer),
+    style:          resettable(require('./StyleRedux').reducer),
+    user:           resettable(require('./UserRedux').reducer),
   })
 
   return configureStore(rootReducer, rootSaga)

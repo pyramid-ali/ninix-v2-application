@@ -180,15 +180,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
    * @param token
    * @returns {Promise<ApiResponse<any>>}
    */
-  const sendConnectLog = (data, token) => api.post('device/connect', data, authorizationHeader(token))
-
-  /***
-   *
-   * @param data
-   * @param token
-   * @returns {Promise<ApiResponse<any>>}
-   */
-  const sendDisconnectLog = (data, token) => api.post('device/disconnect', data, authorizationHeader(token))
+  const sendConnectionLogs = (data, token) => api.post('ninix/connection/logs', data, authorizationHeader(token))
 
   /***
    * get baby images
@@ -238,8 +230,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
     updateDailyStat,
     getDailyStats,
     storeBabyImage,
-    sendConnectLog,
-    sendDisconnectLog,
+    sendConnectionLogs,
     logout,
     sendAlarms,
     getBabyImages,

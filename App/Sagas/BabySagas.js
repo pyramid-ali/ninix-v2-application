@@ -41,17 +41,18 @@ export function *getLastBabyImage (api) {
   const response = yield call(api.getBabyImages, auth.accessToken)
   try {
     const result = yield call(Response.resolve, response)
-    // TODO: we should remove this section
     if (result.images.data.length) {
-      const res = yield call(Api.download, result.images.data[0].path, auth.accessToken)
-      console.tron.log({res})
-      // yield call(Api.removeDownloadedFile, baby.image.uri)
-      yield put(BabyAction.retrieveImage({uri : Platform.OS === 'android' ? 'file://' + res.path() : '' + res.path()}))
+      const latestImage = result.images.data[0]
+      if (baby.image && (latestImage.image === baby.image.id)) {
+        return
+      }
+      const res = yield call(Api.download, latestImage.path, auth.accessToken)
+      yield put(BabyAction.retrieveImage({id: latestImage.id, uri : Platform.OS === 'android' ? 'file://' + res.path() : '' + res.path()}))
     }
 
   }
   catch (e) {
-    console.tron.log({log: 'download baby image', e})
+    console.tron.log({log: 'download baby image', error: e.message})
   }
 }
 
@@ -64,7 +65,7 @@ export function *setImage (api, action) {
   try {
     const response = yield call(() => uploadImage)
     const result = yield call(Response.resolve, response)
-    yield put(BabyAction.didImageSet())
+    yield put(BabyAction.didImageSet(result.id))
   }
   catch (error) {
     console.tron.error({error})
@@ -74,7 +75,7 @@ export function *setImage (api, action) {
 }
 
 export function imageProgressChannel(api, token, payload) {
-  console.tron.log({api, token, payload})
+
   const formData = new FormData()
   formData.append('image', {
     uri: payload.uri,
@@ -103,9 +104,6 @@ export function *imageProgress (channel) {
     }
     catch (error) {
       console.tron.log({error})
-    }
-    finally {
-      console.tron.log('finally')
     }
   }
 }

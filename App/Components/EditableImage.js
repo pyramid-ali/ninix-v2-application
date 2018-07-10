@@ -37,7 +37,7 @@ export default class EditableImage extends Component {
         }
 
         <View style={[styles.imageIconContainer, innerStyle.imageIconContainer, iconStyle]}>
-          <TouchableOpacity onPress={() => this.showImagePicker(onPress)}>
+          <TouchableOpacity onPress={this.showImagePicker.bind(this)}>
             <Icon name={icon} size={size * 0.18} />
           </TouchableOpacity>
         </View>
@@ -45,8 +45,9 @@ export default class EditableImage extends Component {
     )
   }
 
-  showImagePicker (callback, options = null) {
-    ImagePicker.showImagePicker(options = null, callback)
+  showImagePicker () {
+    this.props.onStart()
+    ImagePicker.showImagePicker(null, this.props.onPress)
   }
 
   styles () {
@@ -74,6 +75,7 @@ EditableImage.propTypes = {
     PropTypes.array,
     PropTypes.object
   ]),
+  onStart: PropTypes.func,
   onPress: PropTypes.func,
   progress: PropTypes.number,
   source: PropTypes.oneOfType([
@@ -90,6 +92,7 @@ EditableImage.propTypes = {
 
 EditableImage.defaultProps = {
   icon: 'pencil',
+  onStart: () => {},
   onPress: () => {},
   progress: 0,
   size: 150,

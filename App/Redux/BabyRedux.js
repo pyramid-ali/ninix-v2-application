@@ -30,9 +30,11 @@ const { Types, Creators } = createActions({
   setImage: ['payload'],
   imageProgressUpdate: ['progress'],
   didFail: ['error'],
-  didImageSet: null,
+  didImageSet: ['id'],
   didImageFail: ['previousImage'],
-  retrieveImage: ['payload']
+  retrieveImage: ['payload'],
+  startPickingImage: null,
+  didImagePickCancel: null
 }, {
   prefix: 'baby/'
 })
@@ -101,9 +103,27 @@ export const imageProgressUpdate = (state = INITIAL_STATE, action) => {
   }
 }
 
+export const startPickingImage = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    imageProgress: 0
+  }
+}
+
+export const didImagePickCancel = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    imageProgress: null
+  }
+}
+
 export const didImageSet = (state = INITIAL_STATE, action) => {
   return {
     ...state,
+    image: {
+      ...state.image,
+      id: action.id
+    },
     imageProgress: null
   }
 }
@@ -127,6 +147,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_IMAGE_SET]: didImageSet,
   [Types.DID_IMAGE_FAIL]: didImageFail,
   [Types.RETRIEVE_IMAGE]: retrieveImage,
+  [Types.START_PICKING_IMAGE]: startPickingImage,
+  [Types.DID_IMAGE_PICK_CANCEL]: didImagePickCancel
 })
 
 

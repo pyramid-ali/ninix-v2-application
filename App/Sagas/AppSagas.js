@@ -1,4 +1,4 @@
-import { put, call, select, fork } from 'redux-saga/effects'
+import { put, call, select, fork, cancel } from 'redux-saga/effects'
 
 import { getToken, isTokenValid } from '../Services/TokenManager'
 import AppAction from '../Redux/AppRedux'
@@ -21,9 +21,11 @@ import {
   setupBluetoothStatusListener,
   setupBluetoothStatusListenerChannel
 } from './Channels/AppChannel'
+import VitalSign from "../Realm/VitalSign";
+import Alarm from "../Realm/Alarm";
 
 
-export function *init (api, action) {
+export function *init (api) {
 
   const { app } = yield select()
 
@@ -60,7 +62,7 @@ export function *init (api, action) {
       yield put(AuthAction.issueToken(token))
     }
 
-    yield put(AppAction.sync())
+    yield put(AppAction.sync(api))
     yield put(Router.navigateToMain)
 
   }
@@ -75,6 +77,7 @@ export function *init (api, action) {
     // when an error occurred when initializing app
     if (app.isIntroduced) {
       yield put(Router.navigateToLogin)
+      yield logout(api)
     }
     else {
       yield put(Router.navigateToLanding)
@@ -83,36 +86,34 @@ export function *init (api, action) {
 
 }
 
-// TODO: synchronization with server handle in the latest stage
-export function *sync () {
+export function *sync (api) {
 
-  // TODO: why we need to check auth
   const { auth } = yield select()
-  console.tron.log({log: 'sync', auth})
   if (!auth.accessToken) {
     yield put(AppAction.didSync())
     return
   }
 
-  // TODO: getting daily information
-  // 1. get user information
-  // 2. get mother and father user information
   yield put(BabyAction.getInformation())
   yield put(FatherAction.getInformation())
   yield put(MotherAction.getInformation())
   yield put(DailyStatAction.retrieveFromServer())
   yield put(FirmwareAction.checkLatestVersion())
-  // yield put(DataAction.syncWithServer())
-  // 3. check for parent picture sync
-  // 4. check data received from device is sync or not
 
 }
 
-export function *logout (api, action) {
-
+export function *logout (api) {
   const { auth } = yield select()
   yield put(BluetoothAction.disconnect())
   yield put(AuthAction.revokeToken())
-  yield put(Router.navigateToLogin)
+  // it's not matter that request is successful or not for logout, but it should be matter later
   yield call(api.logout, auth.accessToken)
+  yield put({type: 'RESET'})
+  clearDatabase()
+  yield init(api)
+}
+
+function clearDatabase() {
+  VitalSign.removeAll()
+  Alarm.removeAll()
 }

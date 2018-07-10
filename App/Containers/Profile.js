@@ -6,7 +6,7 @@ import { ScrollView, Text, View, Image, StatusBar } from 'react-native'
 // Dependencies
 import EditableImage from '../Components/EditableImage'
 import ParentAction from '../Redux/ParentRedux'
-import BabyAction from '../Redux/BabyRedux'
+import BabyAction, {didImagePickCancel} from '../Redux/BabyRedux'
 
 // Styles
 import styles from './Styles/ProfileStyle'
@@ -101,6 +101,7 @@ class Profile extends Component {
                 style={styles.babyImage}
                 size={120}
                 source={babyImage}
+                onStart={this.startPickingImage.bind(this)}
                 onPress={this.setBabyImage.bind(this)}
               />
               <Text
@@ -185,9 +186,16 @@ class Profile extends Component {
     )
   }
 
+  startPickingImage() {
+    this.props.startPickingImage()
+  }
+
   setBabyImage (response) {
     if (response.data) {
       this.props.setBabyImage(response, this.props.baby.image, this.failure)
+    }
+    else if (response.didCancel) {
+      this.props.didImagePickCancel()
     }
   }
 }
@@ -214,6 +222,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setBabyImage: (image, previousImage, failure) => dispatch(BabyAction.setImage({image, previousImage, failure})),
+    startPickingImage: () => dispatch(BabyAction.startPickingImage()),
+    didImagePickCancel: () => dispatch(BabyAction.didImagePickCancel())
   }
 }
 

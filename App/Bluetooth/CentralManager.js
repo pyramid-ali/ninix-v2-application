@@ -1,4 +1,4 @@
-import { BleManager, LogLevel } from 'react-native-ble-plx'
+import { BleManager, LogLevel, Device } from 'react-native-ble-plx'
 import UUID from './UUID'
 import moment from 'moment'
 import Ninix from './Ninix'
@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { NordicDFU } from "react-native-nordic-dfu"
 
 class CentralManager {
-
+  // TODO: we should define a method for getting and setting tries out of class
   device = null
   forceDisconnect = false
   tries = 0
@@ -88,17 +88,22 @@ class CentralManager {
    * connect to specific device
    * we set connecting device here if we want to cancel device connection
    * @param device
-   * @returns {Promise<*>}
+   * @returns {Promise<Device>}
    */
   async connect (device) {
     // TODO: why we should stop scan here? this.connectingDevice should be null after device connected
     this.tries += 1
     this.connectingDevice = device
     this.device = await this.manager.connectToDevice(device.id, { autoConnect: false, timeout: this.connectionTimeout * 1000 })
-    this.stopScan()
+    this.connectingDevice = null
     return this.device
   }
 
+  /***
+   * cancel connection
+   * use for canceling connecting device, for disconnect from connected device use disconnect function
+   * @returns {Promise<*>}
+   */
   async cancelConnection () {
     if (this.connectingDevice) {
       return await this.manager.cancelDeviceConnection(this.connectingDevice.id)
@@ -106,7 +111,7 @@ class CentralManager {
     return null
   }
 
-  async start () {
+  async setup () {
     this.ninix = new Ninix(this.device)
     await this.ninix.discover()
     await this.ninix.bond()

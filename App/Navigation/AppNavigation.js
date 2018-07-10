@@ -12,7 +12,6 @@ import BabyHead from '../Containers/BabyHead'
 import BabyHeight from '../Containers/BabyHeight'
 import BabyWeight from '../Containers/BabyWeight'
 import EssentialInformationSlider from '../Containers/EssentialInformationSlider'
-import ShowNinixData from '../Containers/ShowNinixData'
 
 // import Dependencies
 import AddDevice from '../Containers/AddDevice'
@@ -68,9 +67,6 @@ const PrimaryNav = StackNavigator({
   },
   EssentialInformationSlider: {
     screen: EssentialInformationSlider
-  },
-  ShowNinixData: {
-    screen: ShowNinixData
   },
   Landing: {
     screen: Landing

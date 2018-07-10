@@ -6,7 +6,7 @@ import BluetoothStates from '../Bluetooth/BluetoothState'
 
 export const INITIAL_STATE = Immutable({
   state: BluetoothStates.unknown,
-  devices: [],
+  devices: {},
   isConnected: false,
   isConnecting: false,
   isScanning: false,
@@ -24,17 +24,18 @@ const { Types, Creators } = createActions({
   cancelConnection: null,
   didDiscover: ['devices'],
   didStateChange: ['status'],
-  connect: ['device', 'back'],
-  didConnect: null,
+  connect: ['device'],
+  setup: ['device'],
   disconnect: null,
+  startSync: null,
+  turnOffDevice: null,
+  reconnect: null,
+  didConnect: ['device'],
   didDisconnect: null,
   didFail: ['error'],
-  startSync: null,
   didSyncBegin: null,
   didSyncEnd: null,
-  didSetup: null,
-  turnOffDevice: null,
-  reconnect: null
+  didSetup: ['payload']
 }, {
   prefix: 'bluetooth/'
 })
@@ -96,10 +97,16 @@ export const didConnect = (state = INITIAL_STATE, action) => {
     ...state,
     devices: [],
     isConnected: true,
-    isInitiating: true,
     isConnecting: false,
     isScanning: false,
     connectedAt: moment()
+  }
+}
+
+export const setup = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    isInitiating: true,
   }
 }
 

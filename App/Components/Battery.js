@@ -80,3 +80,7 @@ Battery.propTypes = {
   lowBattery: PropTypes.bool,
   onPress: PropTypes.func
 }
+
+Battery.defaultProps = {
+  onPress: () => {}
+}

@@ -8,11 +8,11 @@ function stream (data) {
   const battery = getBattery(data[2], data[3], data[11])
   const respiratory = data[4]
   const flashStore = haveFlashStore(data[8])
-  const ramStore = haveFlashStore(data[9])
+  const ramStore = haveRamStore(data[9])
   const fullCharged = isFullCharge(data[10])
   const charging = isCharging(data[11])
   const lowBattery = isOnLowBattery(data[12])
-  const registerAt = moment().unix()
+  const respMagnitude = getRespMagnitude(data[14], data[15])
 
   return {
     temperature,
@@ -25,7 +25,7 @@ function stream (data) {
     fullCharged,
     charging,
     lowBattery,
-    registerAt
+    respMagnitude
   }
 
 }
@@ -45,7 +45,6 @@ function sync (data, diffTime) {
       registerAt: unix - ((size - i) * period)
     })
   }
-
 
   // we used reverse to sort array in ascending order of registerAt
   return result.reverse()
@@ -165,6 +164,10 @@ function isCharging (decimal) {
 
 function isOnLowBattery (decimal) {
   return castToBoolean(decimal)
+}
+
+function getRespMagnitude(low, high) {
+  return high * 256 + low
 }
 
 function castToBoolean (decimal) {
