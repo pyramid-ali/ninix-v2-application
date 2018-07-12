@@ -7,27 +7,30 @@ import _ from 'lodash'
  * Initial state of login redux
  */
 export const INITIAL_STATE = Immutable({
-  logs: {}
+  connections: {},
+  errors: {}
 })
 
 const { Types, Creators } = createActions({
   didConnect: ['payload'],
   didDisconnect: ['payload'],
+  saveError: ['payload'],
   syncWithServer: null,
-  didSyncWithServer: ['payload'],
+  didSyncConnections: ['payload'],
+  didSyncErrorLogs: ['payload']
 }, {
-  prefix: 'ninixConnection/'
+  prefix: 'ninixLog/'
 })
 
-export const NinixConnectionTypes = Types
+export const NinixLogTypes = Types
 
 export const didConnect = (state = INITIAL_STATE, action) => {
   const { payload } = action
   const now = moment()
   return {
     ...state,
-    logs: {
-      ...state.logs,
+    connections: {
+      ...state.connections,
       [now.unix()]: {
         type: 'connect',
         mac: payload.device.id,
@@ -46,8 +49,8 @@ export const didDisconnect = (state = INITIAL_STATE, action) => {
   const now = moment()
   return {
     ...state,
-    logs: {
-      ...state.logs,
+    connections: {
+      ...state.connections,
       [now.unix()]: {
         type: 'disconnect',
         mac: payload.device.id,
@@ -61,23 +64,50 @@ export const didDisconnect = (state = INITIAL_STATE, action) => {
   }
 }
 
-export const didSyncWithServer = (state = INITIAL_STATE, action) => {
+export const didSyncConnections = (state = INITIAL_STATE, action) => {
   const { payload } = action
-  const logs = _.omit(state.logs, payload)
+  const connections = _.omit(state.connections, payload)
   return {
     ...state,
-    logs: {
-      ...logs
+    connections: {
+      ...connections
     }
   }
 }
 
+export const didSyncErrorLogs = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  const errors = _.omit(state.errors, payload)
+  return {
+    ...state,
+    errors: {
+      ...errors
+    }
+  }
+}
 
+export const saveError = (state = INITIAL_STATE, action) => {
+  const { payload } = action
+  const now = moment()
+  return {
+    ...state,
+    errors: {
+      ...state.errors,
+      [moment().now]: {
+        body: payload.body,
+        serial: payload.serial,
+        registerAt: now
+      }
+    }
+  }
+}
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_CONNECT]: didConnect,
   [Types.DID_DISCONNECT]: didDisconnect,
-  [Types.DID_SYNC_WITH_SERVER]: didSyncWithServer
+  [Types.SAVE_ERROR]: saveError,
+  [Types.DID_SYNC_CONNECTIONS]: didSyncConnections,
+  [Types.DID_SYNC_ERROR_LOGS]: didSyncErrorLogs,
 })
 
 export default Creators

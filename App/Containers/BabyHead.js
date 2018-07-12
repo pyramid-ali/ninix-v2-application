@@ -70,12 +70,11 @@ class BabyHead extends Component {
         { this.renderHighlightedText(
           'Current Head',
           lastHead || 'Not measured yet' ,
-          lastDate ? `last updated: ${lastDate}` : '',
+          (lastDate ? `last updated: ${lastDate}` : ''),
           lastHead)
         }
       </SkewedView>
     )
-
   }
 
   renderInputPage () {

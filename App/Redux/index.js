@@ -21,7 +21,7 @@ export default () => {
     mother:         resettable(require('./MotherRedux').reducer),
     nav:            resettable(require('./NavigationRedux').reducer),
     ninix:          resettable(require('./NinixRedux').reducer),
-    ninixConnection:resettable(require('./NinixConnectionRedux').reducer),
+    ninixLog:       resettable(require('./NinixLogRedux').reducer),
     alarm:          resettable(require('./AlarmRedux').reducer),
     signup:         resettable(require('./SignupRedux').reducer),
     style:          resettable(require('./StyleRedux').reducer),

@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs'
-import _ from 'lodash'
 import moment from 'moment'
+import _ from 'lodash'
 import VitalSign from '../Realm/VitalSign'
 
 class StreamListener {
@@ -28,7 +28,6 @@ class StreamListener {
   }
 
   syncWithLocalDeviceData(ninix, data) {
-    console.tron.log({data})
     if (!this.isSyncing && (data.flashStore || data.ramStore)) {
       this.isSyncing = true
 
@@ -117,6 +116,10 @@ class StreamListener {
       }
     }
     return result
+  }
+
+  syncToServer() {
+
   }
 
 }

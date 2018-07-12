@@ -14,7 +14,7 @@ import { FirmwareTypes } from '../Redux/FirmwareRedux'
 import { MotherTypes } from '../Redux/MotherRedux'
 import { SignupTypes } from '../Redux/SignupRedux'
 import { NinixTypes } from '../Redux/NinixRedux'
-import { NinixConnectionTypes } from '../Redux/NinixConnectionRedux'
+import { NinixLogTypes } from '../Redux/NinixLogRedux'
 import { UserTypes } from '../Redux/UserRedux'
 import { DailyStatTypes } from '../Redux/DailyStatRedux'
 
@@ -29,7 +29,7 @@ const FirmwareSagas = require('./FirmwareSagas')
 const ForgotPasswordSagas = require('./ForgotPasswordSagas')
 const LoginSagas = require('./LoginSagas')
 const NinixSagas = require('./NinixSagas')
-const NinixConnectionSagas = require('./NinixConnectionSagas')
+const NinixLogSagas = require('./NinixLogSagas')
 const FatherSagas = require('./FatherSagas')
 const MotherSagas = require('./MotherSagas')
 const SignupSagas = require('./SignupSagas')
@@ -91,9 +91,9 @@ export const tasks = [
   takeLatest(NinixTypes.GET_INFORMATION, NinixSagas.getInformation),
 
   // Connection logs
-  takeLatest(NinixConnectionTypes.DID_CONNECT, NinixConnectionSagas.didConnect),
-  takeLatest(NinixConnectionTypes.DID_DISCONNECT, NinixConnectionSagas.didDisconnect),
-  takeLatest(NinixConnectionTypes.SYNC_WITH_SERVER, NinixConnectionSagas.syncWithServer, api),
+  takeLatest(NinixLogTypes.DID_CONNECT, NinixLogSagas.didConnect, api),
+  takeLatest(NinixLogTypes.DID_DISCONNECT, NinixLogSagas.didDisconnect, api),
+  takeLatest(NinixLogTypes.SYNC_WITH_SERVER, NinixLogSagas.syncWithServer, api),
 
   // Data Sagas
   takeEvery(DataTypes.DID_RECEIVE_DATA, DataSagas.didReceiveData, api),

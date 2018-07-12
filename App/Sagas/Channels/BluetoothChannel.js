@@ -6,7 +6,7 @@ import { put, take, select } from 'redux-saga/effects'
 import BluetoothAction from '../../Redux/BluetoothRedux'
 import CentralManager from '../../Bluetooth/CentralManager'
 import FirmwareAction from '../../Redux/FirmwareRedux'
-import NinixConnectionAction from '../../Redux/NinixConnectionRedux'
+import NinixLogAction from '../../Redux/NinixLogRedux'
 
 
 export function *setupScanListener (channel) {
@@ -41,7 +41,7 @@ export function *setupBluetoothConnectionListener (channel) {
       if (state.firmware.updating) {
         yield put(FirmwareAction.update())
       }
-      yield put(NinixConnectionAction.didDisconnect({...state.ninix}))
+      yield put(NinixLogAction.didDisconnect({...state.ninix}))
       if (CentralManager.forceDisconnect || state.firmware.updating) {
         yield put(BluetoothAction.didDisconnect())
         CentralManager.forceDisconnect = false

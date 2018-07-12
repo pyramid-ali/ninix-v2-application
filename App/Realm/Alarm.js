@@ -23,6 +23,32 @@ export class Alarm {
     })
   }
 
+  unsynced() {
+    return new Promise((resolve, reject) => {
+      Storage.read(realm => {
+          resolve(realm.objects('Alarm').filtered('sync = false'))
+        },
+        error => {
+          reject(error)
+        })
+    })
+  }
+
+  sync(data) {
+    Storage.write((realm) => {
+        data.forEach(item => {
+          const lastRecord = realm.objects('Alarm').filtered(`type = "${item.type}" AND registerAt = ${item.registerAt}`)
+          if (!this.isEmpty(lastRecord)) {
+            lastRecord[0].sync = true
+          }
+        })
+
+      },
+      error => {
+        console.tron.log({log: 'error saving alarm', error: error.message})
+      })
+  }
+
   isEmpty(obj) {
     for(let key in obj) {
       if(obj.hasOwnProperty(key))
@@ -48,7 +74,8 @@ Alarm.schema = {
   properties: {
     type: 'string',
     repeat: 'int',
-    registerAt: 'int'
+    registerAt: 'int',
+    sync: {type: 'bool' , default: false}
   }
 }
 

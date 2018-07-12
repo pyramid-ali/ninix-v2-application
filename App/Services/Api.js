@@ -183,6 +183,14 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
   const sendConnectionLogs = (data, token) => api.post('ninix/connection/logs', data, authorizationHeader(token))
 
   /***
+   *
+   * @param data
+   * @param token
+   * @returns {Promise<ApiResponse<any>>}
+   */
+  const sendNinixErrorLog = (data, token) =>api.post(`ninix/errors/logs`, data, authorizationHeader(token))
+
+  /***
    * get baby images
    * @param token
    * @returns {Promise<ApiResponse<any>>}
@@ -211,6 +219,8 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
    */
   const checkFirmwareVersion = (token) => api.get('firmware/latest', {}, authorizationHeader(token))
 
+
+
   return {
     login,
     requestRegisterToken,
@@ -231,6 +241,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
     getDailyStats,
     storeBabyImage,
     sendConnectionLogs,
+    sendNinixErrorLog,
     logout,
     sendAlarms,
     getBabyImages,

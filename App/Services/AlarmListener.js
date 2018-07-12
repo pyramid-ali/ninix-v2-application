@@ -2,7 +2,11 @@ import PushNotification from 'react-native-push-notification-ce'
 import { Subject } from 'rxjs'
 import moment from 'moment'
 
+import ModelToJson from '../Transform/ModelToJson'
 import Alarm from '../Realm/Alarm'
+import { store } from '../Containers/App'
+import Api from './Api'
+
 
 class AlarmListener {
 
@@ -14,6 +18,7 @@ class AlarmListener {
       orientation: {}
     }
     this.timer = null
+    this.api = Api.create()
   }
 
   listen(ninix) {
@@ -33,7 +38,9 @@ class AlarmListener {
   }
 
   saveAlarm(alarm, timer) {
+    let needSync = false
     Object.keys(alarm).filter(key => alarm[key] === true).forEach(key => {
+      needSync = true
       const alarms = this.alarms[key]
       const lastAlarm = alarms[Math.max(...Object.keys(alarms))]
       let id = timer - (lastAlarm ? lastAlarm.repeat : 0)
@@ -58,6 +65,7 @@ class AlarmListener {
         }
       }
     })
+    needSync && this.syncWithServer()
   }
 
   save(data) {
@@ -69,6 +77,18 @@ class AlarmListener {
       title: "Warning, your baby may be in danger", // (optional)
       message: "check your baby " + type,
       soundName: 'samsung_galaxy_best.mp3'
+    })
+  }
+
+  syncWithServer() {
+
+    const unsynced = Alarm.unsynced()
+    const data = Object.keys(unsynced).map(key => unsynced[key])
+    const { auth } = store.getState()
+    this.api.sendAlarms(data.map(ModelToJson.alarm), auth.accessToken).then(resp => {
+      Response.resolve(resp).then(result => {
+        Alarm.sync(data)
+      })
     })
   }
 

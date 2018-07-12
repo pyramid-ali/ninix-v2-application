@@ -51,10 +51,16 @@ const connectivityLog = model => ({
   happened_at: model.happenedAt
 })
 
+const errorLog = model => ({
+  serial: '' + model.serial,
+  body: model.body,
+  register_at: model.registerAt
+})
+
 const alarm = model => ({
   type: model.type,
   duration: model.duration,
-  register_at: model.registerAt
+  register_at: moment(model.registerAt * 1000)
 })
 
 const changePassword = model => ({
@@ -68,6 +74,7 @@ export default {
   mother,
   dailyStat,
   vitalSign,
+  errorLog,
   connectivityLog,
   alarm,
   changePassword
