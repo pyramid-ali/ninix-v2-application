@@ -6,6 +6,7 @@ import ModelToJson from '../Transform/ModelToJson'
 import Alarm from '../Realm/Alarm'
 import { store } from '../Containers/App'
 import Api from './Api'
+import Response from './Response'
 
 
 class AlarmListener {
@@ -82,14 +83,16 @@ class AlarmListener {
 
   syncWithServer() {
 
-    const unsynced = Alarm.unsynced()
-    const data = Object.keys(unsynced).map(key => unsynced[key])
-    const { auth } = store.getState()
-    this.api.sendAlarms(data.map(ModelToJson.alarm), auth.accessToken).then(resp => {
-      Response.resolve(resp).then(result => {
-        Alarm.sync(data)
+    Alarm.unsynced().then(alarms => {
+      const data = Object.keys(alarms).map(key => alarms[key])
+      const { auth } = store.getState()
+      this.api.sendAlarms({data: data.map(ModelToJson.alarm)}, auth.accessToken).then(resp => {
+        Response.resolve(resp).then(result => {
+          Alarm.sync(data)
+        })
       })
     })
+
   }
 
 }

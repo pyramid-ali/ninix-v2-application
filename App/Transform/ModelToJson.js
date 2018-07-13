@@ -59,7 +59,7 @@ const errorLog = model => ({
 
 const alarm = model => ({
   type: model.type,
-  duration: model.duration,
+  duration: model.repeat,
   register_at: moment(model.registerAt * 1000)
 })
 

@@ -5,7 +5,7 @@ export class Alarm {
   store (data) {
     Storage.write((realm) => {
         const lastRecord = realm.objects('Alarm').filtered(`type = "${data.type}" AND registerAt = ${data.registerAt}`)
-        this.isEmpty(lastRecord) ? realm.create('Alarm', data) : lastRecord[0].repeat += 1
+        this.isEmpty(lastRecord) ? realm.create('Alarm', data) : (lastRecord[0].repeat += 1, lastRecord[0].sync = false)
       },
       error => {
         console.tron.log({log: 'error saving alarm', error: error.message})
@@ -38,6 +38,7 @@ export class Alarm {
     Storage.write((realm) => {
         data.forEach(item => {
           const lastRecord = realm.objects('Alarm').filtered(`type = "${item.type}" AND registerAt = ${item.registerAt}`)
+          console.tron.log({item, lastRecord})
           if (!this.isEmpty(lastRecord)) {
             lastRecord[0].sync = true
           }
