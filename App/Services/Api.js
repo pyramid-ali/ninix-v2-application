@@ -172,7 +172,7 @@ const create = (baseURL = 'https://api.ninixco.com/api/v1') => {
    * @param data
    * @param token
    */
-  const sendAlarms = (data, token) => api.post('alarms', data, authorizationHeader(token))
+  const sendAlarms = (data, token) => api.post('ninix/alarms', data, authorizationHeader(token))
 
   /***
    *
