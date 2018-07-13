@@ -93,7 +93,7 @@ export const saveError = (state = INITIAL_STATE, action) => {
     ...state,
     errors: {
       ...state.errors,
-      [moment().now]: {
+      [now.unix()]: {
         body: payload.body,
         serial: payload.serial,
         registerAt: now

@@ -93,6 +93,7 @@ export const tasks = [
   // Connection logs
   takeLatest(NinixLogTypes.DID_CONNECT, NinixLogSagas.didConnect, api),
   takeLatest(NinixLogTypes.DID_DISCONNECT, NinixLogSagas.didDisconnect, api),
+  takeLatest(NinixLogTypes.SAVE_ERROR, NinixLogSagas.saveError, api),
   takeLatest(NinixLogTypes.SYNC_WITH_SERVER, NinixLogSagas.syncWithServer, api),
 
   // Data Sagas

@@ -17,7 +17,7 @@ export function *didDisconnect (api, action) {
 
 export function *saveError (api, action) {
   const { ninixLog, auth } = yield select()
-  yield syncConnectionLogs(api, ninixLog, auth)
+  yield syncErrorLog(api, ninixLog, auth)
   // yield put(NinixLogAction.syncWithServer())
 }
 
@@ -30,10 +30,11 @@ export function *syncWithServer (api, action) {
 export function *syncErrorLog(api, ninixLog, auth) {
   const errors = ninixLog.errors
   const data = Object.keys(errors).map(key => errors[key]).map(ModelToJson.errorLog)
-  if (!errors.length) {
+  if (!data.length) {
     return
   }
   const response = yield call(api.sendNinixErrorLog, {data}, auth.accessToken)
+  console.tron.log({response})
   try {
     const result = yield call(Response.resolve, response)
     // TODO: we should getting id's from response
