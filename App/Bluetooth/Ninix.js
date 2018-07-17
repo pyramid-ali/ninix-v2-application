@@ -14,7 +14,7 @@ export default class Ninix {
     // TODO: we can save device in async storage for later uses, but should we do this in ble package?
     this.device = device
     this.syncData = []
-    this.syncTimeout = 10
+    this.syncTimeout = 30
   }
 
   async discover () {
@@ -138,19 +138,25 @@ export default class Ninix {
   sync (listener) {
 
     // TODO: maybe we can split received data into 5 section for simulating one data per second
-
+    console.tron.log({log: 'ninix sync 1'})
     const endChar = Array.apply(null, {length: 20}).map(Function.call, Number)
+    console.tron.log({log: 'ninix sync 2', endChar, sync: this.syncCharacteristic})
     this.startSyncTimer(listener)
+    this.lastSyncPacketTime = moment()
+    console.tron.log({log: 'before monitor'})
     return this.syncCharacteristic.monitor((error, char) => {
+      console.tron.log({log: 'ninix sync 3', error, char})
       this.lastSyncPacketTime = moment()
       if (char) {
         const bytes = this.getCharacteristicBytes(char)
+        console.tron.log({log: 'ninix sync 4', bytes})
         if (_.isEqual(bytes, endChar)) {
           this.didSyncFinish(listener)
           return
         }
 
         const result = DataHandler.sync(bytes, this.differenceTime)
+        console.tron.log({log: 'ninix sync 5', result})
         this.syncData = [...this.syncData, ...result]
       }
     }, 'sync')
@@ -175,18 +181,17 @@ export default class Ninix {
 
   didSyncFail (listener) {
     this.syncData = []
-    listener(this.syncData)
+    listener(null, 'timeout error')
     CentralManager.cancelTransaction('sync')
     clearInterval(this.syncTimer)
   }
 
   startSyncTimer (listener) {
-
     this.syncTimer = setInterval(() => {
       if(moment().diff(this.lastSyncPacketTime, 's') > this.syncTimeout) {
         this.didSyncFail(listener)
       }
-    })
+    }, 1000)
 
   }
 
