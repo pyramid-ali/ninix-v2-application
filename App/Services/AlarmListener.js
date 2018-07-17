@@ -81,6 +81,9 @@ class AlarmListener {
   }
 
   syncWithServer() {
+    if (this.timer % 60 !== 0) {
+      return
+    }
     Alarm.unsynced().then(alarms => {
       const data = Object.keys(alarms).map(key => alarms[key]);
       const { auth } = store.getState();
@@ -89,7 +92,8 @@ class AlarmListener {
         .then(resp => {
           Response.resolve(resp).then(result => {
             Alarm.sync(data);
-          });
+          })
+            .catch(error => console.tron.log({error}));
         });
     });
   }

@@ -50,6 +50,7 @@ export const didConnect = (state = INITIAL_STATE, action) => {
 export const didDisconnect = (state = INITIAL_STATE, action) => {
   const { payload } = action;
   const now = moment();
+  console.tron.log({payload})
   return {
     ...state,
     connections: {

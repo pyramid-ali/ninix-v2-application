@@ -7,7 +7,10 @@ const resolve = response => {
     if (response.ok) {
       resolve(response.data);
     } else {
-      if (response.status === 401) {
+
+
+
+      if (response.status === 401 && !response.config.url.includes('login')) {
         console.tron.log({ log: '401 error', response });
         store.dispatch(AppAction.logout());
         return;

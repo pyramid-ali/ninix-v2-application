@@ -1,7 +1,7 @@
 import Storage from "./Storage";
 
 
-class TempVitalSign {
+export class TempVitalSign {
 
   store(data) {
     Storage.write(

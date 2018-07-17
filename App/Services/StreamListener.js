@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
 import moment from 'moment';
 import _ from 'lodash';
+import { store } from '../Containers/App';
 import VitalSign from '../Realm/VitalSign';
 import Api from './Api';
 import ModelToJson from '../Transform/ModelToJson';
@@ -16,6 +17,7 @@ class StreamListener {
     this.timer = null;
     this.isSyncing = false;
     this.api = Api.create();
+    this.records = []
   }
 
   listen(ninix) {
@@ -29,8 +31,8 @@ class StreamListener {
     const record = { ...data, registerAt: this.timer };
     this.store(record);
     this.broadcast(record);
-    // this.syncWithLocalDeviceData(this.ninix, data);
-    this.syncToServer(data);
+    this.syncWithLocalDeviceData(this.ninix, data);
+    this.syncToServer(record);
   }
 
   store(record) {
@@ -168,27 +170,36 @@ class StreamListener {
   }
 
   syncToServer(data) {
-    if (this.timer % 60 === 0) {
-      TempVitalSign.read().then(items => {
-        const records = [data, ..._.values(items)]
-        this.sendRecordsToServer(records)
-      })
-        .catch(error => {
-          console.tron.log({error})
-        })
+
+    if (this.records.length < 10) {
+      this.records = [...this.records, data]
+      return
     }
 
-    this.sendRecordsToServer([data])
+    const shouldBeSync = this.records
+    this.records = []
+
+    TempVitalSign.read().then(items => {
+      const records = [...shouldBeSync, ..._.values(items)]
+      this.sendRecordsToServer(records, shouldBeSync)
+    })
+      .catch(error => {
+        console.tron.log({error})
+      })
   }
 
-  sendRecordsToServer(records) {
+  sendRecordsToServer(records, data) {
+    const accessToken = store.getState().auth.accessToken
     this.api
-      .sendData({data: records.map(ModelToJson.vitalSign)})
+      .sendData({data: records.map(ModelToJson.vitalSign)}, accessToken)
       .then(resp => {
-        console.tron.log({sync: true})
-      })
-      .catch(error => {
-        TempVitalSign.store(records[0])
+        if (resp.ok) {
+          console.tron.log({sync: true})
+        }
+        else {
+          console.tron.log({resp})
+          TempVitalSign.storeArray(data)
+        }
       })
   }
 }
