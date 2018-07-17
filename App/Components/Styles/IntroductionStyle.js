@@ -5,33 +5,26 @@ export default StyleSheet.create({
   container: {
     flex: 1
   },
-  imageContainer: {
-    flex:4,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  image: {
-    width: 150,
-    height: 150,
-    resizeMode: 'contain'
-  },
-  textContainer: {
-    flex: 6,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
   title: {
+    fontSize: 40,
     textAlign: 'center',
-    marginHorizontal: 15,
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 15
+    padding: 20,
+    color: 'white',
+    fontFamily: 'PoiretOne-Regular'
   },
   description: {
-    textAlign: Platform.OS === 'ios' ? 'justify': 'center',
-    marginHorizontal: 15,
-    fontFamily: 'Amaranth-Regular',
-    fontSize: 16
-    // fontWeight: 'bold'
+    fontSize: 15,
+    lineHeight: 25,
+    textAlign: 'center',
+    padding: 30,
+    color: 'white',
+    fontFamily: 'PoiretOne-Regular',
+    fontWeight: 'bold'
+  },
+  wrapper: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

@@ -5676,7 +5676,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1:
+prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
@@ -6075,12 +6075,6 @@ react-native-menu@^0.23.0:
 react-native-nordic-dfu@pyramid-ali/react-native-nordic-dfu:
   version "1.1.2"
   resolved "https://codeload.github.com/pyramid-ali/react-native-nordic-dfu/tar.gz/70970a048bde263ebd1bd7cb53bc354485f6bf1a"
-
-react-native-pages@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-pages/-/react-native-pages-0.7.0.tgz#1ae1cddc136cdca54d3a61a47db79bae8d432fb8"
-  dependencies:
-    prop-types "^15.5.9"
 
 react-native-push-notification-ce@^3.1.6:
   version "3.1.7"

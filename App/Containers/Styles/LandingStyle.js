@@ -14,10 +14,9 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 55,
     alignSelf: 'center',
-    width: Metrics.screenWidth - 80,
-    height: 50
+    width: Metrics.screenWidth - 80
   },
   buttonText: {
     fontSize: 18,
@@ -25,6 +24,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     backgroundColor: Colors.primary,
     borderRadius: 5,
-    paddingVertical: 10
+    paddingVertical: 15,
+    fontFamily: 'Amaranth-Regular'
   }
 })

@@ -1,19 +1,19 @@
 // Libraries
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, TouchableOpacity } from 'react-native'
-import { Pages} from 'react-native-pages'
+import { View, Text, TouchableOpacity, StatusBar } from 'react-native'
+import Swiper from '@nart/react-native-swiper'
 
 // Dependencies
 import AppAction from '../Redux/AppRedux'
 import Introduction from '../Components/Introduction'
-import PageIndicator from '../Components/PageIndicator'
 
 // Data
 import introductions from '../Fixtures/IntroductionContent'
 
 // Styles
 import styles from './Styles/LandingStyle'
+import Colors from '../Themes/Colors'
 
 class Landing extends Component {
 
@@ -23,11 +23,14 @@ class Landing extends Component {
 
     return (
       <View style={styles.container}>
-        <Pages renderPager={this.renderPager.bind(this)}>
+        <StatusBar hidden />
+        <Swiper
+          loop={false}
+          activeDotColor={Colors.primary}
+        >
+          { this.renderPages() }
+        </Swiper>
 
-          {this.renderPages()}
-
-        </Pages>
         <TouchableOpacity
           onPress={() => {
             this.props.introduceApp()
@@ -35,7 +38,7 @@ class Landing extends Component {
           }}
           style={styles.buttonContainer}
         >
-          <Text style={styles.buttonText}>Let's Start</Text>
+          <Text style={styles.buttonText}>LET'S START</Text>
         </TouchableOpacity>
       </View>
     )
@@ -45,21 +48,11 @@ class Landing extends Component {
     return introductions.map((introduction, index) => {
       const {title, description, image} = introduction
       return (
-        <Introduction key={index} title={title} source={image}>
-          {description}
-        </Introduction>
+        <View style={{flex: 1}} key={index}>
+          <Introduction key={index} title={title} source={image} description={description} />
+        </View>
       )
     })
-  }
-
-  renderPager ({pages, progress}) {
-    return (
-      <PageIndicator
-        pages={pages}
-        progress={progress}
-        containerStyle={styles.indicatorContainerStyle}
-      />
-    )
   }
 }
 
