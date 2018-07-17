@@ -157,6 +157,9 @@ class Sleep extends Component {
   }
 
   stopSound() {
+    if (!this.sound) {
+      return;
+    }
     this.sound.stop(() => {
       this.sound.release();
       this.setState({ playing: false, progress: 0 });
