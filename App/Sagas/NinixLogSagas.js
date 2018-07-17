@@ -34,7 +34,6 @@ export function *syncErrorLog(api, ninixLog, auth) {
     return
   }
   const response = yield call(api.sendNinixErrorLog, {data}, auth.accessToken)
-  console.tron.log({response})
   try {
     const result = yield call(Response.resolve, response)
     // TODO: we should getting id's from response
