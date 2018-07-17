@@ -1,7 +1,7 @@
 // Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, ImageBackground, StatusBar } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 // Dependencies
@@ -20,15 +20,21 @@ class SplashScreen extends Component {
   render() {
     // TODO: we should have interactive animation here, user waiting must be acceptable
     return (
-      <View style={styles.container}>
-        <LottieView
-          ref={animation => {
-            this.animation = animation;
-          }}
-          source={require('../../assets/lotties/loader_animation.json')}
-        />
-        <Text style={styles.center}>NINIX</Text>
-      </View>
+      <ImageBackground
+        source={require('../Images/login-background.jpg')}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <StatusBar hidden />
+        <View style={styles.container}>
+          <LottieView
+            ref={animation => {
+              this.animation = animation;
+            }}
+            source={require('../../assets/lotties/loader_animation.json')}
+          />
+          <Text style={styles.center}>NINIX</Text>
+        </View>
+      </ImageBackground>
     );
   }
 }
