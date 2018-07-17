@@ -15,37 +15,58 @@ class StreamListener {
   }
 
   listen(ninix) {
+    this.ninix = ninix
     this.listener && this.listener.remove()
-    this.listener = ninix.stream((data) => {
-      this.setTimer()
-      const record = {...data, registerAt: this.timer}
-      this.saveTemporary(record)
-      this.save(record)
-      this.subjcet.next(record)
-      this.syncWithLocalDeviceData(ninix, data)
-      this.localData = [...this.localData, _.pick(data, ['temperature', 'respiratory', 'orientation', 'humidity', 'respMagnitude', 'registerAt'])]
-    })
+    this.listener = ninix.stream(this.dataListener.bind(this))
+  }
+
+  dataListener(data) {
+    this.setTimer()
+    const record = {...data, registerAt: this.timer}
+    this.store(record)
+    this.broadcast(record)
+    this.syncWithLocalDeviceData(this.ninix, data)
+    // this.localData = [...this.localData, _.pick(data, ['temperature', 'respiratory', 'orientation', 'humidity', 'respMagnitude', 'registerAt'])]
+  }
+
+  store(record) {
+    this.saveTemporary(record)
+    this.save(record)
+  }
+
+  broadcast(record) {
+    this.subjcet.next(record)
   }
 
   syncWithLocalDeviceData(ninix, data) {
     if (!this.isSyncing && (data.flashStore || data.ramStore)) {
+      console.tron.log({log: 'syncWithLocalDeviceData start'})
       this.isSyncing = true
-
       if (data.flashStore) {
-        ninix.flashSyncCommand().then(resp => console.tron.log({resp})).catch(error => this.isSyncing = false)
+        console.tron.log({log: 'data.flashStore'})
+        ninix.flashSyncCommand().then(this.startSyncWithNinix.bind(this)).catch(error => this.isSyncing = false)
       }
-      else {
-        ninix.ramSyncCommand().then(resp => console.tron.log({resp})).catch(error => this.isSyncing = false)
+      else if (data.ramStore) {
+        console.tron.log({log: 'data.ramStore'})
+        ninix.ramSyncCommand().then(this.startSyncWithNinix.bind(this)).catch(error => this.isSyncing = false)
       }
-
-      this.syncListener = ninix.sync((data) => {
-        this.isSyncing = false
-        this.syncListener.remove()
-        const result = this.convertSyncToNormalData(data)
-        this.saveArray(result)
-        this.localData = [...this.localData, ...result]
-      })
     }
+  }
+
+  startSyncWithNinix() {
+    this.syncListener = this.ninix.sync((data, error) => {
+      if (error) {
+        console.tron.log({error})
+        return
+      }
+      console.tron.log({log: 'startSyncWithNinix', data})
+      this.isSyncing = false
+      this.syncListener.remove()
+      const result = this.convertSyncToNormalData(data)
+      console.tron.log({log: 'startSyncWithNinix', result})
+      this.saveArray(result)
+      this.localData = [...this.localData, ...result]
+    })
   }
 
   setTimer() {
