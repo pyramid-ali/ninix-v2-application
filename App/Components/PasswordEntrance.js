@@ -81,7 +81,7 @@ PasswordEntrance.propTypes = {
 PasswordEntrance.defaultProps = {
   title: 'Password',
   description:
-    'please enter your password, password should not be smaller than 6 characters',
+    'please set your password, password should not be smaller than 6 characters',
   placeholder: 'Enter your password',
   fetching: false,
   valid: true,
