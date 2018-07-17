@@ -1,37 +1,24 @@
 // Libraries
-import React, { Component } from 'react'
-import {View, Text, ActivityIndicator} from 'react-native'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import PropTypes from 'prop-types';
 
 // Dependencies
-import Button from './Button'
-import TextInputWithIcon from './TextInputWithIcon'
+import Button from './Button';
+import TextInputWithIcon from './TextInputWithIcon';
 
 // Styles
-import Colors from '../Themes/Colors'
-import styles from './Styles/MobileEntranceStyle'
+import Colors from '../Themes/Colors';
+import styles from './Styles/MobileEntranceStyle';
 
 export default class MobileEntrance extends Component {
-
   render() {
-
-    const {
-      description,
-      fetching,
-      onChangeValue,
-      title,
-      value
-    } = this.props
+    const { description, fetching, onChangeValue, title, value } = this.props;
 
     return (
       <View>
-
-        <Text style={styles.title}>
-          { title }
-        </Text>
-        <Text style={styles.description}>
-          { description }
-        </Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
         <TextInputWithIcon
           icon="mobile"
           ref="mobileInput"
@@ -42,15 +29,20 @@ export default class MobileEntrance extends Component {
           value={value}
           editable={!fetching}
           onChangeText={onChangeValue}
-          placeholder='Enter your mobile'/>
-        {fetching ? <ActivityIndicator size={24}/> : this.renderActivateButton()}
+          placeholder="Enter your mobile"
+        />
+        {fetching ? (
+          <ActivityIndicator size={24} />
+        ) : (
+          this.renderActivateButton()
+        )}
       </View>
-    )
+    );
   }
 
   renderActivateButton() {
-    const {onPress, valid} = this.props
-    const {mobileInput} = this.refs
+    const { onPress, valid } = this.props;
+    const { mobileInput } = this.refs;
 
     return (
       <Button
@@ -58,15 +50,14 @@ export default class MobileEntrance extends Component {
         color={Colors.white}
         backgroundColor={Colors.dark}
         onPress={() => {
-          onPress()
-          mobileInput.blur()
-        }}>
+          onPress();
+          mobileInput.blur();
+        }}
+      >
         Confirm
       </Button>
-    )
-
+    );
   }
-
 }
 
 MobileEntrance.propTypes = {
@@ -76,8 +67,8 @@ MobileEntrance.propTypes = {
   onPress: PropTypes.func,
   title: PropTypes.string,
   valid: PropTypes.bool,
-  value: PropTypes.string
-}
+  value: PropTypes.string,
+};
 
 MobileEntrance.defaultProps = {
   description: 'Please Enter Your Mobile Number',
@@ -86,4 +77,4 @@ MobileEntrance.defaultProps = {
   onPress: () => {},
   title: 'Mobile Number',
   valid: true,
-}
+};

@@ -1,41 +1,47 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
+import { connect } from 'react-redux';
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 
 // Styles
-import styles from './Styles/EssentialInformationSliderStyle'
+import styles from './Styles/EssentialInformationSliderStyle';
 import SingleInputPage from '../Components/SingleInputPage';
 
 class EssentialInformationSlider extends Component {
-
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       step: 0,
-      height: ''
-    }
+      height: '',
+    };
 
-    this.lastStep = 4
+    this.lastStep = 4;
   }
 
-  componentDidMount () {
-    console.tron.log({children: this.props.children})
+  componentDidMount() {
+    console.tron.log({ children: this.props.children });
   }
 
-  render () {
+  render() {
     return (
       <KeyboardAvoidingView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
-        behavior='position'
+        behavior="position"
       >
         <View style={styles.contentWrapper}>
           <View style={styles.leftSide}>
             <View style={styles.item}>
               <Text style={styles.itemTitle}>Height</Text>
-              <Text style={styles.itemValue}>{ this.state.height || '-' } cm</Text>
+              <Text style={styles.itemValue}>
+                {this.state.height || '-'} cm
+              </Text>
             </View>
             <View style={styles.item}>
               <Text style={styles.itemTitle}>Weight</Text>
@@ -51,29 +57,34 @@ class EssentialInformationSlider extends Component {
             </View>
           </View>
           <View style={styles.rightSide}>
-            <SingleInputPage title='Height' suffix='cm' value={this.state.height} onChange={value => {
-              console.tron.log({value})
-              this.setState({height: value})
-            }}/>
+            <SingleInputPage
+              title="Height"
+              suffix="cm"
+              value={this.state.height}
+              onChange={value => {
+                console.tron.log({ value });
+                this.setState({ height: value });
+              }}
+            />
           </View>
         </View>
-        { this.renderFooter() }
+        {this.renderFooter()}
       </KeyboardAvoidingView>
-    )
+    );
   }
 
-  renderStep () {
+  renderStep() {
     switch (this.state.step) {
       case 0:
-        return
+        return;
       case 1:
-        return
+        return;
       case 2:
-        return
+        return;
     }
   }
 
-  renderFooter () {
+  renderFooter() {
     return (
       <View style={styles.footer}>
         <TouchableOpacity style={styles.footerButton}>
@@ -86,18 +97,19 @@ class EssentialInformationSlider extends Component {
           <Text style={styles.footerApply}>Next</Text>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-  }
-}
+const mapStateToProps = state => {
+  return {};
+};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+const mapDispatchToProps = dispatch => {
+  return {};
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(EssentialInformationSlider)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EssentialInformationSlider);

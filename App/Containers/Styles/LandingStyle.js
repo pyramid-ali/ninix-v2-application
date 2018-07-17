@@ -1,22 +1,22 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light
+    backgroundColor: Colors.light,
   },
   indicatorContainerStyle: {
     backgroundColor: 'white',
     paddingVertical: 15,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.5)'
+    borderColor: 'rgba(0, 0, 0, 0.5)',
   },
   buttonContainer: {
     position: 'absolute',
     bottom: 55,
     alignSelf: 'center',
-    width: Metrics.screenWidth - 80
+    width: Metrics.screenWidth - 80,
   },
   buttonText: {
     fontSize: 18,
@@ -25,6 +25,6 @@ export default StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: 5,
     paddingVertical: 15,
-    fontFamily: 'Amaranth-Regular'
-  }
-})
+    fontFamily: 'Amaranth-Regular',
+  },
+});

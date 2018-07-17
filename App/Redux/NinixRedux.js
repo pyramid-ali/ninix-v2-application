@@ -1,6 +1,6 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-import _ from 'lodash'
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
+import _ from 'lodash';
 // TODO: we can move battery info here
 /***
  * Initial state of login redux
@@ -15,51 +15,64 @@ export const INITIAL_STATE = Immutable({
   fullCharge: false,
   charging: false,
   lowBattery: false,
-  fetch: false
-})
+  fetch: false,
+});
 
-const { Types, Creators } = createActions({
-  getInformation: ['payload'],
-  setInformation: ['payload'],
-  updateBattery: ['payload'],
-}, {
-  prefix: 'ninix/'
-})
+const { Types, Creators } = createActions(
+  {
+    getInformation: ['payload'],
+    setInformation: ['payload'],
+    updateBattery: ['payload'],
+  },
+  {
+    prefix: 'ninix/',
+  }
+);
 
-export const NinixTypes = Types
+export const NinixTypes = Types;
 
 export const getInformation = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    fetch: true
-  }
-}
+    fetch: true,
+  };
+};
 
 export const setInformation = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+  const { payload } = action;
   return {
     ...state,
     ..._.pick(payload, ['name', 'firmware', 'revision', 'serial']),
     device: _.pick(payload.device, [
-      'isConnectable', 'rssi', 'serviceData', 'overflowServiceUUIDs',
-      'mtu', 'localName', 'manufacturerData', 'txPowerLevel',
-      'id', 'solicitedServiceUUIDs', 'name', 'serviceUUIDs']),
-    fetch: false
-  }
-}
+      'isConnectable',
+      'rssi',
+      'serviceData',
+      'overflowServiceUUIDs',
+      'mtu',
+      'localName',
+      'manufacturerData',
+      'txPowerLevel',
+      'id',
+      'solicitedServiceUUIDs',
+      'name',
+      'serviceUUIDs',
+    ]),
+    fetch: false,
+  };
+};
 
 export const updateBattery = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+  const { payload } = action;
   return {
     ...state,
-    ..._.pick(payload, ['battery', 'fullCharge', 'charging', 'lowBattery'])
-  }
-}
+    ..._.pick(payload, ['battery', 'fullCharge', 'charging', 'lowBattery']),
+  };
+};
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.GET_INFORMATION]: getInformation,
   [Types.SET_INFORMATION]: setInformation,
   [Types.UPDATE_BATTERY]: updateBattery,
-})
+});
 
-export default Creators
+export default Creators;

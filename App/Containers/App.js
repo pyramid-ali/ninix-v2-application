@@ -1,28 +1,25 @@
 // Libraries
-import React, { Component } from 'react'
-import { Provider } from 'react-redux'
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 
 // Dependencies
-import '../Config'
-import createStore from '../Redux'
-import DebugConfig from '../Config/DebugConfig'
-import RootContainer from './RootContainer'
-
+import '../Config';
+import createStore from '../Redux';
+import DebugConfig from '../Config/DebugConfig';
+import RootContainer from './RootContainer';
 
 // create store
-export const store = createStore()
+export const store = createStore();
 
 class App extends Component {
-  render () {
+  render() {
     return (
       <Provider store={store}>
-          <RootContainer />
+        <RootContainer />
       </Provider>
-    )
+    );
   }
 }
 
 // allow reactotron overlay for fast design in dev mode
-export default DebugConfig.useReactotron
-  ? console.tron.overlay(App)
-  : App
+export default (DebugConfig.useReactotron ? console.tron.overlay(App) : App);

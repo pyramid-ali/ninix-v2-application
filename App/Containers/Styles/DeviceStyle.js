@@ -1,43 +1,43 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
   },
   batteryContainer: {
     flex: 1,
   },
   connectedContainer: {
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   statusText: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   statusContainer: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   connect: {
     fontSize: 20,
     color: Colors.white,
     paddingBottom: 10,
     borderBottomColor: Colors.white,
-    borderBottomWidth: 2
+    borderBottomWidth: 2,
   },
   firmwareText: {
     textAlign: 'center',
-    color: Colors.dark
+    color: Colors.dark,
   },
   firmwareButton: {
     textAlign: 'center',
     color: Colors.dark,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   successText: {
-    color: Colors.secondary
+    color: Colors.secondary,
   },
   animationWrapper: {
     flex: 1,
@@ -52,7 +52,7 @@ export default StyleSheet.create({
   },
   connectedTitle: {
     textAlign: 'center',
-    fontSize: 25
+    fontSize: 25,
   },
   deviceName: {
     textAlign: 'center',
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   hardwareRevision: {
     textAlign: 'center',
@@ -73,51 +73,50 @@ export default StyleSheet.create({
   notConnectedContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   notConnectedTitle: {
     fontSize: 22,
     marginBottom: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   notConnectedDescription: {
     fontSize: 14,
     color: Colors.gray,
     textAlign: 'center',
-    padding: 20
+    padding: 20,
   },
   disconnectReason: {
     fontSize: 12,
     color: Colors.alert,
     textAlign: 'center',
     padding: 20,
-    marginTop: 20
+    marginTop: 20,
   },
   connectButton: {
     backgroundColor: Colors.primary,
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   disconnectButton: {
     backgroundColor: Colors.alert,
     paddingHorizontal: 15,
     paddingVertical: 5,
     marginHorizontal: 15,
-    marginVertical: 15
+    marginVertical: 15,
   },
   turnOffButton: {
     backgroundColor: Colors.dark,
     paddingHorizontal: 15,
     paddingVertical: 5,
     marginHorizontal: 15,
-    marginVertical: 5
+    marginVertical: 5,
   },
   connectedListSubtitle: {
-    color: Colors.gray
+    color: Colors.gray,
   },
   connectedRightTitle: {
     color: Colors.dark,
-    fontSize: 12
-  }
-
-})
+    fontSize: 12,
+  },
+});

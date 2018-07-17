@@ -1,6 +1,5 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
 /***
  * Initial state of login redux
@@ -8,8 +7,8 @@ import Immutable from 'seamless-immutable'
 export const INITIAL_STATE = Immutable({
   fetching: false,
   error: null,
-  tries: 0
-})
+  tries: 0,
+});
 
 /***
  * actions:
@@ -17,15 +16,18 @@ export const INITIAL_STATE = Immutable({
  * success: when server response ok with token properties
  * failure: when an error occurred to get user token properties
  */
-const { Types, Creators } = createActions({
-  request: ['mobile', 'password'],
-  didSuccess: null,
-  didFail: ['error']
-}, {
-  prefix: 'login/'
-})
+const { Types, Creators } = createActions(
+  {
+    request: ['mobile', 'password'],
+    didSuccess: null,
+    didFail: ['error'],
+  },
+  {
+    prefix: 'login/',
+  }
+);
 
-export const LoginTypes = Types
+export const LoginTypes = Types;
 
 /***
  *
@@ -38,9 +40,9 @@ export const request = (state = INITIAL_STATE, action) => {
     ...state,
     fetching: true,
     error: null,
-    tries: state.tries++
-  }
-}
+    tries: state.tries++,
+  };
+};
 
 /***
  *
@@ -49,14 +51,12 @@ export const request = (state = INITIAL_STATE, action) => {
  * @returns {{fetching: boolean, error: boolean}}
  */
 export const success = (state = INITIAL_STATE, action) => {
-
   return {
     ...state,
     fetching: false,
-    error: null
-  }
-}
-
+    error: null,
+  };
+};
 
 /***
  *
@@ -65,13 +65,13 @@ export const success = (state = INITIAL_STATE, action) => {
  * @returns {{error: *, fetching: boolean}}
  */
 export const failure = (state = INITIAL_STATE, action) => {
-  const { error } = action
+  const { error } = action;
   return {
     ...state,
     error,
-    fetching: false
-  }
-}
+    fetching: false,
+  };
+};
 
 /***
  * create reducer
@@ -80,6 +80,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_SUCCESS]: success,
   [Types.REQUEST]: request,
   [Types.DID_FAIL]: failure,
-})
+});
 
-export default Creators
+export default Creators;

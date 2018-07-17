@@ -1,26 +1,25 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
   },
 
-  banner: {
-  },
+  banner: {},
 
   inner: {
     height: Metrics.screenHeight * 0.4,
     backgroundColor: Colors.dark,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   outer: {
     height: 60,
     width: Metrics.screenWidth * 0.6,
     marginTop: -30,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   buttonStyle: {
@@ -29,29 +28,18 @@ export default StyleSheet.create({
   },
 
   wrapper: {
-    marginTop: 20
+    marginTop: 20,
   },
 
   title: {
     fontFamily: 'PoiretOne-Regular',
     marginLeft: 20,
-    marginTop: 20
+    marginTop: 20,
   },
 
   listTitle: {
     fontFamily: 'Courgette-Regular',
-  }
-
-
-
-
-
-
-
-
-
-
-
+  },
 
   // top: {
   //   flex: 5,
@@ -86,5 +74,4 @@ export default StyleSheet.create({
   //   alignSelf: 'center',
   //
   // }
-
-})
+});

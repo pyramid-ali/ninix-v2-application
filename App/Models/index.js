@@ -1,7 +1,4 @@
-import sounds from './Sounds'
-import durations from './Durations'
+import sounds from './Sounds';
+import durations from './Durations';
 
-export {
-  sounds,
-  durations
-}
+export { sounds, durations };

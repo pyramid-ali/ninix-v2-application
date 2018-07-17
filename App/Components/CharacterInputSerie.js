@@ -1,29 +1,23 @@
 // Libraries
-import React, { Component } from 'react'
-import { View, TextInput } from 'react-native'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { View, TextInput } from 'react-native';
+import PropTypes from 'prop-types';
 
 // Styles
-import styles from './Styles/CharacterInputSerieStyle'
+import styles from './Styles/CharacterInputSerieStyle';
 
 export default class CharacterInputSerie extends Component {
-
   constructor(props) {
-    super(props)
-    this.codeArray = new Array(props.size)
+    super(props);
+    this.codeArray = new Array(props.size);
   }
 
-  render () {
-    const {
-      containerStyle,
-      disabled,
-      placeholder,
-      size,
-    } = this.props
+  render() {
+    const { containerStyle, disabled, placeholder, size } = this.props;
 
     return (
       <View style={[styles.container, containerStyle]}>
-        {Array.from(new Array(size), (value, index) => (index)).map((index) => {
+        {Array.from(new Array(size), (value, index) => index).map(index => {
           return (
             <TextInput
               ref={index}
@@ -34,35 +28,33 @@ export default class CharacterInputSerie extends Component {
               maxLength={1}
               underlineColorAndroid="transparent"
               selectionColor="black"
-              placeholderTextColor='#ccc'
+              placeholderTextColor="#ccc"
               style={styles.input}
               placeholder={placeholder[index] || '-'}
-              onChangeText={(text) => this.textInputChange(text, index)}
+              onChangeText={text => this.textInputChange(text, index)}
             />
-          )
+          );
         })}
       </View>
-    )
+    );
   }
 
   getCodeFromArray() {
-    return this.codeArray.join('')
+    return this.codeArray.join('');
   }
 
   textInputChange(text, index) {
-    const { onFinish, size } = this.props
-    this.codeArray[index] = text
-    const code = this.getCodeFromArray()
-    if(code.length === size) {
-      onFinish(code)
-      this.refs[index].blur()
-    }
-    else {
-      if(text.length && index < size - 1) {
-        this.refs[index + 1].focus()
-      }
-      else if (text.length === 0 && index > 0) {
-        this.refs[index - 1].focus()
+    const { onFinish, size } = this.props;
+    this.codeArray[index] = text;
+    const code = this.getCodeFromArray();
+    if (code.length === size) {
+      onFinish(code);
+      this.refs[index].blur();
+    } else {
+      if (text.length && index < size - 1) {
+        this.refs[index + 1].focus();
+      } else if (text.length === 0 && index > 0) {
+        this.refs[index - 1].focus();
       }
     }
   }
@@ -73,13 +65,13 @@ CharacterInputSerie.propTypes = {
   containerStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.object,
-    PropTypes.array
+    PropTypes.array,
   ]),
   disabled: PropTypes.bool,
-  placeholder: PropTypes.arrayOf(PropTypes.string)
-}
+  placeholder: PropTypes.arrayOf(PropTypes.string),
+};
 
 CharacterInputSerie.defaultProps = {
   disabled: false,
-  placeholder: ['C', 'O', 'D', 'E']
-}
+  placeholder: ['C', 'O', 'D', 'E'],
+};

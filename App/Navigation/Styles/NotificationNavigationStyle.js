@@ -1,19 +1,19 @@
-import { StyleSheet } from 'react-native'
-import { Colors } from '../../Themes'
+import { StyleSheet } from 'react-native';
+import { Colors } from '../../Themes';
 
-const styles =  StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.secondary
+    backgroundColor: Colors.secondary,
   },
   label: {
-    fontSize: 12
+    fontSize: 12,
   },
   tab: {
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   indicator: {
-    backgroundColor: Colors.white
-  }
-})
+    backgroundColor: Colors.white,
+  },
+});
 
-export default styles
+export default styles;

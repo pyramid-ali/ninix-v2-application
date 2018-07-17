@@ -1,75 +1,74 @@
-import { NetInfo, AppState } from 'react-native'
-import { put, take } from 'redux-saga/effects'
-import { eventChannel } from 'redux-saga'
+import { NetInfo, AppState } from 'react-native';
+import { put, take } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 
-import AppAction from '../../Redux/AppRedux'
-import BluetoothAction from '../../Redux/BluetoothRedux'
-import CentralManager from '../../Bluetooth/CentralManager'
+import AppAction from '../../Redux/AppRedux';
+import BluetoothAction from '../../Redux/BluetoothRedux';
+import CentralManager from '../../Bluetooth/CentralManager';
 
-export function *setupAppStatusListener (channel) {
+export function* setupAppStatusListener(channel) {
   try {
     while (true) {
-      const appState = yield take(channel)
-      yield put(AppAction.didStateChange(appState))
+      const appState = yield take(channel);
+      yield put(AppAction.didStateChange(appState));
     }
+  } finally {
   }
-  finally {}
 }
 
-export function setupAppStatusListenerChannel () {
+export function setupAppStatusListenerChannel() {
   return eventChannel(emit => {
     const listener = nextAppState => {
-      emit(nextAppState)
-    }
-    AppState.addEventListener('change', listener)
+      emit(nextAppState);
+    };
+    AppState.addEventListener('change', listener);
     return () => {
-      AppState.removeEventListener('change', listener)
-    }
-  })
+      AppState.removeEventListener('change', listener);
+    };
+  });
 }
 
-export function *setupNetStatusListener (channel) {
+export function* setupNetStatusListener(channel) {
   try {
     while (true) {
-
-      const isConnected = yield take(channel)
-      yield put(AppAction.didConnectivityChange(isConnected))
-      if (isConnected) yield put(AppAction.sync())
+      const isConnected = yield take(channel);
+      yield put(AppAction.didConnectivityChange(isConnected));
+      if (isConnected) yield put(AppAction.sync());
     }
+  } finally {
   }
-  finally {}
 }
 
-export function setupNetStatusListenerChannel () {
+export function setupNetStatusListenerChannel() {
   return eventChannel(emit => {
     const listener = isConnected => {
-      emit(isConnected)
-    }
-    NetInfo.isConnected.addEventListener('connectionChange', listener)
+      emit(isConnected);
+    };
+    NetInfo.isConnected.addEventListener('connectionChange', listener);
     return () => {
-      AppState.isConnected.removeEventListener('connectionChange', listener)
-    }
-  })
+      AppState.isConnected.removeEventListener('connectionChange', listener);
+    };
+  });
 }
 
-export function *setupBluetoothStatusListener (channel) {
+export function* setupBluetoothStatusListener(channel) {
   try {
     while (true) {
-      const state = yield take(channel)
-      yield put(BluetoothAction.didStateChange(state))
+      const state = yield take(channel);
+      yield put(BluetoothAction.didStateChange(state));
     }
+  } finally {
   }
-  finally {}
 }
 
-export function setupBluetoothStatusListenerChannel () {
+export function setupBluetoothStatusListenerChannel() {
   return eventChannel(emit => {
     const listener = state => {
-      emit(state)
-    }
-    const subscription = CentralManager.addStateListener(listener, true)
+      emit(state);
+    };
+    const subscription = CentralManager.addStateListener(listener, true);
     return () => {
-      subscription.remove()
-    }
-  })
+      subscription.remove();
+    };
+  });
 }

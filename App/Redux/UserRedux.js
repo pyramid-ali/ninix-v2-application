@@ -1,7 +1,6 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-import moment from 'moment'
-
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
+import moment from 'moment';
 
 /***
  * Initial state of authentication redux
@@ -11,65 +10,66 @@ export const INITIAL_STATE = Immutable({
   loggedInAt: null,
   loggedOutAt: null,
   fetching: false,
-  error: null
-})
+  error: null,
+});
 
 /***
  * create actions
  */
-const { Types, Creators } = createActions({
-  loggedIn: null,
-  loggedOut: null,
-  changePassword: ['newPassword', 'oldPassword', 'onSuccess', 'onFail'],
-  failure: ['error'],
-  success: null,
-  end: null
-}, {
-  prefix: 'AUTHENTICATION_'
-})
+const { Types, Creators } = createActions(
+  {
+    loggedIn: null,
+    loggedOut: null,
+    changePassword: ['newPassword', 'oldPassword', 'onSuccess', 'onFail'],
+    failure: ['error'],
+    success: null,
+    end: null,
+  },
+  {
+    prefix: 'AUTHENTICATION_',
+  }
+);
 
-export const UserTypes = Types
+export const UserTypes = Types;
 
 export const loggedIn = (state = INITIAL_STATE, action) => {
-
   return {
     ...state,
     isLoggedIn: true,
-    loggedInAt: moment()
-  }
-
-}
+    loggedInAt: moment(),
+  };
+};
 
 export const loggedOut = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isLoggedIn: false,
-    loggedOutAt: moment()
-  }
-}
+    loggedOutAt: moment(),
+  };
+};
 
 export const changePassword = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    fetching: true
-  }
-}
+    fetching: true,
+  };
+};
 
 export const failure = (state = INITIAL_STATE, action) => {
-  const { error } = action
+  const { error } = action;
   return {
     ...state,
     fetching: false,
-    error
-  }
-}
+    error,
+  };
+};
 
 export const end = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    fetching: false
-  }
-}
+    fetching: false,
+  };
+};
 
 /***
  * create reducer
@@ -79,6 +79,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOGGED_OUT]: loggedOut,
   [Types.CHANGE_PASSWORD]: changePassword,
   [Types.END]: end,
-})
+});
 
-export default Creators
+export default Creators;

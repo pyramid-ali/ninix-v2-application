@@ -1,11 +1,11 @@
 // Libraries
-import React, { Component } from 'react'
-import { View, TextInput } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { View, TextInput } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
 
 // Styles
-import styles from './Styles/TextInputWithIconStyle'
+import styles from './Styles/TextInputWithIconStyle';
 
 export default class TextInputWithIcon extends Component {
   static propTypes = {
@@ -14,18 +14,18 @@ export default class TextInputWithIcon extends Component {
     size: PropTypes.number,
     placeholder: PropTypes.string,
     placeholderTextColor: PropTypes.string,
-    secureTextEntry: PropTypes.bool
-  }
+    secureTextEntry: PropTypes.bool,
+  };
 
   // Defaults for props
   static defaultProps = {
     icon: null,
     color: null,
     size: 24,
-    selectionColor: 'white'
-  }
+    selectionColor: 'white',
+  };
 
-  render () {
+  render() {
     const {
       color,
       size,
@@ -33,57 +33,50 @@ export default class TextInputWithIcon extends Component {
       containerStyle,
       style,
       ...textInput
-    } = this.props
+    } = this.props;
 
     return (
       <View style={[styles.container, containerStyle]}>
-        <Icon
-          style={styles.icon}
-          name={icon}
-          size={size}
-          color={color} />
+        <Icon style={styles.icon} name={icon} size={size} color={color} />
         <TextInput
           ref="textInput"
           underlineColorAndroid="transparent"
           style={[styles.textInput, style]}
-          {...textInput} />
+          {...textInput}
+        />
       </View>
-    )
+    );
   }
 
   focus() {
-    this.refs.textInput.focus()
+    this.refs.textInput.focus();
   }
 
   blur() {
-    this.refs.textInput.blur()
+    this.refs.textInput.blur();
   }
-
 }
 
 TextInputWithIcon.propTypes = {
   ...TextInput.propTypes,
-  color: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  color: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   size: PropTypes.number,
   icon: PropTypes.string,
   containerStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
-    PropTypes.object
+    PropTypes.object,
   ]),
   style: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
-    PropTypes.object
-  ])
-}
+    PropTypes.object,
+  ]),
+};
 
 TextInputWithIcon.defaultProps = {
   icon: null,
   color: null,
   size: 24,
-  selectionColor: 'white'
-}
+  selectionColor: 'white',
+};

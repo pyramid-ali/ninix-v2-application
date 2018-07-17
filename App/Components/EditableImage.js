@@ -1,17 +1,16 @@
 // Libraries
-import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ImagePicker from 'react-native-image-picker'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ImagePicker from 'react-native-image-picker';
+import PropTypes from 'prop-types';
 
 // Styles
-import Colors from '../Themes/Colors'
-import styles from './Styles/EditableImageStyle'
+import Colors from '../Themes/Colors';
+import styles from './Styles/EditableImageStyle';
 
 export default class EditableImage extends Component {
-
-  render () {
+  render() {
     const {
       icon,
       iconStyle,
@@ -19,53 +18,69 @@ export default class EditableImage extends Component {
       progress,
       source,
       size,
-      style
-    } = this.props
+      style,
+    } = this.props;
 
-    const innerStyle = this.styles()
+    const innerStyle = this.styles();
 
     return (
       <View style={styles.container}>
-        <Image style={[styles.image, innerStyle.image, style]} source={source} />
-        {
-          progress !== null ?
-            <View style={[styles.hover, innerStyle.image, {backgroundColor: `rgba(${Colors.blackRGB}, ${1 - progress / 200})`}]}>
-              <Text style={[styles.progressText, {fontSize: size / 3}]}>{progress}%</Text>
-            </View>
-            :
-            null
-        }
+        <Image
+          style={[styles.image, innerStyle.image, style]}
+          source={source}
+        />
+        {progress !== null ? (
+          <View
+            style={[
+              styles.hover,
+              innerStyle.image,
+              {
+                backgroundColor: `rgba(${Colors.blackRGB}, ${1 -
+                  progress / 200})`,
+              },
+            ]}
+          >
+            <Text style={[styles.progressText, { fontSize: size / 3 }]}>
+              {progress}%
+            </Text>
+          </View>
+        ) : null}
 
-        <View style={[styles.imageIconContainer, innerStyle.imageIconContainer, iconStyle]}>
+        <View
+          style={[
+            styles.imageIconContainer,
+            innerStyle.imageIconContainer,
+            iconStyle,
+          ]}
+        >
           <TouchableOpacity onPress={this.showImagePicker.bind(this)}>
             <Icon name={icon} size={size * 0.18} />
           </TouchableOpacity>
         </View>
       </View>
-    )
+    );
   }
 
-  showImagePicker () {
-    this.props.onStart()
-    ImagePicker.showImagePicker(null, this.props.onPress)
+  showImagePicker() {
+    this.props.onStart();
+    ImagePicker.showImagePicker(null, this.props.onPress);
   }
 
-  styles () {
-    const { size } = this.props
+  styles() {
+    const { size } = this.props;
     return StyleSheet.create({
       image: {
         width: size,
         height: size,
-        borderRadius: size / 2
+        borderRadius: size / 2,
       },
       imageIconContainer: {
         width: size / 3,
         height: size / 3,
-        borderRadius: size / 6
-      }
-    })
+        borderRadius: size / 6,
+      },
+    });
   }
-
 }
 
 EditableImage.propTypes = {
@@ -73,22 +88,19 @@ EditableImage.propTypes = {
   iconStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
-    PropTypes.object
+    PropTypes.object,
   ]),
   onStart: PropTypes.func,
   onPress: PropTypes.func,
   progress: PropTypes.number,
-  source: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.object
-  ]),
+  source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   size: PropTypes.number,
   style: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
-    PropTypes.object
-  ])
-}
+    PropTypes.object,
+  ]),
+};
 
 EditableImage.defaultProps = {
   icon: 'pencil',
@@ -96,4 +108,4 @@ EditableImage.defaultProps = {
   onPress: () => {},
   progress: 0,
   size: 150,
-}
+};

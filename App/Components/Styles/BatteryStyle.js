@@ -1,16 +1,16 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 import Metrics from '../../Themes/Metrics';
 import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   batteryWrapper: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   batteryBody: {
@@ -20,7 +20,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Colors.dark,
-    borderRadius: 5
+    borderRadius: 5,
   },
   redBorder: {
     borderColor: Colors.alert,
@@ -31,42 +31,42 @@ export default StyleSheet.create({
     borderColor: Colors.dark,
     borderRadius: 3,
     borderWidth: 2,
-    marginLeft: -2
+    marginLeft: -2,
   },
   batteryCharge: {
     fontSize: 40,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   batteryFooter: {
     fontSize: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   barContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   bar: {
     backgroundColor: Colors.dark,
     marginHorizontal: 1,
-    marginVertical: 1
+    marginVertical: 1,
   },
   lowBattery: {
-    backgroundColor: Colors.alert
+    backgroundColor: Colors.alert,
   },
   fullCharge: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   fullChargeTitle: {
     fontSize: 16,
-    color: Colors.white
+    color: Colors.white,
   },
   fullChargeDescription: {
-    fontSize: 12
+    fontSize: 12,
   },
   noBar: {
-    flex: 1
-  }
-})
+    flex: 1,
+  },
+});

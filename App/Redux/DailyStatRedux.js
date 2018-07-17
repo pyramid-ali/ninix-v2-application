@@ -1,27 +1,30 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-import moment from 'moment'
-import _ from 'lodash'
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
+import moment from 'moment';
+import _ from 'lodash';
 
 // define initial state when for first time launch
 export const INITIAL_STATE = Immutable({
-  data: {}
-})
+  data: {},
+});
 
 // define types and actions
-const { Types, Creators } = createActions({
-  set: ['payload'],
-  update: ['dailyStats'],
-  retrieveFromServer: null
-}, {
-  prefix: 'dailyStat/'
-})
+const { Types, Creators } = createActions(
+  {
+    set: ['payload'],
+    update: ['dailyStats'],
+    retrieveFromServer: null,
+  },
+  {
+    prefix: 'dailyStat/',
+  }
+);
 
-export const DailyStatTypes = Types
+export const DailyStatTypes = Types;
 
 export const set = (state = INITIAL_STATE, action) => {
-  const { payload } = action
-  const now = moment().format('YYYY-MM-DD')
+  const { payload } = action;
+  const now = moment().format('YYYY-MM-DD');
   return {
     ...state,
     data: {
@@ -30,30 +33,30 @@ export const set = (state = INITIAL_STATE, action) => {
         ...state.data[now],
         ...payload,
         registerAt: now,
-        sync: false
-      }
-    }
-
-  }
-}
+        sync: false,
+      },
+    },
+  };
+};
 
 export const update = (state = INITIAL_STATE, action) => {
-  const { dailyStats } = action
-  const data = dailyStats.reduce((acc, curr) => ({...acc, [curr.registerAt]: {...curr, sync: true}}), {})
+  const { dailyStats } = action;
+  const data = dailyStats.reduce(
+    (acc, curr) => ({ ...acc, [curr.registerAt]: { ...curr, sync: true } }),
+    {}
+  );
   return {
     ...state,
     data: {
       ...state.data,
-      ...data
-    }
-  }
-}
-
+      ...data,
+    },
+  };
+};
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET]: set,
-  [Types.UPDATE]: update
- })
+  [Types.UPDATE]: update,
+});
 
-
-export default Creators
+export default Creators;

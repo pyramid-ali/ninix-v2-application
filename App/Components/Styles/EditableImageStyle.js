@@ -1,9 +1,9 @@
-import { StyleSheet } from 'react-native'
-import Colors from '../../Themes/Colors'
+import { StyleSheet } from 'react-native';
+import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
   container: {
-    flex: -1
+    flex: -1,
   },
   imageIconContainer: {
     backgroundColor: Colors.white,
@@ -13,16 +13,16 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.black
+    borderColor: Colors.black,
   },
   hover: {
     position: 'absolute',
     alignSelf: 'center',
     backgroundColor: `rgba(${Colors.blackRGB}, 0.5)`,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   progressText: {
     color: Colors.white,
-  }
-})
+  },
+});

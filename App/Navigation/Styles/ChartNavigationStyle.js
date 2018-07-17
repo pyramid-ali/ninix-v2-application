@@ -1,16 +1,10 @@
-import { StyleSheet } from 'react-native'
-import { Colors } from '../../Themes'
+import { StyleSheet } from 'react-native';
+import { Colors } from '../../Themes';
 
-const styles =  StyleSheet.create({
-  container: {
+const styles = StyleSheet.create({
+  container: {},
+  label: {},
+  tab: {},
+});
 
-  },
-  label: {
-
-  },
-  tab: {
-
-  }
-})
-
-export default styles
+export default styles;

@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native'
-import Colors from "../../Themes/Colors";
+import { StyleSheet } from 'react-native';
+import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     fontSize: 40,
@@ -18,6 +18,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: Colors.gray,
     fontFamily: 'PoiretOne-Regular',
-    marginHorizontal: 15
-  }
-})
+    marginHorizontal: 15,
+  },
+});

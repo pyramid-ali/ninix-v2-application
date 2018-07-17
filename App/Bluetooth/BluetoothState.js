@@ -4,7 +4,7 @@ const states = {
   unsupported: 'Unsupported',
   unauthorized: 'Unauthorized',
   poweredOff: 'PoweredOff',
-  poweredOn: 'PoweredOn'
-}
+  poweredOn: 'PoweredOn',
+};
 
-export default states
+export default states;

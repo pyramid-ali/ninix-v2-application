@@ -1,93 +1,93 @@
-export default sounds = [
+export default (sounds = [
   {
     id: 1,
     title: 'Car',
     source: require('../Images/Sleep/program_car.png'),
     sound: 'sp_car_1_loop_priority.ogg',
-    background: '#663399'
+    background: '#663399',
   },
   {
     id: 2,
     title: 'Fan',
     source: require('../Images/Sleep/program_fan.png'),
     sound: 'sp_fan_1_loop_priority.ogg',
-    background: '#446CB3'
+    background: '#446CB3',
   },
   {
     id: 3,
     title: 'Hair Dryer',
     source: require('../Images/Sleep/program_hairdryer.png'),
     sound: 'sp_hairdryer_1_loop_priority.ogg',
-    background: '#1BBC9B'
+    background: '#1BBC9B',
   },
   {
     id: 4,
     title: 'Heart',
     source: require('../Images/Sleep/program_heart.png'),
     sound: 'sp_heart_1_loop_priority.ogg',
-    background: '#E87E04'
+    background: '#E87E04',
   },
   {
     id: 5,
     title: 'In Utero',
     source: require('../Images/Sleep/program_inutero.png'),
     sound: 'sp_inutero_1_loop.ogg',
-    background: '#F9BF3B'
+    background: '#F9BF3B',
   },
   {
     id: 6,
     title: 'Music Box',
     source: require('../Images/Sleep/program_musicbox.png'),
     sound: 'sp_musicbox_1_loop_priority.ogg',
-    background: '#2C3E50'
+    background: '#2C3E50',
   },
   {
     id: 7,
     title: 'Sea',
     source: require('../Images/Sleep/program_sea.png'),
     sound: 'sp_sea_1_loop_priority.ogg',
-    background: '#336E7B'
+    background: '#336E7B',
   },
   {
     id: 8,
     title: 'Shower',
     source: require('../Images/Sleep/program_shower.png'),
     sound: 'sp_shower_1_loop_priority.ogg',
-    background: '#CF000F'
+    background: '#CF000F',
   },
   {
     id: 9,
     title: 'Shush',
     source: require('../Images/Sleep/program_shush.png'),
     sound: 'sp_shush_1_loop_priority.ogg',
-    background: '#1E824C'
+    background: '#1E824C',
   },
   {
     id: 10,
     title: 'Stream',
     source: require('../Images/Sleep/program_stream.png'),
     sound: 'sp_stream_1_loop_priority.ogg',
-    background: '#D35400'
+    background: '#D35400',
   },
   {
     id: 11,
     title: 'Train',
     source: require('../Images/Sleep/program_train.png'),
     sound: 'sp_train_1_loop_priority.ogg',
-    background: '#6C7A89'
+    background: '#6C7A89',
   },
   {
     id: 12,
     title: 'Vacuum',
     source: require('../Images/Sleep/program_vacuum.png'),
     sound: 'sp_vacuum_1_loop_priority.ogg',
-    background: '#26C281'
+    background: '#26C281',
   },
   {
     id: 13,
     title: 'Washing',
     source: require('../Images/Sleep/program_washing.png'),
     sound: 'sp_washing_1_loop_priority.ogg',
-    background: '#19B5FE'
-  }
-]
+    background: '#19B5FE',
+  },
+]);

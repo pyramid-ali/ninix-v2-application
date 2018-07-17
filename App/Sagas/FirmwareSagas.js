@@ -1,114 +1,116 @@
-import { put, call, select, fork, take } from 'redux-saga/effects'
-import { DFUEmitter } from 'react-native-nordic-dfu'
-import { eventChannel, END } from 'redux-saga'
+import { put, call, select, fork, take } from 'redux-saga/effects';
+import { DFUEmitter } from 'react-native-nordic-dfu';
+import { eventChannel, END } from 'redux-saga';
 
-import CentralManager from '../Bluetooth/CentralManager'
-import FirmwareAction from '../Redux/FirmwareRedux'
-import BluetoothAction from '../Redux/BluetoothRedux'
-import JsonToModel from '../Transform/JsonToModel'
-import Response from '../Services/Response'
-import Api from '../Services/Api'
+import CentralManager from '../Bluetooth/CentralManager';
+import FirmwareAction from '../Redux/FirmwareRedux';
+import BluetoothAction from '../Redux/BluetoothRedux';
+import JsonToModel from '../Transform/JsonToModel';
+import Response from '../Services/Response';
+import Api from '../Services/Api';
 
-
-export function *checkLatestVersion(api) {
-
-  const { auth, ninix } = yield select()
+export function* checkLatestVersion(api) {
+  const { auth, ninix } = yield select();
   if (!ninix.firmware) {
-    yield put(FirmwareAction.didFail(null))
-    return
+    yield put(FirmwareAction.didFail(null));
+    return;
   }
 
-  const response = yield call(api.checkFirmwareVersion, auth.accessToken)
+  const response = yield call(api.checkFirmwareVersion, auth.accessToken);
   try {
-    const result = yield call(Response.resolve, response)
-    let path = null
+    const result = yield call(Response.resolve, response);
+    let path = null;
     if (result.firmware.version > ninix.firmware) {
-      const firmwareFile = yield call(Api.download, result.firmware.path, auth.accessToken)
-      path = firmwareFile.path()
+      const firmwareFile = yield call(
+        Api.download,
+        result.firmware.path,
+        auth.accessToken
+      );
+      path = firmwareFile.path();
     }
-    yield put(FirmwareAction.setLatestVersion({
-      ...JsonToModel.firmware(result.firmware),
-      path
-    }))
+    yield put(
+      FirmwareAction.setLatestVersion({
+        ...JsonToModel.firmware(result.firmware),
+        path,
+      })
+    );
+  } catch (e) {
+    yield put(
+      FirmwareAction.didFail(
+        e.message ||
+          'something went wrong while checking latest firmware version, try again'
+      )
+    );
   }
-  catch (e) {
-    yield put(FirmwareAction.didFail(e.message || 'something went wrong while checking latest firmware version, try again'))
-  }
-
 }
 
-export function *startUpdate() {
-  yield call([CentralManager, CentralManager.startUpdate])
+export function* startUpdate() {
+  yield call([CentralManager, CentralManager.startUpdate]);
 }
 
-export function *updateFirmware() {
-  const { firmware, ninix } = yield select()
-  yield fork(setupDFUProgress, yield call(setupDFUProgressChannel))
-  yield fork(setupDFUStateChange, yield call(setupDFUStateChangeChannel))
+export function* updateFirmware() {
+  const { firmware, ninix } = yield select();
+  yield fork(setupDFUProgress, yield call(setupDFUProgressChannel));
+  yield fork(setupDFUStateChange, yield call(setupDFUStateChangeChannel));
   try {
-    yield call([CentralManager, CentralManager.updateFirmware], firmware.path)
-    yield put(FirmwareAction.didUpdateSuccess())
-    yield put(BluetoothAction.connect(ninix.device))
+    yield call([CentralManager, CentralManager.updateFirmware], firmware.path);
+    yield put(FirmwareAction.didUpdateSuccess());
+    yield put(BluetoothAction.connect(ninix.device));
+  } catch (e) {
+    yield put(FirmwareAction.didUpdateFail(e.message));
   }
-  catch (e) {
-    yield put(FirmwareAction.didUpdateFail(e.message))
-  }
-
 }
 
-export function *setupDFUProgress (channel) {
+export function* setupDFUProgress(channel) {
   try {
     while (true) {
-      const payload = yield take(channel)
-      console.tron.log({log: 'dfu pr', payload})
-      yield put(FirmwareAction.dfuProgress(payload))
+      const payload = yield take(channel);
+      console.tron.log({ log: 'dfu pr', payload });
+      yield put(FirmwareAction.dfuProgress(payload));
     }
-  }
-  finally {
-    console.tron.log({log: 'setupDFUProgress finally'})
+  } finally {
+    console.tron.log({ log: 'setupDFUProgress finally' });
   }
 }
 
-export function setupDFUProgressChannel () {
+export function setupDFUProgressChannel() {
   return eventChannel(emit => {
     const listener = state => {
-      emit(state)
+      emit(state);
       if (state.percent === 100) {
-        emit(END)
+        emit(END);
       }
-    }
-    DFUEmitter.addListener("DFUProgress", listener)
+    };
+    DFUEmitter.addListener('DFUProgress', listener);
     return () => {
-      DFUEmitter.removeListener("DFUProgress")
-    }
-  })
+      DFUEmitter.removeListener('DFUProgress');
+    };
+  });
 }
 
-export function *setupDFUStateChange (channel) {
+export function* setupDFUStateChange(channel) {
   try {
     while (true) {
-      const {state} = yield take(channel)
-      yield put(FirmwareAction.dfuStateChange(state))
+      const { state } = yield take(channel);
+      yield put(FirmwareAction.dfuStateChange(state));
     }
+  } finally {
+    console.tron.log({ log: 'setupDFUStateChange finally' });
   }
-  finally {
-    console.tron.log({log: 'setupDFUStateChange finally'})
-  }
-
 }
 
-export function setupDFUStateChangeChannel () {
+export function setupDFUStateChangeChannel() {
   return eventChannel(emit => {
     const listener = state => {
-      emit(state)
+      emit(state);
       if (state.state === 'DFU_COMPLETED') {
-        emit(END)
+        emit(END);
       }
-    }
-    console.tron.log({log: 'add dfu state listenr'})
-    DFUEmitter.addListener("DFUStateChanged", listener)
+    };
+    console.tron.log({ log: 'add dfu state listenr' });
+    DFUEmitter.addListener('DFUStateChanged', listener);
     return () => {
-      DFUEmitter.removeListener("DFUStateChanged")
-    }
-  })
+      DFUEmitter.removeListener('DFUStateChanged');
+    };
+  });
 }

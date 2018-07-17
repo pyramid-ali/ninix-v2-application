@@ -1,112 +1,111 @@
 // Libraries
-import React, { Component } from 'react'
-import { View, Text, Animated, TouchableOpacity, StyleSheet } from 'react-native'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import {
+  View,
+  Text,
+  Animated,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import PropTypes from 'prop-types';
 
 // Styles
-import styles from './Styles/NinixDeviceStyle'
-import Colors from '../Themes/Colors'
+import styles from './Styles/NinixDeviceStyle';
+import Colors from '../Themes/Colors';
 
 export default class NinixDevice extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       blink: new Animated.Value(0),
-      stopAnimation: false
-    }
+      stopAnimation: false,
+    };
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.props.blink) {
       if (this.state.stopAnimation) {
         this.setState({
-          stopAnimation: false
-        })
+          stopAnimation: false,
+        });
       }
-      this.startAnimation()
-    }
-    else {
+      this.startAnimation();
+    } else {
       if (!this.state.stopAnimation) {
         this.setState({
-          stopAnimation: true
-        })
+          stopAnimation: true,
+        });
       }
     }
   }
 
   startAnimation() {
-    const { blink } = this.state
+    const { blink } = this.state;
 
     Animated.timing(blink, {
       toValue: 1,
-      duration: 1000
+      duration: 1000,
     }).start(() => {
-      blink.setValue(0)
+      blink.setValue(0);
       if (!this.state.stopAnimation) {
-        this.startAnimation()
+        this.startAnimation();
       }
-    })
+    });
   }
 
-  render () {
-    const {
-      containerStyle,
-      lightColor,
-      logo,
-      onPress
-    } = this.props
+  render() {
+    const { containerStyle, lightColor, logo, onPress } = this.props;
 
     const {
       outerCircleStyle,
       innerCircleStyle,
       lightContainerStyle,
       lightStyle,
-      logoStyle
-    } = this.styleSheets()
+      logoStyle,
+    } = this.styleSheets();
 
     const backgroundColor = this.state.blink.interpolate({
       inputRange: [0, 1],
-      outputRange: [lightColor, Colors.gray]
-    })
-
-
+      outputRange: [lightColor, Colors.gray],
+    });
 
     return (
       <View style={[styles.container, containerStyle]}>
         <View style={[styles.outerCircle, outerCircleStyle]}>
           <View style={[styles.innerCircle, innerCircleStyle]}>
             <TouchableOpacity onPress={onPress}>
-              <Text style={[logoStyle]}>{ logo.toUpperCase() }</Text>
+              <Text style={[logoStyle]}>{logo.toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
           <View style={[styles.lightContainer, lightContainerStyle]}>
-            <Animated.View style={[styles.light, lightStyle, {backgroundColor}]} />
+            <Animated.View
+              style={[styles.light, lightStyle, { backgroundColor }]}
+            />
           </View>
         </View>
       </View>
-    )
+    );
   }
 
   calculateFontSize(logo) {
-    const arr = logo.split('\n')
-    const length = arr.map(item => item.length)
-    length.sort((a, b) => b -a)
-    return length[0]
+    const arr = logo.split('\n');
+    const length = arr.map(item => item.length);
+    length.sort((a, b) => b - a);
+    return length[0];
   }
 
   styleSheets() {
-    const { size, logo } = this.props
+    const { size, logo } = this.props;
     return StyleSheet.create({
       outerCircleStyle: {
         width: size,
         height: size,
-        borderRadius: size / 2
+        borderRadius: size / 2,
       },
       innerCircleStyle: {
         width: size * 0.6,
         height: size * 0.6,
-        borderRadius: size * 0.3
+        borderRadius: size * 0.3,
       },
       lightContainerStyle: {
         width: size / 8,
@@ -118,15 +117,14 @@ export default class NinixDevice extends Component {
       lightStyle: {
         width: size / 18,
         height: size / 6,
-        borderRadius: size / 32
+        borderRadius: size / 32,
       },
       logoStyle: {
         textAlign: 'center',
-        fontSize: (4 / 5) * (size / this.calculateFontSize(logo))
-      }
-    })
+        fontSize: (4 / 5) * (size / this.calculateFontSize(logo)),
+      },
+    });
   }
-
 }
 
 NinixDevice.propTypes = {
@@ -134,16 +132,13 @@ NinixDevice.propTypes = {
   containerStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
-    PropTypes.object
+    PropTypes.object,
   ]),
-  lightColor: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ]),
+  lightColor: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   logo: PropTypes.string,
   onPress: PropTypes.func,
-  size: PropTypes.number
-}
+  size: PropTypes.number,
+};
 
 NinixDevice.defaultProps = {
   blink: true,
@@ -151,4 +146,4 @@ NinixDevice.defaultProps = {
   logo: 'NINIX',
   onPress: () => null,
   size: 250,
-}
+};

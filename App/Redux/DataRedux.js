@@ -1,90 +1,77 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
 export const INITIAL_STATE = Immutable({
   stream: [],
   sync: [],
-  temp: []
-})
+  temp: [],
+});
 
-const { Types, Creators } = createActions({
-  didReceiveData: ['data'],
-  didReceiveSync: ['data'],
-  didSyncEnd: null,
-  syncWithServer: null,
-  saveTemp: ['data'],
-  removeTemp: null
-}, {
-  prefix: 'data/'
-})
+const { Types, Creators } = createActions(
+  {
+    didReceiveData: ['data'],
+    didReceiveSync: ['data'],
+    didSyncEnd: null,
+    syncWithServer: null,
+    saveTemp: ['data'],
+    removeTemp: null,
+  },
+  {
+    prefix: 'data/',
+  }
+);
 
-export const DataTypes = Types
+export const DataTypes = Types;
 
 export const didReceiveData = (state = INITIAL_STATE, action) => {
-
-  const { stream } = state
-  const { data } = action
+  const { stream } = state;
+  const { data } = action;
   return {
     ...state,
-    stream: [
-      ...stream.slice(stream.length - 1000, stream.length),
-      data
-    ]
-  }
-}
+    stream: [...stream.slice(stream.length - 1000, stream.length), data],
+  };
+};
 
 export const didReceiveSync = (state = INITIAL_STATE, action) => {
-
-  const { data } = action
-  const { sync } = state
+  const { data } = action;
+  const { sync } = state;
   return {
     ...state,
-    sync: [
-      ...sync,
-      ...data
-    ]
-  }
-}
+    sync: [...sync, ...data],
+  };
+};
 
 export const saveTemp = (state = INITIAL_STATE, action) => {
-  const { temp } = state
-  const { data } =action
+  const { temp } = state;
+  const { data } = action;
   return {
     ...state,
-    temp: [
-      ...temp,
-      data
-    ]
-  }
-}
+    temp: [...temp, data],
+  };
+};
 
 export const removeTemp = (state = INITIAL_STATE, action) => {
-
   return {
     ...state,
-    temp: []
-  }
-}
+    temp: [],
+  };
+};
 
 export const didSyncEnd = (state = INITIAL_STATE, action) => {
-
-  const { sync, temp } = state
+  const { sync, temp } = state;
   return {
     ...state,
     sync: [],
-    temp: [
-      ...sync,
-      ...temp
-    ]
-  }
-}
+    temp: [...sync, ...temp],
+  };
+};
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_RECEIVE_DATA]: didReceiveData,
   [Types.DID_RECEIVE_SYNC]: didReceiveSync,
   [Types.SAVE_TEMP]: saveTemp,
   [Types.REMOVE_TEMP]: removeTemp,
-  [Types.DID_SYNC_END]: didSyncEnd
-})
+  [Types.DID_SYNC_END]: didSyncEnd,
+});
 
-export default Creators
+export default Creators;

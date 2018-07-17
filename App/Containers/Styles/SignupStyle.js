@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   formContainer: {
     flex: 1,
     paddingBottom: 20,
     paddingHorizontal: '10%',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   error: {
     padding: 5,
     backgroundColor: 'red',
-    color: 'white'
+    color: 'white',
   },
   barButton: {
-    color: 'white'
-  }
-})
+    color: 'white',
+  },
+});

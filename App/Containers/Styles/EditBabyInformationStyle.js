@@ -1,27 +1,27 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
 
   section: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
 
   inputContainer: {
     flex: 1,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray,
-    padding: 0
+    padding: 0,
   },
   labelStyle: {
     fontFamily: 'PoiretOne-Regular',
     fontWeight: 'normal',
-    color: Colors.black
+    color: Colors.black,
   },
   suffix: {
     fontFamily: 'PoiretOne-Regular',
@@ -32,7 +32,7 @@ export default StyleSheet.create({
   },
   sectionTitleContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   sectionTitle: {
     flex: 0,
@@ -44,15 +44,15 @@ export default StyleSheet.create({
     color: Colors.dark,
   },
   picker: {
-    flex: 1
+    flex: 1,
   },
 
   errorContainer: {
-    backgroundColor: Colors.alert
+    backgroundColor: Colors.alert,
   },
   errorText: {
     textAlign: 'center',
     margin: 10,
-    color: Colors.white
-  }
-})
+    color: Colors.white,
+  },
+});

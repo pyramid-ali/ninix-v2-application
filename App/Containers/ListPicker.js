@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
-import { ScrollView, Text, View } from 'react-native'
-import { connect } from 'react-redux'
-import {ListItem, Header} from 'react-native-elements'
+import React, { Component } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import { connect } from 'react-redux';
+import { ListItem, Header } from 'react-native-elements';
 
 // Styles
-import styles from './Styles/ListPickerStyle'
+import styles from './Styles/ListPickerStyle';
 import Colors from '../Themes/Colors';
-
 
 class ListPicker extends Component {
   // constructor (props) {
@@ -14,53 +13,61 @@ class ListPicker extends Component {
   //   this.state = {}
   // }
 
-  render () {
-
-    const { params } = this.props.navigation.state
+  render() {
+    const { params } = this.props.navigation.state;
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Header
           backgroundColor={params.backgroundHeader}
-          leftComponent={{ icon: 'arrow-left', color: '#fff', type: 'material-community', onPress: () => this.props.navigation.goBack() }}
+          leftComponent={{
+            icon: 'arrow-left',
+            color: '#fff',
+            type: 'material-community',
+            onPress: () => this.props.navigation.goBack(),
+          }}
           centerComponent={{ text: 'Select One', style: { color: '#fff' } }}
         />
 
         <ScrollView style={styles.container}>
-
-          { params.items.map((item, index) => {
-
+          {params.items.map((item, index) => {
             return (
               <ListItem
                 key={index}
                 title={item.label}
                 titleStyle={styles.labelStyle}
                 leftIcon={{ name: 'chevron-right', type: 'material-community' }}
-                rightIcon={params.value === item.value ? {name: 'check', type: 'material-community', color: Colors.primary} : null}
+                rightIcon={
+                  params.value === item.value
+                    ? {
+                        name: 'check',
+                        type: 'material-community',
+                        color: Colors.primary,
+                      }
+                    : null
+                }
                 onPress={() => {
-                  params.onChange(item.value)
-                  this.props.navigation.goBack()
+                  params.onChange(item.value);
+                  this.props.navigation.goBack();
                 }}
               />
-            )
-
-
+            );
           })}
-
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-  }
-}
+const mapStateToProps = state => {
+  return {};
+};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+const mapDispatchToProps = dispatch => {
+  return {};
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPicker)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ListPicker);

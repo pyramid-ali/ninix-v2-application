@@ -1,6 +1,6 @@
 class Form {
-  constructor () {
-    this.form = new FormData()
+  constructor() {
+    this.form = new FormData();
   }
   /***
    *
@@ -8,21 +8,20 @@ class Form {
    * @param type
    * @param name default is image
    */
-  appendImageToForm (uri: string, type: string, fileName, name = 'image') {
-    this.form.append(name, {uri, type, name: fileName})
-    return this
+  appendImageToForm(uri: string, type: string, fileName, name = 'image') {
+    this.form.append(name, { uri, type, name: fileName });
+    return this;
   }
 
-  build () {
-    return this.form
+  build() {
+    return this.form;
   }
-
 }
 
 const create = () => {
-  return new Form()
-}
+  return new Form();
+};
 
 export default {
-  create
-}
+  create,
+};

@@ -1,9 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
   },
   title: {
     textAlign: 'center',
@@ -19,15 +19,15 @@ export default StyleSheet.create({
   },
   chartWrapper: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   textWrapper: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   chartStyle: {
     flex: 1,
-    marginLeft: 16
-  }
-})
+    marginLeft: 16,
+  },
+});

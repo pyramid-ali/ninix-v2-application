@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
-
   container: {
     marginHorizontal: 5,
     height: 40,
@@ -20,10 +19,10 @@ export default StyleSheet.create({
   },
 
   activeSegment: {
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
   },
   activeSegmentText: {
-    color: 'white'
+    color: 'white',
   },
 
   rightBordered: {
@@ -34,6 +33,5 @@ export default StyleSheet.create({
   segmentText: {
     color: Colors.secondary,
     textAlign: 'center',
-  }
-
-})
+  },
+});

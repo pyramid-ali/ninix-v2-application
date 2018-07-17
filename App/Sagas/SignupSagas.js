@@ -1,8 +1,8 @@
-import { put, call } from 'redux-saga/effects'
-import SignupAction from '../Redux/SignupRedux'
-import Response from '../Services/Response'
-import AuthAction from '../Redux/AuthRedux'
-import Router from '../Navigation/Router'
+import { put, call } from 'redux-saga/effects';
+import SignupAction from '../Redux/SignupRedux';
+import Response from '../Services/Response';
+import AuthAction from '../Redux/AuthRedux';
+import Router from '../Navigation/Router';
 
 /***
  * request token send mobile code and if response is ok then call callback
@@ -10,20 +10,17 @@ import Router from '../Navigation/Router'
  * @param api
  * @param action
  */
-export function *requestToken (api, action) {
-
-  const { mobile, callback } = action
-  const response = yield call(api.requestRegisterToken, mobile)
+export function* requestToken(api, action) {
+  const { mobile, callback } = action;
+  const response = yield call(api.requestRegisterToken, mobile);
 
   try {
-    const data = yield call(Response.resolve, response)
-    yield put(SignupAction.didRequestSuccess())
-    callback(data.mobile)
+    const data = yield call(Response.resolve, response);
+    yield put(SignupAction.didRequestSuccess());
+    callback(data.mobile);
+  } catch (error) {
+    yield put(SignupAction.didRequestFail(error.message));
   }
-  catch (error) {
-    yield put(SignupAction.didRequestFail(error.message))
-  }
-
 }
 
 /***
@@ -31,19 +28,17 @@ export function *requestToken (api, action) {
  * @param api
  * @param action
  */
-export function *checkToken(api, action) {
-  const { mobile, token, callback } = action
-  const response = yield call(api.checkToken, mobile, token)
+export function* checkToken(api, action) {
+  const { mobile, token, callback } = action;
+  const response = yield call(api.checkToken, mobile, token);
 
   try {
-    const data = yield call(Response.resolve, response)
-    yield put(SignupAction.didRequestSuccess())
-    callback(data.mobile, data.token)
+    const data = yield call(Response.resolve, response);
+    yield put(SignupAction.didRequestSuccess());
+    callback(data.mobile, data.token);
+  } catch (error) {
+    yield put(SignupAction.didRequestFail(error.message));
   }
-  catch (error) {
-    yield put(SignupAction.didRequestFail(error.message))
-  }
-
 }
 
 /***
@@ -51,18 +46,16 @@ export function *checkToken(api, action) {
  * @param api
  * @param action
  */
-export function *register(api, action) {
-  const { mobile, token, password } = action
-  const response = yield call(api.register, mobile, token, password)
+export function* register(api, action) {
+  const { mobile, token, password } = action;
+  const response = yield call(api.register, mobile, token, password);
 
   try {
-    const token = yield call(Response.resolve, response)
-    yield put(SignupAction.didRequestSuccess())
-    yield put(AuthAction.saveToken(token))
-    yield put(Router.navigateToMain)
+    const token = yield call(Response.resolve, response);
+    yield put(SignupAction.didRequestSuccess());
+    yield put(AuthAction.saveToken(token));
+    yield put(Router.navigateToMain);
+  } catch (error) {
+    yield put(SignupAction.didRequestFail(error.message));
   }
-  catch (error) {
-    yield put(SignupAction.didRequestFail(error.message))
-  }
-
 }

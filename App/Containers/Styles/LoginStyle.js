@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
@@ -11,51 +11,51 @@ export default StyleSheet.create({
     width: Metrics.screenWidth,
     height: Metrics.screenHeight,
     justifyContent: 'center',
-    position: 'absolute'
+    position: 'absolute',
   },
   gradientBackground: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logoContainer: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
     fontSize: 80,
     color: Colors.white,
     width: Metrics.screenWidth,
     textAlign: 'center',
-    fontFamily: 'BerkshireSwash-Regular'
+    fontFamily: 'BerkshireSwash-Regular',
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   textInputContainerStyle: {
     alignSelf: 'center',
     width: Metrics.screenWidth - 60,
-    borderColor: 'white'
+    borderColor: 'white',
   },
   textInput: {
-    color: Colors.white
+    color: Colors.white,
   },
   buttonStyle: {
     alignSelf: 'center',
     width: Metrics.screenWidth - 60,
-    marginBottom: 15
+    marginBottom: 15,
   },
   linkContainer: {
     textAlign: 'center',
     fontSize: 14,
     color: Colors.white,
-    marginBottom: 25
+    marginBottom: 25,
   },
   link: {
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   footer: {
     width: Metrics.screenWidth,
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderTopColor: 'rgba(255, 255, 255, 0.7)',
-    borderTopWidth: 1
+    borderTopWidth: 1,
   },
   footerText: {
     width: Metrics.screenWidth,
@@ -73,13 +73,13 @@ export default StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderTopColor: 'rgba(255, 255, 255, 0.7)',
-    borderTopWidth: 1
+    borderTopWidth: 1,
   },
   error: {
     color: Colors.alert,
     marginHorizontal: 30,
     marginBottom: 10,
     padding: 10,
-    backgroundColor: Colors.white
-  }
-})
+    backgroundColor: Colors.white,
+  },
+});

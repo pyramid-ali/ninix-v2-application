@@ -12,7 +12,7 @@ const colors = {
   whiteRGB: '255,255,255',
   black: '#000',
   warning: '#F5AB35',
-  normal: '#4183D7'
-}
+  normal: '#4183D7',
+};
 
-export default colors
+export default colors;

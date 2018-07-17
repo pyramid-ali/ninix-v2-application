@@ -1,12 +1,12 @@
-import { StyleSheet } from 'react-native'
-import Colors from '../../Themes/Colors'
+import { StyleSheet } from 'react-native';
+import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
   container: {
     height: 40,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     borderBottomWidth: 1,
@@ -17,6 +17,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontSize: 25,
     fontWeight: 'bold',
-    color: Colors.dark
-  }
-})
+    color: Colors.dark,
+  },
+});

@@ -1,13 +1,13 @@
-import { TabNavigator, TabBarBottom } from 'react-navigation'
-import Dashboard from '../Containers/Dashboard'
-import Charts from '../Containers/Charts'
-import Profile from '../Containers/Profile'
-import Device from '../Containers/Device'
-import Settings from '../Containers/Settings'
-import Colors from '../Themes/Colors'
-import styles from './Styles/MainNavigationStyle'
-import Sleep from '../Containers/Sleep'
-import Notification from '../Containers/Notification'
+import { TabNavigator, TabBarBottom } from 'react-navigation';
+import Dashboard from '../Containers/Dashboard';
+import Charts from '../Containers/Charts';
+import Profile from '../Containers/Profile';
+import Device from '../Containers/Device';
+import Settings from '../Containers/Settings';
+import Colors from '../Themes/Colors';
+import styles from './Styles/MainNavigationStyle';
+import Sleep from '../Containers/Sleep';
+import Notification from '../Containers/Notification';
 
 const config = {
   tabBarComponent: TabBarBottom,
@@ -23,30 +23,31 @@ const config = {
     showLabel: true,
     style: styles.container,
     labelStyle: styles.label,
-    tabStyle: styles.tab
+    tabStyle: styles.tab,
   },
   initialRouteName: 'Dashboard',
-  order: [
-    'Sleep', 'Charts', 'Dashboard', 'Notification', 'Profile'
-  ]
-}
+  order: ['Sleep', 'Charts', 'Dashboard', 'Notification', 'Profile'],
+};
 
-const MainNavigation = TabNavigator({
-  Dashboard: {
-    screen: Dashboard
+const MainNavigation = TabNavigator(
+  {
+    Dashboard: {
+      screen: Dashboard,
+    },
+    Charts: {
+      screen: Charts,
+    },
+    Profile: {
+      screen: Profile,
+    },
+    Notification: {
+      screen: Notification,
+    },
+    Sleep: {
+      screen: Sleep,
+    },
   },
-  Charts: {
-    screen: Charts
-  },
-  Profile: {
-    screen: Profile
-  },
-  Notification: {
-    screen: Notification
-  },
-  Sleep: {
-    screen: Sleep
-  }
-}, config)
+  config
+);
 
-export default MainNavigation
+export default MainNavigation;

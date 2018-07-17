@@ -1,25 +1,25 @@
-import Realm from 'realm'
-import { Alarm } from './Alarm'
-import { VitalSign } from './VitalSign'
+import Realm from 'realm';
+import { Alarm } from './Alarm';
+import { VitalSign } from './VitalSign';
 
 export const write = (write, error = () => {}) => {
-  Realm.open({schema: [VitalSign, Alarm]})
+  Realm.open({ schema: [VitalSign, Alarm] })
     .then(realm => {
-      realm.write(() => write(realm))
-  })
-    .catch(e => error(e))
-}
+      realm.write(() => write(realm));
+    })
+    .catch(e => error(e));
+};
 
 export const read = (read, error = () => {}) => {
-  Realm.open({schema: [VitalSign, Alarm]})
+  Realm.open({ schema: [VitalSign, Alarm] })
     .then(read)
-    .catch(e => error(e))
-}
+    .catch(e => error(e));
+};
 
 export default {
   write,
-  read
-}
+  read,
+};
 
 // export default class Storage {
 //

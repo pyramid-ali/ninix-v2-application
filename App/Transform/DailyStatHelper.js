@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import moment from 'moment'
+import _ from 'lodash';
+import moment from 'moment';
 /***
  *
  * @param stats
@@ -7,8 +7,8 @@ import moment from 'moment'
  * @returns {Array}
  */
 export const getDatesFor = (stats, index) => {
-  return Object.keys(_.pickBy(stats, item => item[index]))
-}
+  return Object.keys(_.pickBy(stats, item => item[index]));
+};
 
 /***
  *
@@ -16,9 +16,9 @@ export const getDatesFor = (stats, index) => {
  * @param index
  */
 export const getLastDateFor = (stats, index) => {
-  const dates = getDatesFor(stats, index)
-  return dates.reduce((acc, curr) => curr > acc ? curr : acc, dates[0])
-}
+  const dates = getDatesFor(stats, index);
+  return dates.reduce((acc, curr) => (curr > acc ? curr : acc), dates[0]);
+};
 
 /***
  * return last stats if it exists or default value
@@ -28,13 +28,13 @@ export const getLastDateFor = (stats, index) => {
  * @returns number
  */
 export const getLastStatFor = (stats, index, defaultValue = null) => {
-  const lastDate = getLastDateFor(stats, index)
+  const lastDate = getLastDateFor(stats, index);
   if (lastDate) {
-    return stats[lastDate][index] || defaultValue
+    return stats[lastDate][index] || defaultValue;
   }
 
-  return defaultValue
-}
+  return defaultValue;
+};
 
 /***
  *
@@ -44,13 +44,13 @@ export const getLastStatFor = (stats, index, defaultValue = null) => {
  * @returns string | null
  */
 export const getTodayStatFor = (stats, index, defaultValue = null) => {
-  const today = moment().format('YYYY-MM-DD')
-  return _.get(stats, `${today}.${index}`, defaultValue)
-}
+  const today = moment().format('YYYY-MM-DD');
+  return _.get(stats, `${today}.${index}`, defaultValue);
+};
 
 export default {
   getDatesFor,
   getLastDateFor,
   getLastStatFor,
-  getTodayStatFor
-}
+  getTodayStatFor,
+};

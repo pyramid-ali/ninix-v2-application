@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native'
-import Colors from '../../Themes/Colors'
+import { StyleSheet } from 'react-native';
+import Colors from '../../Themes/Colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   animatedContainer: {
     position: 'absolute',
@@ -16,7 +16,7 @@ export default StyleSheet.create({
   outerCircle: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.dark
+    backgroundColor: Colors.dark,
   },
   innerCircle: {
     backgroundColor: Colors.white,
@@ -30,6 +30,6 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   light: {
-    backgroundColor: Colors.gray
-  }
-})
+    backgroundColor: Colors.gray,
+  },
+});

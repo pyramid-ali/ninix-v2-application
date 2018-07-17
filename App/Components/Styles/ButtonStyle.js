@@ -1,14 +1,14 @@
-import { StyleSheet } from 'react-native'
-import { Colors } from '../../Themes'
+import { StyleSheet } from 'react-native';
+import { Colors } from '../../Themes';
 
 export default StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   buttonContainer: {
     height: 50,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
     width: '100%',
@@ -18,12 +18,12 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     textAlign: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   disabled: {
     backgroundColor: 'transparent',
     color: Colors.gray,
     borderColor: Colors.gray,
     borderWidth: 1,
-  }
-})
+  },
+});

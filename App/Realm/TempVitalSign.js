@@ -1,6 +1,4 @@
-class TempVitalSign {
-
-}
+class TempVitalSign {}
 
 TempVitalSign.schema = {
   name: 'TempVitalSign',
@@ -8,9 +6,9 @@ TempVitalSign.schema = {
     temperature: 'float',
     respiratory: 'int',
     orientation: 'int',
-    humidity   : 'int',
-    registerAt : 'int'
-  }
-}
+    humidity: 'int',
+    registerAt: 'int',
+  },
+};
 
-export default TempVitalSign
+export default TempVitalSign;

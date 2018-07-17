@@ -1,22 +1,28 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Text } from 'react-native'
-import { Input, Icon } from 'react-native-elements'
-import styles from './Styles/DefaultTextInputStyle'
-import Colors from "../Themes/Colors"
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Text } from 'react-native';
+import { Input, Icon } from 'react-native-elements';
+import styles from './Styles/DefaultTextInputStyle';
+import Colors from '../Themes/Colors';
 
 export default class DefaultTextInput extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      focus: ''
-    }
+      focus: '',
+    };
   }
 
-  render () {
-
-    const { placeholder, label, icon, suffix, onChangeText, value, secureTextEntry } = this.props
+  render() {
+    const {
+      placeholder,
+      label,
+      icon,
+      suffix,
+      onChangeText,
+      value,
+      secureTextEntry,
+    } = this.props;
 
     return (
       <Input
@@ -26,34 +32,31 @@ export default class DefaultTextInput extends Component {
         secureTextEntry={secureTextEntry}
         labelStyle={styles.labelStyle}
         selectionColor={Colors.dark}
-        containerStyle={{marginLeft: 15, marginVertical: 15}}
+        containerStyle={{ marginLeft: 15, marginVertical: 15 }}
         placeholderTextColor={Colors.gray}
-        inputStyle={{fontFamily: 'PoiretOne-Regular', padding: 0}}
-        onFocus={() => this.setState({focus: true})}
-        onBlur={() => this.setState({focus: false})}
+        inputStyle={{ fontFamily: 'PoiretOne-Regular', padding: 0 }}
+        onFocus={() => this.setState({ focus: true })}
+        onBlur={() => this.setState({ focus: false })}
         onChangeText={onChangeText}
-        inputContainerStyle={[styles.inputContainer, {borderBottomColor: this.state.focus ? Colors.primary : Colors.gray}]}
+        inputContainerStyle={[
+          styles.inputContainer,
+          {
+            borderBottomColor: this.state.focus ? Colors.primary : Colors.gray,
+          },
+        ]}
         value={typeof value === 'number' ? value + '' : value}
         leftIcon={
-          <Icon
-            type='material-community'
-            name={icon}
-            size={24}
-            color='black'
-          />
+          <Icon type="material-community" name={icon} size={24} color="black" />
         }
-        rightIcon={
-          <Text style={styles.suffix}>{ suffix }</Text>
-        }
+        rightIcon={<Text style={styles.suffix}>{suffix}</Text>}
       />
-    )
+    );
   }
-
 }
 
 DefaultTextInput.defaultProps = {
-  secureTextEntry: false
-}
+  secureTextEntry: false,
+};
 
 DefaultTextInput.propTypes = {
   placeholder: PropTypes.string,
@@ -61,6 +64,5 @@ DefaultTextInput.propTypes = {
   icon: PropTypes.string,
   suffix: PropTypes.string,
   onChangeText: PropTypes.func.isRequired,
-  secureTextEntry: PropTypes.bool
-}
-
+  secureTextEntry: PropTypes.bool,
+};

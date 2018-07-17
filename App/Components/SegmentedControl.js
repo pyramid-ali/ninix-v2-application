@@ -1,42 +1,40 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { View, Text, TouchableOpacity } from 'react-native'
-import styles from './Styles/SegmentedControlStyle'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { View, Text, TouchableOpacity } from 'react-native';
+import styles from './Styles/SegmentedControlStyle';
 
 export default class SegmentedControl extends Component {
-
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      active: this.props.active
-    }
+      active: this.props.active,
+    };
   }
 
-  render () {
-
+  render() {
     return (
       <View style={[styles.container, this.props.style]}>
-        { this.renderList() }
+        {this.renderList()}
       </View>
-    )
+    );
   }
 
-  renderList () {
-    const { items, onChange } = this.props
+  renderList() {
+    const { items, onChange } = this.props;
     return items.map((item, index) => {
       return (
         <TouchableOpacity
           style={[
             styles.segment,
             this.state.active === index ? styles.activeSegment : null,
-            index < items.length - 1 ? styles.rightBordered : null
+            index < items.length - 1 ? styles.rightBordered : null,
           ]}
           key={index}
           onPress={() => {
             this.setState({
-              active: index
-            })
-            onChange(item, index)
+              active: index,
+            });
+            onChange(item, index);
           }}
         >
           <Text
@@ -48,8 +46,8 @@ export default class SegmentedControl extends Component {
             {item}
           </Text>
         </TouchableOpacity>
-      )
-    })
+      );
+    });
   }
 }
 
@@ -57,8 +55,8 @@ SegmentedControl.propTypes = {
   items: PropTypes.arrayOf(PropTypes.string).isRequired,
   active: PropTypes.number,
   onChange: PropTypes.func.isRequired,
-}
+};
 
 SegmentedControl.defaultProps = {
-  active: 0
-}
+  active: 0,
+};

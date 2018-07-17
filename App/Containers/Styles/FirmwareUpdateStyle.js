@@ -1,27 +1,27 @@
-import { StyleSheet } from 'react-native'
-import { Colors, Metrics } from '../../Themes/'
+import { StyleSheet } from 'react-native';
+import { Colors, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
   },
   wrapper: {
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
   },
   notConnectedTitle: {
     color: Colors.alert,
     fontSize: 20,
     textAlign: 'center',
-    marginVertical: 10
+    marginVertical: 10,
   },
   notConnectedText: {
     color: Colors.gray,
     fontSize: 14,
     textAlign: 'center',
     marginVertical: 10,
-    marginHorizontal: 40
+    marginHorizontal: 40,
   },
   error: {
     color: Colors.white,
@@ -38,18 +38,18 @@ export default StyleSheet.create({
     color: Colors.black,
     marginVertical: 10,
     fontSize: 16,
-    fontFamily: 'PoiretOne-Regular'
+    fontFamily: 'PoiretOne-Regular',
   },
   subtitle: {
     marginVertical: 10,
     textAlign: 'center',
     fontSize: 12,
-    fontFamily: 'PoiretOne-Regular'
+    fontFamily: 'PoiretOne-Regular',
   },
   description: {
     textAlign: 'center',
     fontSize: 14,
-    marginTop: 10
+    marginTop: 10,
   },
   button: {
     marginHorizontal: 30,
@@ -58,9 +58,9 @@ export default StyleSheet.create({
     padding: 10,
     borderRadius: 30,
     borderColor: Colors.dark,
-    borderWidth: 1
+    borderWidth: 1,
   },
   buttonText: {
-    color: Colors.dark
+    color: Colors.dark,
   },
-})
+});

@@ -1,7 +1,7 @@
-import { createActions, createReducer } from 'reduxsauce'
-import Immutable from 'seamless-immutable'
-import moment from 'moment'
-import _ from 'lodash'
+import { createActions, createReducer } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
+import moment from 'moment';
+import _ from 'lodash';
 
 /***
  * Initial state of login redux
@@ -20,76 +20,79 @@ export const INITIAL_STATE = Immutable({
   avgSpeed: null,
   speed: null,
   state: null,
-  successfulUpdate: false
-})
+  successfulUpdate: false,
+});
 
-const { Types, Creators } = createActions({
-  checkLatestVersion: null,
-  setLatestVersion: ['payload'],
-  startUpdate: null,
-  update: null,
-  dfuProgress: ['payload'],
-  dfuStateChange: ['state'],
-  didFail: ['error'],
-  didUpdateSuccess: null,
-  didUpdateFail: ['error'],
-  didLeaveUpdate: null
-}, {
-  prefix: 'firmware/'
-})
+const { Types, Creators } = createActions(
+  {
+    checkLatestVersion: null,
+    setLatestVersion: ['payload'],
+    startUpdate: null,
+    update: null,
+    dfuProgress: ['payload'],
+    dfuStateChange: ['state'],
+    didFail: ['error'],
+    didUpdateSuccess: null,
+    didUpdateFail: ['error'],
+    didLeaveUpdate: null,
+  },
+  {
+    prefix: 'firmware/',
+  }
+);
 
-export const FirmwareTypes = Types
+export const FirmwareTypes = Types;
 
 export const checkLatestVersion = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     fetch: true,
-    error: null
-  }
-}
+    error: null,
+  };
+};
 
 export const setLatestVersion = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+  const { payload } = action;
   return {
     ...state,
     ...payload,
     fetch: false,
-    error: null
-  }
-}
+    error: null,
+  };
+};
 
 export const didFail = (state = INITIAL_STATE, action) => {
-  const { error } = action
+  const { error } = action;
   return {
     ...state,
     error,
-    fetch: false
-  }
-}
+    fetch: false,
+  };
+};
 
 export const startUpdate = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     percent: 0,
     state: 'SENDING_COMMAND',
-    updating: true
-  }
-}
+    updating: true,
+  };
+};
 
 export const dfuProgress = (state = INITIAL_STATE, action) => {
-  const { payload } = action
+  const { payload } = action;
   return {
     ...state,
-    ...payload
-  }
-}
+    ...payload,
+  };
+};
 
 export const dfuStateChange = (state = INITIAL_STATE, action) => {
   return {
     ...state,
-    state: action.state
-  }
-}
+    state: action.state,
+  };
+};
 
 export const didUpdateSuccess = (state = INITIAL_STATE, action) => {
   return {
@@ -101,9 +104,9 @@ export const didUpdateSuccess = (state = INITIAL_STATE, action) => {
     avgSpeed: null,
     speed: null,
     state: null,
-    successfulUpdate: true
-  }
-}
+    successfulUpdate: true,
+  };
+};
 
 export const didUpdateFail = (state = INITIAL_STATE, action) => {
   return {
@@ -114,18 +117,17 @@ export const didUpdateFail = (state = INITIAL_STATE, action) => {
     partsTotal: null,
     avgSpeed: null,
     speed: null,
-    state: null
-  }
-}
+    state: null,
+  };
+};
 
 export const didLeaveUpdate = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     successfulUpdate: false,
-    error: false
-  }
-}
-
+    error: false,
+  };
+};
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.CHECK_LATEST_VERSION]: checkLatestVersion,
@@ -137,6 +139,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DID_UPDATE_SUCCESS]: didUpdateSuccess,
   [Types.DID_UPDATE_FAIL]: didUpdateFail,
   [Types.DID_LEAVE_UPDATE]: didLeaveUpdate,
-})
+});
 
-export default Creators
+export default Creators;

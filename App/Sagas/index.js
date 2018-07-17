@@ -1,45 +1,45 @@
-import { takeLatest, takeEvery, all } from 'redux-saga/effects'
-import Api from '../Services/Api'
+import { takeLatest, takeEvery, all } from 'redux-saga/effects';
+import Api from '../Services/Api';
 
 /* ------------- Types ------------- */
-import { AppTypes } from '../Redux/AppRedux'
-import { AuthTypes } from '../Redux/AuthRedux'
-import { BabyTypes } from '../Redux/BabyRedux'
-import { BluetoothTypes } from '../Redux/BluetoothRedux'
-import { DataTypes } from '../Redux/DataRedux'
-import { ForgotPasswordTypes } from '../Redux/ForgotPasswordRedux'
-import { LoginTypes } from '../Redux/LoginRedux'
-import { FatherTypes } from '../Redux/FatherRedux'
-import { FirmwareTypes } from '../Redux/FirmwareRedux'
-import { MotherTypes } from '../Redux/MotherRedux'
-import { SignupTypes } from '../Redux/SignupRedux'
-import { NinixTypes } from '../Redux/NinixRedux'
-import { NinixLogTypes } from '../Redux/NinixLogRedux'
-import { UserTypes } from '../Redux/UserRedux'
-import { DailyStatTypes } from '../Redux/DailyStatRedux'
+import { AppTypes } from '../Redux/AppRedux';
+import { AuthTypes } from '../Redux/AuthRedux';
+import { BabyTypes } from '../Redux/BabyRedux';
+import { BluetoothTypes } from '../Redux/BluetoothRedux';
+import { DataTypes } from '../Redux/DataRedux';
+import { ForgotPasswordTypes } from '../Redux/ForgotPasswordRedux';
+import { LoginTypes } from '../Redux/LoginRedux';
+import { FatherTypes } from '../Redux/FatherRedux';
+import { FirmwareTypes } from '../Redux/FirmwareRedux';
+import { MotherTypes } from '../Redux/MotherRedux';
+import { SignupTypes } from '../Redux/SignupRedux';
+import { NinixTypes } from '../Redux/NinixRedux';
+import { NinixLogTypes } from '../Redux/NinixLogRedux';
+import { UserTypes } from '../Redux/UserRedux';
+import { DailyStatTypes } from '../Redux/DailyStatRedux';
 
 /* ------------- Sagas ------------- */
 
-const AppSagas = require('./AppSagas')
-const AuthSagas = require('./AuthSagas')
-const BabySagas = require('./BabySagas')
-const BluetoothSagas  = require('./BluetoothSagas')
-const DataSagas = require('./DataSagas')
-const FirmwareSagas = require('./FirmwareSagas')
-const ForgotPasswordSagas = require('./ForgotPasswordSagas')
-const LoginSagas = require('./LoginSagas')
-const NinixSagas = require('./NinixSagas')
-const NinixLogSagas = require('./NinixLogSagas')
-const FatherSagas = require('./FatherSagas')
-const MotherSagas = require('./MotherSagas')
-const SignupSagas = require('./SignupSagas')
-const DailyStatSagas = require('./DailyStatSaga')
-const UserSagas = require('./UserSagas')
+const AppSagas = require('./AppSagas');
+const AuthSagas = require('./AuthSagas');
+const BabySagas = require('./BabySagas');
+const BluetoothSagas = require('./BluetoothSagas');
+const DataSagas = require('./DataSagas');
+const FirmwareSagas = require('./FirmwareSagas');
+const ForgotPasswordSagas = require('./ForgotPasswordSagas');
+const LoginSagas = require('./LoginSagas');
+const NinixSagas = require('./NinixSagas');
+const NinixLogSagas = require('./NinixLogSagas');
+const FatherSagas = require('./FatherSagas');
+const MotherSagas = require('./MotherSagas');
+const SignupSagas = require('./SignupSagas');
+const DailyStatSagas = require('./DailyStatSaga');
+const UserSagas = require('./UserSagas');
 
 /* ------------- API ------------- */
 // The API we use is only used from Sagas, so we create it here and pass along
 // to the sagas which need it.
-const api = Api.create()
+const api = Api.create();
 
 export const tasks = [
   // App Sagas
@@ -60,9 +60,21 @@ export const tasks = [
   takeLatest(SignupTypes.REGISTER, SignupSagas.register, api),
 
   // Forgot Password Sagas
-  takeLatest(ForgotPasswordTypes.REQUEST_TOKEN, ForgotPasswordSagas.requestToken, api),
-  takeLatest(ForgotPasswordTypes.CHECK_TOKEN, ForgotPasswordSagas.checkToken, api),
-  takeLatest(ForgotPasswordTypes.CHANGE_PASSWORD, ForgotPasswordSagas.changePassword, api),
+  takeLatest(
+    ForgotPasswordTypes.REQUEST_TOKEN,
+    ForgotPasswordSagas.requestToken,
+    api
+  ),
+  takeLatest(
+    ForgotPasswordTypes.CHECK_TOKEN,
+    ForgotPasswordSagas.checkToken,
+    api
+  ),
+  takeLatest(
+    ForgotPasswordTypes.CHANGE_PASSWORD,
+    ForgotPasswordSagas.changePassword,
+    api
+  ),
 
   // Parent Sagas
   takeLatest(FatherTypes.SAVE_INFORMATION, FatherSagas.saveInformation, api),
@@ -102,22 +114,28 @@ export const tasks = [
 
   // DailyStat Sagas
   takeLatest(DailyStatTypes.SET, DailyStatSagas.didAddNewRecord, api),
-  takeLatest(DailyStatTypes.RETRIEVE_FROM_SERVER, DailyStatSagas.retrieveFromServer, api),
+  takeLatest(
+    DailyStatTypes.RETRIEVE_FROM_SERVER,
+    DailyStatSagas.retrieveFromServer,
+    api
+  ),
 
   // User Sagas
   takeLatest(UserTypes.CHANGE_PASSWORD, UserSagas.changePassword, api),
 
   // firmware
-  takeLatest(FirmwareTypes.CHECK_LATEST_VERSION, FirmwareSagas.checkLatestVersion, api),
+  takeLatest(
+    FirmwareTypes.CHECK_LATEST_VERSION,
+    FirmwareSagas.checkLatestVersion,
+    api
+  ),
   takeLatest(FirmwareTypes.START_UPDATE, FirmwareSagas.startUpdate),
-  takeLatest(FirmwareTypes.UPDATE, FirmwareSagas.updateFirmware)
-]
+  takeLatest(FirmwareTypes.UPDATE, FirmwareSagas.updateFirmware),
+];
 
 /* ------------- Connect Types To Sagas ------------- */
-const root = function * root () {
+const root = function* root() {
+  yield all(tasks);
+};
 
-
-  yield all(tasks)
-}
-
-export default root
+export default root;
