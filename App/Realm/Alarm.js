@@ -38,7 +38,6 @@ export class Alarm {
     Storage.write((realm) => {
         data.forEach(item => {
           const lastRecord = realm.objects('Alarm').filtered(`type = "${item.type}" AND registerAt = ${item.registerAt}`)
-          console.tron.log({item, lastRecord})
           if (!this.isEmpty(lastRecord)) {
             lastRecord[0].sync = true
           }
