@@ -2,15 +2,20 @@ import { Subject } from 'rxjs';
 import moment from 'moment';
 import _ from 'lodash';
 import VitalSign from '../Realm/VitalSign';
+import Api from './Api';
+import ModelToJson from '../Transform/ModelToJson';
+import TempVitalSign from "../Realm/TempVitalSign";
 
 class StreamListener {
   constructor() {
+    this.missSynced = 0
     this.subjcet = new Subject();
     this.localData = [];
     this.temperatures = Array.apply(null, { length: 60 }).fill(null);
     this.respiratories = Array.apply(null, { length: 70 }).fill(null);
     this.timer = null;
     this.isSyncing = false;
+    this.api = Api.create();
   }
 
   listen(ninix) {
@@ -24,8 +29,8 @@ class StreamListener {
     const record = { ...data, registerAt: this.timer };
     this.store(record);
     this.broadcast(record);
-    this.syncWithLocalDeviceData(this.ninix, data);
-    // this.localData = [...this.localData, _.pick(data, ['temperature', 'respiratory', 'orientation', 'humidity', 'respMagnitude', 'registerAt'])]
+    // this.syncWithLocalDeviceData(this.ninix, data);
+    this.syncToServer(data);
   }
 
   store(record) {
@@ -162,7 +167,30 @@ class StreamListener {
     return result;
   }
 
-  syncToServer() {}
+  syncToServer(data) {
+    if (this.timer % 60 === 0) {
+      TempVitalSign.read().then(items => {
+        const records = [data, ..._.values(items)]
+        this.sendRecordsToServer(records)
+      })
+        .catch(error => {
+          console.tron.log({error})
+        })
+    }
+
+    this.sendRecordsToServer([data])
+  }
+
+  sendRecordsToServer(records) {
+    this.api
+      .sendData({data: records.map(ModelToJson.vitalSign)})
+      .then(resp => {
+        console.tron.log({sync: true})
+      })
+      .catch(error => {
+        TempVitalSign.store(records[0])
+      })
+  }
 }
 
 export default (streamListener = new StreamListener());

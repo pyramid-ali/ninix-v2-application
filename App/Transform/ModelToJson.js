@@ -34,6 +34,7 @@ const vitalSign = model => ({
   temperature: model.temperature,
   respiratory: model.respiratory,
   orientation: model.orientation,
+  resp_magnitude: model.respMagnitude,
   humidity: model.humidity,
   register_at: moment(model.registerAt * 1000),
 });
