@@ -3,6 +3,7 @@ package com.ninix;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import com.zmxv.RNSound.RNSoundPackage;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAndroidLocationEnablerPackage(),
             new RNFetchBlobPackage(),
             new BackgroundTimerPackage(),
             new RNSoundPackage(),

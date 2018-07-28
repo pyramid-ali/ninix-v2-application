@@ -55,6 +55,12 @@ class CentralManager {
       this.scanOptions,
       (error, device) => {
         // check device name
+
+        if (error) {
+          console.tron.log({device, error})
+          return;
+        }
+
         if (!device.name.toLowerCase().includes('ninix')) {
           return;
         }

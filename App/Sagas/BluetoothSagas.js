@@ -1,6 +1,7 @@
 // Libraries
 import { put, call, fork, select } from 'redux-saga/effects';
-import { PermissionsAndroid } from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 // Dependencies
 import { checkAndGetPermission } from '../Services/Permission';
@@ -92,7 +93,22 @@ export function* startScan() {
     PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
   );
   if (granted) {
+
+    if (Platform.OS === 'android') {
+      try {
+        yield call(RNAndroidLocationEnabler.promptForEnableLocationIfNeeded, {interval: 10000, fastInterval: 5000});
+      }
+      catch (error) {
+        yield put(
+          BluetoothAction.didFail(
+            'For scanning new device yous should enable location service'
+          )
+        );
+        return
+      }
+    }
     yield fork(setupScanListener, yield call(setupScanListenerChannel));
+
   } else {
     yield put(BluetoothAction.stopScan());
     yield put(

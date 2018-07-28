@@ -166,6 +166,7 @@ android {
 
 
 dependencies {
+    compile project(':react-native-android-location-enabler')
     compile project(':rn-fetch-blob')
     compile project(':react-native-background-timer')
     compile project(':react-native-sound')
