@@ -1,30 +1,31 @@
-export const services = {
-  main: {
-    uuid: '00001523-0000-1000-8000-00805f9b34fb',
-    chars: {
-      stream: '00001524-0000-1000-8000-00805f9b34fb',
-      synchronize: '00001525-0000-1000-8000-00805f9b34fb',
-      command: '00001526-0000-1000-8000-00805f9b34fb',
-      alarm: '00001527-0000-1000-8000-00805f9b34fb',
-    },
-  },
-  genericAccess: {
-    uuid: '00001800-0000-1000-8000-00805f9b34fb',
-  },
-  genericAttribute: {
-    uuid: '00001801-0000-1000-8000-00805f9b34fb',
-  },
-  deviceInformation: {
-    uuid: '0000180a-0000-1000-8000-00805f9b34fb',
-    chars: {
-      name: '00002a29-0000-1000-8000-00805f9b34fb',
-      serial: '00002a25-0000-1000-8000-00805f9b34fb',
-      revision: '00002a27-0000-1000-8000-00805f9b34fb',
-      firmware: '00002a26-0000-1000-8000-00805f9b34fb',
-    },
-  },
-};
+/**
+ * services uuid
+ * @type {{DEVICE_INFORMATION: string, GENERIC_ACCESS: string, GENERIC_ATTRIBUTE: string, MAIN: string}}
+ */
+export const SERVICES = {
+  DEVICE_INFORMATION: "0000180a-0000-1000-8000-00805f9b34fb",
+  GENERIC_ACCESS:     "00001800-0000-1000-8000-00805f9b34fb",
+  GENERIC_ATTRIBUTE:  "00001801-0000-1000-8000-00805f9b34fb",
+  MAIN:               "00001523-0000-1000-8000-00805f9b34fb",
+}
+
+/**
+ * characteristics uuid
+ * @type {{ALARM: string, COMMAND: string, STREAM: string, FIRMWARE: string, NAME: string, REVISION: string, SERIAL: string, SYNCHRONIZE: string}}
+ */
+export const CHARACTERISTICS = {
+  ALARM:       "00001527-0000-1000-8000-00805f9b34fb",
+  COMMAND:     "00001526-0000-1000-8000-00805f9b34fb",
+  STREAM:      "00001524-0000-1000-8000-00805f9b34fb",
+  FIRMWARE:    "00002a26-0000-1000-8000-00805f9b34fb",
+  NAME:        "00002a29-0000-1000-8000-00805f9b34fb",
+  REVISION:    "00002a27-0000-1000-8000-00805f9b34fb",
+  SERIAL:      "00002a25-0000-1000-8000-00805f9b34fb",
+  SYNCHRONIZE: "00001525-0000-1000-8000-00805f9b34fb",
+}
 
 export default {
-  services,
+  SERVICES,
+  CHARACTERISTICS
 };
+

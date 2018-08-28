@@ -3,4 +3,7 @@
 export default {
   // font scaling override - RN default is on
   allowTextFontScaling: true,
+  bluetooth: {
+    connectRetries: 3
+  }
 };

@@ -9,7 +9,7 @@ import TempVitalSign from "../Realm/TempVitalSign";
 
 class StreamListener {
   constructor() {
-    this.missSynced = 0
+    this.missSynced = 0;
     this.subjcet = new Subject();
     this.localData = [];
     this.temperatures = Array.apply(null, { length: 60 }).fill(null);
@@ -51,13 +51,13 @@ class StreamListener {
       if (data.flashStore) {
         console.tron.log({ log: 'data.flashStore' });
         ninix
-          .flashSyncCommand()
+          .syncFlash()
           .then(this.startSyncWithNinix.bind(this))
           .catch(error => (this.isSyncing = false));
       } else if (data.ramStore) {
         console.tron.log({ log: 'data.ramStore' });
         ninix
-          .ramSyncCommand()
+          .syncRam()
           .then(this.startSyncWithNinix.bind(this))
           .catch(error => (this.isSyncing = false));
       }

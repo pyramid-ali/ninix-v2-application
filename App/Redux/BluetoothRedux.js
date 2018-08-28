@@ -11,6 +11,8 @@ export const INITIAL_STATE = Immutable({
   isConnecting: false,
   isScanning: false,
   isInitiating: false,
+  manualDisconnect: false,
+  tries: 0,
   error: null,
   isSyncing: false,
   successSync: false,
@@ -32,7 +34,7 @@ const { Types, Creators } = createActions(
     turnOffDevice: null,
     reconnect: null,
     didConnect: ['device'],
-    didDisconnect: null,
+    didDisconnect: ['error'],
     didFail: ['error'],
     didSyncBegin: null,
     didSyncEnd: null,
@@ -91,6 +93,7 @@ export const connect = (state = INITIAL_STATE, action) => {
     ...state,
     isConnecting: true,
     isConnected: false,
+    tries: state.tries++,
     error: null,
   };
 };
@@ -102,6 +105,7 @@ export const didConnect = (state = INITIAL_STATE, action) => {
     isConnected: true,
     isConnecting: false,
     isScanning: false,
+    manualDisconnect: false,
     connectedAt: moment(),
   };
 };
@@ -113,12 +117,28 @@ export const setup = (state = INITIAL_STATE, action) => {
   };
 };
 
+export const turnOffDevice = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    manualDisconnect: true
+  };
+};
+
+export const disconnect = (state = INITIAL_STATE, action) => {
+  return {
+    ...state,
+    manualDisconnect: true
+  };
+};
+
 export const didDisconnect = (state = INITIAL_STATE, action) => {
   return {
     ...state,
     isConnected: false,
     isConnecting: false,
     isInitiating: false,
+    error: action.error,
+    tries: 0,
     disconnectedAt: moment(),
   };
 };
@@ -130,6 +150,8 @@ export const didFail = (state = INITIAL_STATE, action) => {
     isConnected: false,
     isConnecting: false,
     isInitiating: false,
+    isScanning: false,
+    tries: 0,
     error,
   };
 };
@@ -166,11 +188,13 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.STOP_SCAN]: stopScan,
   [Types.CONNECT]: connect,
   [Types.DID_CONNECT]: didConnect,
+  [Types.DISCONNECT]: disconnect,
   [Types.DID_DISCONNECT]: didDisconnect,
   [Types.CANCEL_CONNECTION]: cancel,
   [Types.DID_STATE_CHANGE]: didStateChange,
   [Types.DID_DISCOVER]: didDiscover,
   [Types.DID_FAIL]: didFail,
+  [Types.TURN_OFF_DEVICE]: turnOffDevice,
   [Types.DID_SYNC_BEGIN]: didSyncBegin,
   [Types.DID_SYNC_END]: didSyncEnd,
   [Types.DID_SETUP]: didSetup,

@@ -9,6 +9,7 @@ import CentralManager from '../Bluetooth/CentralManager';
 import BluetoothAction from '../Redux/BluetoothRedux';
 import NinixAction from '../Redux/NinixRedux';
 import Router from '../Navigation/Router';
+import NinixLogAction from "../Redux/NinixLogRedux";
 import StreamListener from '../Services/StreamListener';
 import AlarmListener from '../Services/AlarmListener';
 
@@ -20,56 +21,57 @@ import {
   setupBluetoothConnectionListenerChannel,
 } from './Channels/BluetoothChannel';
 
+
+/**
+ * connect to selected device
+ * @param action
+ */
 export function* connect(action) {
-  const { device } = action;
   try {
-    const connectedDevice = yield call(
+    const device = yield call(
       [CentralManager, CentralManager.connect],
-      device
+      action.device
     );
-    yield put(BluetoothAction.didConnect(connectedDevice));
-    CentralManager.stopScan();
-  } catch (error) {
+    yield put(BluetoothAction.didConnect(device));
+  }
+  catch (error) {
+    // TODO: we can change didFail to DidConnectFail
     yield put(BluetoothAction.didFail(error.message));
   }
+  finally {
+    CentralManager.stopScan();
+  }
 }
 
-export function* didConnect(action) {
-  const { device } = action;
-  yield fork(
-    setupBluetoothConnectionListener,
-    yield call(setupBluetoothConnectionListenerChannel, device)
-  );
-  yield put(BluetoothAction.setup(device));
-}
-
+/**
+ * setup ninix
+ * get device information, ge error logs, setup listeners
+ * @param action
+ */
 export function* setup(action) {
   const { device } = action;
-  const { auth } = yield select();
-  const ninix = yield call([CentralManager, CentralManager.setup]);
-  yield put(NinixAction.getInformation({ ninix, device }));
-  StreamListener.listen(ninix, { accessToken: auth.accessToken });
-  AlarmListener.listen(ninix);
+
+  const ninix = yield call([CentralManager, CentralManager.setup], {device});
+
+  const info = yield _getDeviceInformation(ninix)
+  yield _getDeviceErrorLogs(ninix, info.serial)
+  yield _setPacketListeners(ninix)
+
   yield put(BluetoothAction.didSetup({ ninix, device }));
+  yield _saveConnectionLog(info, ninix)
 }
 
-export function* didSetup(action) {
-  const { ninix, device } = action.payload;
-  const { nav } = yield select();
-  if (nav.index >= 1) {
-    if (nav.routes[nav.routes.length - 1].routeName === 'AddDevice') {
-      yield put(Router.backFromAddDevice);
-    }
-  }
-  // TODO: get device error log
-  // TODO: send device log to server
-}
-
+/**
+ * reconnect to last connected device
+ */
 export function* reconnect() {
   const { ninix } = yield select();
   yield put(BluetoothAction.connect(ninix.device));
 }
 
+/**
+ * cancel connection, for when device is connecting
+ */
 export function* cancelConnection() {
   const device = yield call(
     CentralManager.cancelConnection.bind(CentralManager)
@@ -79,15 +81,66 @@ export function* cancelConnection() {
   }
 }
 
+/**
+ * disconnect
+ */
 export function* disconnect() {
-  try {
-    yield CentralManager.disconnect();
-  } catch (error) {
-    yield put(BluetoothAction.didFail(error.message));
-    console.tron.error({ log: 'disconnect', error, message: error.message });
-  }
+  yield CentralManager.disconnect();
 }
 
+/**
+ | -----------------------------------------------------------------------
+ | ---------------------------- event listener ---------------------------
+ | -----------------------------------------------------------------------
+ */
+
+/**
+ * did device connect
+ * add connection listener and setup device after connection
+ * @param action
+ */
+export function* didConnect(action) {
+  const { device } = action;
+
+  yield fork(
+    setupBluetoothConnectionListener,
+    yield call(setupBluetoothConnectionListenerChannel, action.device)
+  );
+
+  yield put(BluetoothAction.setup(device));
+}
+
+/**
+ * did disconnect
+ */
+export function* didDisconnect() {
+  const { ninix } = yield select();
+  yield put(NinixLogAction.didDisconnect({ ...ninix }))
+}
+
+/**
+ * after setup ninix
+ */
+export function* didSetup() {
+
+  const { nav } = yield select();
+  if (nav.index >= 1) {
+    if (nav.routes[nav.routes.length - 1].routeName === 'AddDevice') {
+      yield put(Router.backFromAddDevice);
+    }
+  }
+
+}
+
+/**
+ | -----------------------------------------------------------------------
+ | ---------------------------- scan options -----------------------------
+ | -----------------------------------------------------------------------
+ */
+
+/**
+ * start scan
+ */
 export function* startScan() {
   const granted = yield checkAndGetPermission(
     PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
@@ -101,7 +154,7 @@ export function* startScan() {
       catch (error) {
         yield put(
           BluetoothAction.didFail(
-            'For scanning new device yous should enable location service'
+            'For scanning new devices you should enable location service'
           )
         );
         return
@@ -119,10 +172,53 @@ export function* startScan() {
   }
 }
 
+/**
+ * stop scan
+ */
 export function* stopScan() {
   CentralManager.stopScan();
 }
 
+/**
+ * turn off ninix
+ */
 export function* turnOffDevice() {
-  yield CentralManager.ninix.sendTurnOffDevice();
+  yield CentralManager.ninix.turnOff();
+}
+
+/**
+ * get device information
+ * @param ninix
+ * @private
+ */
+function* _getDeviceInformation(ninix) {
+  const information = yield call([ninix, ninix.getInformation]);
+  yield put(NinixAction.setInformation({...information, device: ninix.device}));
+  return information;
+}
+
+/**
+ * get device error logs
+ * @param ninix
+ * @param serial
+ * @private
+ */
+function* _getDeviceErrorLogs(ninix, serial) {
+  const errorLog = yield call([ninix, ninix.getErrorLog]);
+  yield put(NinixLogAction.saveError({ body: errorLog, serial }));
+  return errorLog;
+}
+
+/**
+ * packet listener
+ * @param ninix
+ * @private
+ */
+function* _setPacketListeners(ninix) {
+  StreamListener.listen(ninix);
+  AlarmListener.listen(ninix);
+}
+
+function* _saveConnectionLog(information, ninix) {
+  yield put(NinixLogAction.didConnect({...information, device: ninix.device}));
 }

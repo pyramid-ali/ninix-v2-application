@@ -1,280 +1,301 @@
-import UUID from './UUID';
-import DataHandler from './DataHandler';
-import { Base64 } from 'js-base64';
-import Commands from './Commands';
-import CentralManager from './CentralManager';
 import moment from 'moment';
 import _ from 'lodash';
 
+import CentralManager from './CentralManager';
+import PacketManager from './PacketManager';
+import COMMANDS from './Commands';
+import {SERVICES, CHARACTERISTICS} from "./UUID";
+import {
+  encodeHexToBase64,
+  decodeBase64ToHexString,
+  encodeUnixTimeToBase64WithLeadingZero,
+  decodeBase64ToInt32,
+  decodeBase64,
+  decodeBase64ToBytes, sequentialArray
+} from "./Utilities/Helper";
+
 // TODO: split codes to each own class
 export default class Ninix {
+
+  /**
+   * initialize Ninix Class
+   * @param options
+   * @return {Promise<void>}
+   */
+  static async init(options) {
+    const instance = new Ninix(options.device);
+    await instance.setup();
+    return instance;
+  }
+
+  /**
+   * constructor
+   * @param device
+   */
   constructor(device) {
-    // TODO: we can save device in async storage for later uses, but should we do this in ble package?
     this.device = device;
-    this.syncData = [];
+    this.syncPacketData = [];
     this.syncTimeout = 30;
   }
 
+  /**
+   * setup ninix to work with device
+   * @return {Promise<void>}
+   */
+  async setup() {
+    this.device = await this.discover();
+    await this.bond();
+    this.syncOffsetTime = this.getSyncTimeOffset();
+  }
+
+  /**
+   * discover service and characteristics
+   * @return {Promise<*>}
+   */
   async discover() {
-    this.device = await this.device.discoverAllServicesAndCharacteristics();
-    this.services = await this.getServices();
-    await this.getCharacteristics();
+    return await this.device.discoverAllServicesAndCharacteristics();
   }
 
-  async getTimestamp() {
-    const result = await this.sendTimestamp();
-    this.differenceTime = this.getDifferenceTimestamp(result);
-  }
-
-  async disconnect() {
-    return await this.device.cancelConnection();
-  }
-
-  async getServices() {
-    const services = await this.device.services();
-    return services.reduce((services, service) => {
-      return { ...services, [service.id]: { service } };
-    });
-  }
-
-  async getCharacteristics() {
-    await asyncForEach(Object.keys(this.services), async id => {
-      const service = this.services[id].service;
-      if (service) {
-        const characteristics = await service.characteristics();
-        this.services[id].characteristics = characteristics;
-        this.assignCharacteristics(characteristics);
-      }
-    });
-  }
-
-  assignCharacteristics(characteristics) {
-    characteristics.forEach(characteristic => {
-      switch (characteristic.uuid) {
-        case UUID.services.main.chars.stream:
-          this.streamCharacteristic = characteristic;
-          break;
-        case UUID.services.main.chars.command:
-          this.commandCharacteristic = characteristic;
-          break;
-        case UUID.services.main.chars.synchronize:
-          this.syncCharacteristic = characteristic;
-          break;
-        case UUID.services.main.chars.alarm:
-          this.alarmCharacteristic = characteristic;
-          break;
-        case UUID.services.deviceInformation.chars.name:
-          this.deviceNameCharacteristic = characteristic;
-          break;
-        case UUID.services.deviceInformation.chars.serial:
-          this.deviceSerialCharacteristic = characteristic;
-          break;
-        case UUID.services.deviceInformation.chars.revision:
-          this.deviceHardwareRevisionCharacteristic = characteristic;
-          break;
-        case UUID.services.deviceInformation.chars.firmware:
-          this.deviceFirmawareCharacteristic = characteristic;
-          break;
-      }
-    });
-  }
-
+  /**
+   * pair device with phone
+   * @return {Promise<NativeCharacteristic>}
+   */
   async bond() {
-    try {
-      return await this.commandCharacteristic.read();
-    } catch (error) {
-      return null;
-    }
+    return await this.device
+      .readCharacteristicForService(SERVICES.MAIN, CHARACTERISTICS.COMMAND)
+  }
+
+  /**
+   * there is an offset time for sync packet times that we should know, we can get this time offset with below method
+   * @return {Promise<number>}
+   */
+  async getSyncTimeOffset() {
+    const response = await this.sendTimestamp();
+    return decodeBase64ToInt32(response.value);
   }
 
   /* ----------------------------------- getting information ------------------------------------- */
+
+  /**
+   * get device name
+   * @return {Promise<string>}
+   */
   async getName() {
-    return await this.deviceNameCharacteristic.read().then(parseCharValue);
+    return await this.device
+      .readCharacteristicForService(SERVICES.DEVICE_INFORMATION, CHARACTERISTICS.NAME)
+      .then(char => char.value)
+      .then(decodeBase64);
   }
 
+  /**
+   * get device serial number
+   * @return {Promise<string>}
+   */
   async getSerial() {
-    return await this.deviceSerialCharacteristic.read().then(parseCharValue);
+    return await this.device
+      .readCharacteristicForService(SERVICES.DEVICE_INFORMATION, CHARACTERISTICS.SERIAL)
+      .then(char => char.value)
+      .then(decodeBase64)
+      .then(value => value || 'unknown');
   }
 
+  /**
+   * get device hardware revision
+   * @return {Promise<string>}
+   */
   async getHardwareRevision() {
-    return await this.deviceHardwareRevisionCharacteristic
-      .read()
-      .then(parseCharValue);
+    return await this.device
+      .readCharacteristicForService(SERVICES.DEVICE_INFORMATION, CHARACTERISTICS.REVISION)
+      .then(char => char.value)
+      .then(decodeBase64);
   }
 
+  /**
+   * get device firmware version
+   * @return {Promise<string>}
+   */
   async getFirmware() {
-    return await this.deviceFirmawareCharacteristic.read().then(parseCharValue);
+    return await this.device
+      .readCharacteristicForService(SERVICES.DEVICE_INFORMATION, CHARACTERISTICS.FIRMWARE)
+      .then(char => char.value)
+      .then(decodeBase64);
   }
 
+  /**
+   * get full information of device,
+   * include: name, serial, hardware revision, firmware
+   * @return {Promise<{name: string, serial: string, revision: string, firmware: string}>}
+   */
   async getInformation() {
-    const name = await this.getName();
-    const serial = await this.getSerial();
-    const revision = await this.getHardwareRevision();
-    const firmware = await this.getFirmware();
 
     return {
-      name,
-      serial,
-      revision,
-      firmware,
+      name: await this.getName(),
+      serial: await this.getSerial(),
+      revision: await this.getHardwareRevision(),
+      firmware: await this.getFirmware(),
     };
+
   }
 
+  /**
+   * get error log of device
+   * @return {Promise<string>}
+   */
   async getErrorLog() {
-    await this.sendCommand(Commands.errorLog);
-    return this.commandCharacteristic
-      .read()
-      .then(this.getCharacteristicBytesString);
+    await this.sendCommand(COMMANDS.LOG_ERRORS);
+    return this.device
+      .readCharacteristicForService(SERVICES.MAIN, CHARACTERISTICS.COMMAND)
+      .then(char => char.value)
+      .then(decodeBase64ToHexString);
   }
 
   /* ----------------------------------- end of getting information ------------------------------ */
 
+  /**
+   * send command
+   * command should be in hex format
+   * @param command
+   * @return {Promise<*>}
+   */
+  async sendCommand(command) {
+    return await this.device.writeCharacteristicWithResponseForService(SERVICES.MAIN, CHARACTERISTICS.COMMAND, encodeHexToBase64(command))
+  }
+
+  /**
+   * send timestamp to device
+   * @return {Promise<*>}
+   */
+  async sendTimestamp() {
+    const data = encodeUnixTimeToBase64WithLeadingZero(moment().unix());
+    return await this.device.writeCharacteristicWithResponseForService(SERVICES.MAIN, CHARACTERISTICS.COMMAND, data)
+  }
+
+  /**
+   * sync flash
+   * @return {Promise<*>}
+   */
+  async syncFlash() {
+    return await this.sendCommand(COMMANDS.SYNC_FLASH);
+  }
+
+  /**
+   * sync ram
+   * @return {Promise<*>}
+   */
+  async syncRam() {
+    return await this.sendCommand(COMMANDS.SYNC_RAM);
+  }
+
+  /**
+   * turn off device
+   * @return {Promise<*>}
+   */
+  async turnOff() {
+    return await this.sendCommand(COMMANDS.TURN_OFF);
+  }
+
+  /**
+   * update device firmware
+   * @return {Promise<*>}
+   */
+  async updateFirmware() {
+    return await this.sendCommand(COMMANDS.UPDATE_FIRMWARE);
+  }
+
+  /**
+   * reset device
+   * @return {Promise<*>}
+   */
+  async reset() {
+    return await this.sendCommand(COMMANDS.RESET);
+  }
+
+  /* -------------------------------------- */
+
+  // TODO: we should use RXJS here
   stream(listener) {
-    return this.streamCharacteristic.monitor((error, char) => {
+    return this.device
+      .monitorCharacteristicForService(SERVICES.MAIN, CHARACTERISTICS.STREAM, (error, char) => {
       if (char) {
-        const bytes = this.getCharacteristicBytes(char);
-        const result = DataHandler.stream(bytes);
-        listener(result);
+        listener(PacketManager.stream(decodeBase64ToBytes(char.value)));
       }
     });
   }
 
   sync(listener) {
     // TODO: maybe we can split received data into 5 section for simulating one data per second
-    console.tron.log({ log: 'ninix sync 1' });
-    const endChar = Array.apply(null, { length: 20 }).map(
-      Function.call,
-      Number
-    );
-    console.tron.log({
-      log: 'ninix sync 2',
-      endChar,
-      sync: this.syncCharacteristic,
-    });
-    this.startSyncTimer(listener);
+    const endCharacteristicValue = sequentialArray(20)
+
+    this._startSyncTimer(listener);
     this.lastSyncPacketTime = moment();
-    console.tron.log({ log: 'before monitor' });
-    return this.syncCharacteristic.monitor((error, char) => {
-      console.tron.log({ log: 'ninix sync 3', error, char });
+
+    return this.device
+      .monitorCharacteristicForService(SERVICES.MAIN, CHARACTERISTICS.SYNCHRONIZE, (error, char) => {
       this.lastSyncPacketTime = moment();
+
       if (char) {
-        const bytes = this.getCharacteristicBytes(char);
-        console.tron.log({ log: 'ninix sync 4', bytes });
-        if (_.isEqual(bytes, endChar)) {
-          this.didSyncFinish(listener);
+        const bytes = decodeBase64ToBytes(char.value);
+
+        if (_.isEqual(bytes, endCharacteristicValue)) {
+          this._didSyncFinish(listener);
           return;
         }
 
-        const result = DataHandler.sync(bytes, this.differenceTime);
-        console.tron.log({ log: 'ninix sync 5', result });
-        this.syncData = [...this.syncData, ...result];
+        const result = PacketManager.sync(bytes, this.syncOffsetTime);
+        this.syncPacketData = _.concat(this.syncPacketData, result);
       }
     }, 'sync');
   }
 
+  /**
+   * alarm listener
+   * @param listener
+   * @return {Promise<void>}
+   */
   alarmListener(listener) {
-    return this.alarmCharacteristic.monitor((error, char) => {
+    return this.device
+      .monitorCharacteristicForService(SERVICES.MAIN, CHARACTERISTICS.ALARM, (error, char) => {
       if (char) {
-        const bytes = this.getCharacteristicBytes(char);
-        const result = DataHandler.alarm(bytes);
-        listener(result);
+        listener(PacketManager.alarm(decodeBase64ToBytes(char.value)));
       }
     });
   }
 
-  didSyncFinish(listener) {
+  /**
+   * if sync finished
+   * @param listener
+   * @private
+   */
+  _didSyncFinish(listener) {
     listener(this.syncData);
     CentralManager.cancelTransaction('sync');
-    this.syncData = [];
+    this.syncPacketData = [];
     clearInterval(this.syncTimer);
   }
 
-  didSyncFail(listener) {
+  /**
+   * did sync failed
+   * @param listener
+   * @private
+   */
+  _didSyncFail(listener) {
     this.syncData = [];
     listener(null, 'timeout error');
     CentralManager.cancelTransaction('sync');
     clearInterval(this.syncTimer);
   }
 
-  startSyncTimer(listener) {
+  /**
+   * start a timer for sync timeout
+   * @param listener
+   * @private
+   */
+  _startSyncTimer(listener) {
     this.syncTimer = setInterval(() => {
       if (moment().diff(this.lastSyncPacketTime, 's') > this.syncTimeout) {
-        this.didSyncFail(listener);
+        this._didSyncFail(listener);
       }
     }, 1000);
   }
 
-  getCharacteristicBytesString(char) {
-    let arr = [];
-    const buf = Buffer.from(char.value, 'base64');
-    return buf.toString('hex');
-  }
-
-  getCharacteristicBytes(char) {
-    let arr = [];
-    const buf = Buffer.from(char.value, 'base64');
-    for (let i = 0; i < buf.length; i++) {
-      arr.push(buf[i]);
-    }
-    return arr;
-  }
-
-  async flashSyncCommand() {
-    return await this.sendCommand(Commands.flashSync);
-  }
-
-  async ramSyncCommand() {
-    return await this.sendCommand(Commands.ramSync);
-  }
-
-  async sendTurnOffDevice() {
-    CentralManager.forceDisconnect = true;
-    return await this.sendCommand(Commands.turnOff);
-  }
-
-  async sendUpdateFirmwareCommand() {
-    return await this.sendCommand(Commands.updateFirmware);
-  }
-
-  async sendResetCommand() {
-    return await this.sendCommand(Commands.reset);
-  }
-
-  async sendCommand(command) {
-    const value = String.fromCharCode(command);
-    const data = Base64.encode(value);
-    return await this.commandCharacteristic.writeWithResponse(data);
-  }
-
-  async sendTimestamp() {
-    const timestamp = moment().unix();
-    const buffer = Buffer.alloc(5, 0);
-    buffer.writeUInt32LE(timestamp, 1);
-    const data = buffer.toString('Base64');
-
-    return await this.commandCharacteristic.writeWithResponse(data);
-  }
-
-  getDifferenceTimestamp(characteristic) {
-    let arr = this.getCharacteristicBytes(characteristic).reverse();
-    let value = 0;
-    for (let i = 0; i < 4; i++) {
-      const shift = (3 - i) * 8;
-      value += arr[i] << shift;
-    }
-
-    return value;
-  }
 }
-
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
-
-function parseCharValue(char) {
-  return Base64.decode(char.value);
-}
-
-// TODO: we can create a class for working with bytes, like convert base64 string to bytes or inverse

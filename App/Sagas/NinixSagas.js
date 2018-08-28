@@ -7,7 +7,7 @@ export function* getInformation(action) {
   const information = yield call([payload.ninix, payload.ninix.getInformation]);
   const data = { ...information, serial: 123456789, device: payload.device };
   yield put(NinixAction.setInformation(data));
-  yield put(NinixLogAction.didConnect(data));
+  yield put(NinixLogAction._didConnect(data));
   yield getErrorLog(payload.ninix, data);
 }
 

@@ -61,7 +61,7 @@ class Settings extends Component {
                 { text: 'Cancel', style: 'cancel' },
                 {
                   text: 'OK',
-                  onPress: CentralManager.ninix.sendResetCommand(() => {
+                  onPress: CentralManager.ninix.reset(() => {
                     Alert.alert('Success', 'device did reset successfully', [
                       { text: 'OK' },
                     ]);
@@ -90,7 +90,7 @@ class Settings extends Component {
                 { text: 'Cancel', style: 'cancel' },
                 {
                   text: 'OK',
-                  onPress: CentralManager.ninix.sendTurnOffDevice().then(() => {
+                  onPress: CentralManager.ninix.turnOff().then(() => {
                     Alert.alert('Success', 'device turned off successfully', [
                       { text: 'OK' },
                     ]);

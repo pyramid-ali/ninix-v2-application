@@ -96,6 +96,7 @@ export const tasks = [
   takeLatest(BluetoothTypes.DID_SETUP, BluetoothSagas.didSetup),
   takeLatest(BluetoothTypes.RECONNECT, BluetoothSagas.reconnect),
   takeLatest(BluetoothTypes.DISCONNECT, BluetoothSagas.disconnect),
+  takeLatest(BluetoothTypes.DID_DISCONNECT, BluetoothSagas.didDisconnect),
   takeLatest(BluetoothTypes.CANCEL_CONNECTION, BluetoothSagas.cancelConnection),
   takeLatest(BluetoothTypes.TURN_OFF_DEVICE, BluetoothSagas.turnOffDevice),
 

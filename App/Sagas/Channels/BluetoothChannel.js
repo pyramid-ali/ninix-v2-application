@@ -3,11 +3,15 @@ import { eventChannel, END } from 'redux-saga';
 import { put, take, select } from 'redux-saga/effects';
 
 // Dependencies
+import AppConfig from "../../Config/AppConfig";
 import BluetoothAction from '../../Redux/BluetoothRedux';
 import CentralManager from '../../Bluetooth/CentralManager';
 import FirmwareAction from '../../Redux/FirmwareRedux';
-import NinixLogAction from '../../Redux/NinixLogRedux';
 
+/**
+ * setup scan listener
+ * @param channel
+ */
 export function* setupScanListener(channel) {
   try {
     while (true) {
@@ -19,59 +23,62 @@ export function* setupScanListener(channel) {
   }
 }
 
+/**
+ * setup scan listener channel
+ * @return {Channel<any>}
+ */
 export function setupScanListenerChannel() {
   return eventChannel(emit => {
-    const listener = state => {
-      emit(state);
-    };
-    CentralManager.scanForDevices(listener);
+    CentralManager.scanForDevices(state => emit(state));
     return () => {
       CentralManager.stopScan();
     };
   });
 }
 
+/**
+ * setup bluetooth connection listener
+ * @param channel
+ */
 export function* setupBluetoothConnectionListener(channel) {
   try {
     while (true) {
       const { error, device } = yield take(channel);
-      const state = yield select();
-      if (state.firmware.updating) {
+      const { bluetooth, firmware } = yield select()
+
+      if (firmware.updating) {
         yield put(FirmwareAction.update());
       }
-      yield put(NinixLogAction.didDisconnect({ ...state.ninix }));
-      if (CentralManager.forceDisconnect || state.firmware.updating) {
-        yield put(BluetoothAction.didDisconnect());
-        CentralManager.forceDisconnect = false;
-        CentralManager.tries = 0;
-      } else {
-        if (CentralManager.tries <= 3) {
-          yield put(BluetoothAction.connect(device));
-        } else {
-          yield put(
-            BluetoothAction.didFail(
-              error ? error.message : 'Please clear bound information'
-            )
-          );
-          CentralManager.tries = 0;
-        }
+
+      if (!bluetooth.manualDisconnect && bluetooth.tries <= AppConfig.bluetooth.connectRetries) {
+        yield put(BluetoothAction.connect(device));
       }
+      else {
+        const message = error ? error.message : (bluetooth.tries > AppConfig.bluetooth.connectRetries) ? 'Please clear bound information' : null;
+        yield put(BluetoothAction.didDisconnect(message));
+      }
+
     }
   } finally {
     console.tron.log({ log: 'end of disconnect listener' });
   }
 }
 
+/**
+ * setup bluetooth connection listener channel
+ * @param device
+ * @return {Channel<any>}
+ */
 export function setupBluetoothConnectionListenerChannel(device) {
   return eventChannel(emit => {
-    const listener = (error, device) => {
-      emit({ error, device });
-      // because every time we connect to a device we set a listener for it, then we don't need previous listener
-      emit(END);
-    };
-    const subscription = device.onDisconnected(listener);
-    return () => {
-      subscription.remove();
-    };
+
+    const subscription =
+      device.onDisconnected((error, device) => {
+        emit({ error, device });
+        emit(END);
+      });
+
+    return () => subscription.remove();
+
   });
 }

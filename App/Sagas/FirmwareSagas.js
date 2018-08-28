@@ -8,6 +8,7 @@ import BluetoothAction from '../Redux/BluetoothRedux';
 import JsonToModel from '../Transform/JsonToModel';
 import Response from '../Services/Response';
 import Api from '../Services/Api';
+import DFUManager from "../Bluetooth/DFUManager";
 
 export function* checkLatestVersion(api) {
   const { auth, ninix } = yield select();
@@ -53,7 +54,7 @@ export function* updateFirmware() {
   yield fork(setupDFUProgress, yield call(setupDFUProgressChannel));
   yield fork(setupDFUStateChange, yield call(setupDFUStateChangeChannel));
   try {
-    yield call([CentralManager, CentralManager.updateFirmware], firmware.path);
+    yield call([DFUManager, DFUManager.update], firmware.path);
     yield put(FirmwareAction.didUpdateSuccess());
     yield put(BluetoothAction.connect(ninix.device));
   } catch (e) {
