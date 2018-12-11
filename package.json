@@ -10,7 +10,7 @@
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i",
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
-    "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
+    "coverage": "jest --coverage",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
     "android:hockeyapp": "cd android && ./gradlew assembleRelease && puck -submit=auto app/build/outputs/apk/app-release.apk",
@@ -76,29 +76,40 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react-native": "^4.0.0",
     "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.3",
     "flow-bin": "^0.69.0",
     "husky": "^0.14.3",
     "ignite-ir-boilerplate": "^2.0.2",
     "jest": "^22.4.3",
+    "jsdom": "^11.8.0",
+    "jsdom-global": "^3.0.2",
     "mockery": "^2.1.0",
+    "raf": "^3.4.0",
     "react-addons-test-utils": "^15.6.0",
     "react-dom": "^16.3.1",
     "react-test-renderer": "^16.0.0-alpha.12",
     "reactotron-react-native": "^1.12.2",
     "reactotron-redux": "^1.12.2",
-    "reactotron-redux-saga": "^1.12.2"
+    "reactotron-redux-saga": "^1.12.2",
+    "redux-mock-store": "^1.5.1"
   },
   "jest": {
-    "testMatch": [
-      "**/Tests/**/*.js",
-      "**/?(*.)(spec|test).js?(x)"
-    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
+    },
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "Tests/Setup.js"
+      "<rootDir>/node_modules/",
+      "<rootDir>/__tests__/jest.setup.js"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(jest-)?react-native|react-navigation)"
     ],
     "setupFiles": [
-      "./Tests/Setup"
+      "<rootDir>/__tests__/jest.setup"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ],
     "preset": "react-native"
   },
